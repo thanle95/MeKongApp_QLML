@@ -10,29 +10,14 @@ import java.text.SimpleDateFormat
 
 class Constant internal constructor() {
     val settingsItems: Array<SettingsAdapter.Item>? = null
-    var API_LOGIN: String
+    var API_LOGIN: String = "$SERVER_API/Login"
 
-    var DISPLAY_NAME: String
+    var DISPLAY_NAME: String = "$SERVER_API/Account/Profile"
 
-    var LAYER_INFO: String
+    var LAYER_INFO: String = "$SERVER_API/Account/LayerInfo"
 
-    var IS_ACCESS: String
+    var IS_ACCESS: String = "$SERVER_API/Account/IsAccess/m_qlts"
 
-    init {
-        API_LOGIN = "$SERVER_API/Login"
-    }
-
-    init {
-        DISPLAY_NAME = "$SERVER_API/Account/Profile"
-    }
-
-    init {
-        LAYER_INFO = "$SERVER_API/Account/LayerInfo"
-    }
-
-    init {
-        IS_ACCESS = "$SERVER_API/Account/IsAccess/m_qlts"
-    }
     object PreferenceKey {
         const val USERNAME = "username"
         const val PASSWORD = "pasword"

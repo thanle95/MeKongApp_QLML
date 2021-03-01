@@ -4,13 +4,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 29
-    buildToolsVersion '28.0.3'
+    buildToolsVersion '29.0.3'
     defaultConfig {
         applicationId "vinhlong.ditagis.com.qlml"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 9
-        versionName "l.3.2"
+        versionCode 10000
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk.abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
     }
@@ -57,15 +57,15 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.0.0'
-    testImplementation 'junit:junit:4.12'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.3.0'
+//    testImplementation 'junit:junit:4.12'
     implementation 'com.esri.arcgisruntime:arcgis-android:100.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'org.apache.directory.studio:org.apache.commons.io:2.4'
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
-    implementation files('libs/sqljdbc4.jar')
-    implementation files('libs/jtds-1.3.0.jar')
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+//    implementation files('libs/sqljdbc4.jar')
+//    implementation files('libs/jtds-1.3.0.jar')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.github.darsh2:MultipleImageSelect:v0.0.4'
