@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+
+    <item android:title="Chức năng">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_home"
+                    android:icon="@drawable/ic_home"
+                    android:title="@string/nav_home" />
+                <item
+                    android:id="@+id/nav_thongke"
+                    android:icon="@drawable/ic_thongke"
+                    android:title="@string/nav_thong_ke" />
+                <item
+                    android:id="@+id/nav_chuthich"
+                    android:icon="@drawable/ic_legend"
+                    android:title="@string/nav_chu_thich" />
+                <item
+                    android:id="@+id/nav_tracuu"
+                    android:icon="@drawable/ic_search"
+                    android:visible="false"
+                    android:title="@string/nav_tra_cuu" />
+                <item
+                    android:id="@+id/nav_thaotacbando"
+                    android:icon="@drawable/ic_layer"
+                    android:title="@string/nav_thaotacbando" />
+
+            </group>
+        </menu>
+    </item>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_reload"
+            android:icon="@drawable/ic_refresh"
+            android:visible="false"
+            android:title="Làm mới bản đồ" />
+        <item
+            android:id="@+id/nav_delete_searching"
+            android:icon="@drawable/ic_delete"
+            android:title="@string/nav_xoa_tim_kiem" />
+        <item
+            android:id="@+id/nav_visible_float_button"
+            android:icon="@drawable/ic_action_visible"
+            android:title="@string/nav_an_hien_nut_chuc_nang" />
+        <item
+            android:id="@+id/nav_logOut"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/nav_log_out" />
+    </group>
+
+
+</menu>

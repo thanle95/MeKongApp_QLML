@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txt_title_layer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_title_popup"
+            android:textColor="@color/colorBlack"
+            android:layout_weight="10"
+            android:text="Tên"
+            android:textSize="20sp" />
+        <Button
+            android:id="@+id/btn_layer_close"
+
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:background="@color/colorRed"
+            android:text="x"
+            />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lstview_thongtinsuco"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"></ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/imgBtn_ViewMoreInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:paddingRight="@dimen/padding_title_popup"
+                android:visibility="gone"
+                android:src="@drawable/ic_info" />
+            <ImageButton
+                android:id="@+id/imgBtn_view_attachment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:paddingRight="@dimen/padding_title_popup"
+                android:visibility="gone"
+                android:src="@drawable/ic_colections" />
+            <ImageButton
+                android:id="@+id/imgBtn_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:paddingRight="@dimen/padding_title_popup"
+                android:visibility="gone"
+                android:src="@drawable/ic_delete" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

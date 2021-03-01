@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ShowCaptureActivity">
+
+    <ImageView
+        android:id="@+id/show_capture_imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <!--layout chứa các nút chức năng-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/padding_small"
+        android:alpha="0.5"
+        android:background="@android:color/black"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/show_capture_cancel"
+            style="@style/MyTextAppearance.White.Bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"
+            android:onClick="onClick"
+            android:text="CHỤP LẠI" />
+
+        <TextView
+            android:id="@+id/show_capture_ok"
+            style="@style/MyTextAppearance.White.Bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/margin_small"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="OK" />
+    </LinearLayout>
+
+</FrameLayout>

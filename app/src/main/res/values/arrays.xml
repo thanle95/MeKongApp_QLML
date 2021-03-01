@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Query field begin-->
+
+    <!--Query field end-->
+
+    <!--Out field begin-->
+    <string-array name="hiddenFields">
+        <item>GLOBALID</item>
+        <item>GlobalID</item>
+        <item>TOADO_X</item>
+        <item>TOADO_Y</item>
+        <item>Shape.STArea()</item>
+        <item>Shape.STLength()</item>
+        <item>created_user</item>
+        <item>created_date</item>
+        <item>last_edited_user</item>
+        <item>last_edited_date</item>
+        <item>SHAPE_Length_1</item>
+    </string-array>
+
+    <!--Out field end-->
+
+    <!--unupdate fields    -->
+    <string-array name="unedit_Fields">
+        <item>OBJECTID</item>
+        <item>created_user</item>
+        <item>created_date</item>
+        <item>last_edited_user</item>
+        <item>last_edited_date</item>
+        <item>NGUOICAPNHAT</item>
+        <item>NGAYCAPNHAT</item>
+        <item>NGAYTHEMMOI</item>
+        <item>MaXa</item>
+        <item>MaHuyen</item>
+    </string-array>
+</resources>

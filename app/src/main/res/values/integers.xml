@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="REQUEST_ID_UPDATE_ATTACHMENT">50</integer>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+>
+
+
+    <item
+        android:id="@+id/selection_method_capture"
+        android:icon="@drawable/ic_camera"
+
+        android:title="Chụp ảnh" />
+
+    <item
+        android:id="@+id/selection_method_pick"
+        android:icon="@drawable/ic_attachment"
+        android:title="Thư viện" />
+</menu>

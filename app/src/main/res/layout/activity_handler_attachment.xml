@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_handler_attachment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_vertical_margin">
+
+    <android:com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/img_view_attachment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_right"
+        android:scaleType="centerCrop"
+        layout_height="match_parent"
+        layout_width="match_parent" />
+
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/img_view_attachment"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:src="@drawable/ic_right" />-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:background="@android:color/black"
+        android:alpha="0.7"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:gravity="center_horizontal"
+
+
+        >
+        <LinearLayout android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:orientation="horizontal"
+            >
+
+
+            <ImageButton
+                android:id="@+id/btn_rorate_left"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:tint="@android:color/white"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_rotate_left"
+
+                />
+            <ImageButton
+                android:id="@+id/btn_rorate_right"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/ic_rotate_right"
+                android:tint="@android:color/white"
+                android:background="@android:color/transparent"
+                /></LinearLayout>
+        <Button
+            android:id="@+id/btn_update"
+            android:textColor="@android:color/white"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center_vertical|end"
+            android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Cập nhật"
+            />
+    </FrameLayout>
+
+</FrameLayout>

@@ -1,0 +1,137 @@
+<resources>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="license">runtimelite,1000,rud6046938574,none,4N5X0H4AH5JB003AD169</string>
+
+    <string name="app_name">Quản lý mạng lưới</string>
+
+    <!--ID START-->
+
+    <!--ID END-->
+    <!--TITLE SERVICE START-->
+
+    <!--TITLE SERVICE END-->
+
+    <!--URL SERVICE START-->
+
+
+    <!--url basemap-->
+    <!--URL SERVICE END-->
+
+
+    <string name="path_saveImage">.qlsc</string>
+    <string name="attachment">attachment</string>
+
+    <string name="ket_qua_objectid">ket_qua_objectid</string>
+
+    <!--thông báo-->
+    <string name="title_search">Tìm kiếm mọi thứ…</string>
+    <string name="location_permission_denied">Chưa có quyền truy cập vị trí</string>
+
+    <!--navigation-->
+    <string name="nav_tra_cuu">Tra cứu</string>
+    <string name="nav_find_route">Tìm đường đi</string>
+    <string name="nav_find_address">Tìm địa chỉ</string>
+    <string name="nav_xoa_tim_kiem">Xóa các tìm kiếm</string>
+    <string name="nav_an_hien_nut_chuc_nang">Ẩn/hiện nút chức năng</string>
+    <string name="nav_log_out">Đăng xuất</string>
+    <string name="nav_thong_ke">Thống kê</string>
+    <string name="nav_chu_thich">Chú thích</string>
+    <string name="nav_thaotacbando">Chọn lớp thao tác bản đồ</string>
+    <!--async-->
+    <string name="async_dang_xu_ly">Đang xử lý…</string>
+    <string name="async_dang_tai_du_lieu">Đang tải dữ liệu…</string>
+    <string name="async_dang_lay_hinh_anh_dinh_kem">Đang tải hình ảnh đính kèm…</string>
+    <string name="async_dang_cap_nhat_giao_dien">Đang cập nhật giao diện…</string>
+    <!--preference-->
+
+    <!--Attribute-->
+
+
+    <!--Route begin-->
+    <string name="title_activity_find_route">Tìm đường đi</string>
+    <string name="find_route_xem_ban_do">Xem bản đồ</string>
+    <string name="find_route_cac_buoc">Các bước</string>
+    <string name="find_route_diem_bat_dau">Nhập điểm bắt đầu</string>
+    <string name="find_route_diem_ket_thuc">Nhập điểm kết thúc</string>
+    <string name="find_route_image_change">Đổi địa điểm</string>
+    <string name="find_route_image_route">Độ dài đường đi</string>
+    <string name="find_route_image_time">Thời gian đi</string>
+    <string name="find_route_image_menu">Menu</string>
+    <string name="find_route_textview_route">0 km</string>
+    <string name="find_route_textview_time">0 min</string>
+    <string name="find_route_textview_begin">Từ</string>
+    <string name="find_route_textview_end">Đến</string>
+    <string name="todo">TODO</string>
+    <string name="title_layer_default">Mặc định</string>
+    <string name="title_layer_street">Đường phố</string>
+    <string name="title_layer_satellite">Vệ tinh</string>
+    <!--Route end-->
+
+    <!--display process status -->
+    <string name="INCORRECT_INPUT_FORMAT">Số liệu nhập vào không đúng định dạng!!!</string>
+
+
+    <!--Action popup-->
+    <string name="btn_Update">Cập nhật</string>
+    <string name="btn_Esc">Thoát</string>
+    <string name="type_search_feature_layer">TYPE_SEARCH_FEATURE_LAYER</string>
+    <string name="email_nv">username@gmail.com</string>
+    <string name="name_nv">USER NAME</string>
+
+
+    <!--sql column login begin-->
+    <string name="sql_coloumn_login_displayname">DisplayName</string>
+    <!--sql column login end-->
+
+
+    <!--sql end-->
+    <string name="connect_message">Đang kết nối đến máy chủ…</string>
+
+    <!--preference begin-->
+    <string name="preference_username">username</string>
+    <string name="preference_password">password</string>
+    <string name="preference_displayname">displayname</string>
+    <string name="preference_login_api">preference_login_api</string>
+    <!--preference end-->
+
+
+    <string name="validate_no_connect">Không có kết nối internet</string>
+    <string name="info_login_empty">Danh bạ hoặc mật khẩu không được để trống</string>
+    <string name="validate_login_fail">Sai danh bạ hoặc mật khẩu</string>
+
+
+    <string name="preparing">Đang khởi tạo bản đồ…</string>
+    <!--sql column login begin-->
+    <string name="sql_coloumn_sys_id">LayerID</string>
+    <string name="sql_coloumn_sys_title">LayerTitle</string>
+    <string name="sql_coloumn_sys_url">Url</string>
+    <string name="sql_coloumn_sys_iscreate">IsCreate</string>
+    <string name="sql_coloumn_sys_isdelete">IsDelete</string>
+    <string name="sql_coloumn_sys_isedit">IsEdit</string>
+    <string name="sql_coloumn_sys_isview">IsView</string>
+    <string name="sql_coloumn_sys_outfield">OutFields</string>
+    <string name="sql_coloumn_sys_definition">Definition</string>
+    <!--sql column login end-->
+
+    <string name="IDLayer_Basemap">BASEMAP</string>
+
+    <string name="NGAYCAPNHAT">NGAYCAPNHAT</string>
+    <string name="NGUOICAPNHAT">NGUOICAPNHAT</string>
+    <string name="format_typeday">%02d/%02d/%d</string>
+    <string name="NGAYTHEMMOI">NGAYTHEMMOI</string>
+
+    <!--<string name="NGAYTHEMMOI">NGAYCAPNHAT</string>-->
+    <!--<string name="URL_API">http://sawagis.vn/cholon</string>-->
+
+
+    <!--ATTRIBUTES-->
+    <string name="MAXA">MAXA</string>
+    <string name="TENHANHCHINH">TenHanhChinh</string>
+    <string name="MAHUYEN">MAHUYEN</string>
+    <string name="TENHUYEN">TenHuyen</string>
+    <string name="nav_home">Trang chủ</string>
+    <string name="index_HanhChinhXa">5</string>
+    <string name="IDHanhChinh">IDHanhChinh</string>
+
+</resources>
