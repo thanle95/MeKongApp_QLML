@@ -282,14 +282,12 @@ class Popup(private val mMainActivity: MainActivity, private val mMapView: MapVi
         refreshPopup()
         mBindingLayoutInfos.txtTitleLayer.text = mApplication.selectedFeatureLayer!!.name
         val btnUpdate = mBindingLayoutInfos.imgBtnUpdate
-        btnUpdate.visibility = View.VISIBLE
         btnUpdate.setOnClickListener { v ->
             val updateIntent = Intent(mMainActivity, UpdateActivity::class.java)
             mMainActivity.startActivityForResult(updateIntent, Constant.RequestCode.UPDATE)
         }
         val imgBtn_view_attachment = mBindingLayoutInfos.imgBtnViewAttachment
         if ((this.mApplication.selectedFeature!! as ArcGISFeature).canEditAttachments()) {
-            imgBtn_view_attachment.visibility = View.VISIBLE
             imgBtn_view_attachment.setOnClickListener { v ->
                 val intent = Intent(mMainActivity, AttachmentActivity::class.java)
                 mMainActivity.startActivity(intent)
@@ -297,9 +295,6 @@ class Popup(private val mMainActivity: MainActivity, private val mMapView: MapVi
         } else
             imgBtn_view_attachment.visibility = View.GONE
         val imgBtn_delete = mBindingLayoutInfos.imgBtnDelete
-
-        //        if (mFeatureLayerDTG.getAction().isDelete() && isDeleteFeature()) {
-        imgBtn_delete.visibility = View.VISIBLE
         imgBtn_delete.setOnClickListener { v ->
             mApplication.selectedFeature!!.featureTable.featureLayer.clearSelection()
             deleteFeature()
