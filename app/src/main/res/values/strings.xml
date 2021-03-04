@@ -44,7 +44,9 @@
     <string name="async_dang_lay_hinh_anh_dinh_kem">Đang tải hình ảnh đính kèm…</string>
     <string name="async_dang_cap_nhat_giao_dien">Đang cập nhật giao diện…</string>
     <!--preference-->
-
+    <string name="message_add_feature_had_not_point">Bạn cần chọn một điểm trên bản đồ trước khi thêm thuộc tính</string>
+    <string name="message_add_feature_had_not_feature">Bạn cần chọn lớp dữ liệu</string>
+    <string name="message_no_geocoder_available">Cần cập nhật phiên bản Google+ mới nhất để dùng tính năng này</string>
     <!--Attribute-->
 
 

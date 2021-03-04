@@ -36,7 +36,13 @@ class Constant internal constructor() {
         const val NOTIFICATION = 100
         const val REQUEST_ID_UPDATE_ATTACHMENT = 50
     }
-
+    object FileType {
+        const val VIDEO = "video/quicktime"
+        const val PNG = "image/png"
+        const val JPEG = "image/jpeg"
+        const val PDF = "application/pdf"
+        const val DOC = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    }
     object Field {
         const val OBJECTID = "OBJECTID"
         const val CREATED_USER = "created_user"
@@ -94,7 +100,7 @@ class Constant internal constructor() {
 
     companion object {
         const val EMPTY = ""
-
+        const val QUERY_BY_OBJECTID = Field.OBJECTID + " = %d"
         val DATE_FORMAT = SimpleDateFormat("dd/MM/yyyy")
         val OBJECTID = "OBJECTID"
         val IDSU_CO = "IDSuCo"

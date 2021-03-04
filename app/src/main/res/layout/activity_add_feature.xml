@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/padding_medium"
+    android:paddingRight="@dimen/padding_medium"
+    android:paddingTop="@dimen/padding_medium"
+    tools:context=".AddFeatureActivity">
+
+    <LinearLayout
+        android:id="@+id/llayout_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:layout_marginTop="20dip"
+            android:indeterminate="true"
+            android:maxHeight="24dip"
+
+            android:minHeight="24dip" />
+
+        <TextView
+            android:id="@+id/txt_progress"
+            style="@style/MyTextAppearance.Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:text="Đang tải bản đồ" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llayout_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:id="@+id/llayout_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llayout_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_small"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></View>
+            <Button
+                android:id="@+id/btn_pick_photo"
+                style="@style/MyTextAppearance.Prime.Big"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="@dimen/margin_small"
+                android:background="@drawable/layout_border_transparent"
+                android:padding="@dimen/padding_small"
+                android:visibility="gone"
+                android:text="Chọn ảnh" />
+            <Button
+                android:id="@+id/btn_capture"
+                style="@style/MyTextAppearance.Prime.Big"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="@dimen/margin_small"
+                android:background="@drawable/layout_border_transparent"
+                android:padding="@dimen/padding_small"
+                android:text="Chụp ảnh" />
+
+            <Button
+                android:id="@+id/btn_add"
+                style="@style/MyTextAppearance.White.Big"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:background="@color/colorPrimary"
+                android:padding="@dimen/padding_small"
+                android:text="Thêm" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

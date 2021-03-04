@@ -4,6 +4,7 @@ import android.app.Application
 import android.graphics.Bitmap
 import com.esri.arcgisruntime.data.Attachment
 import com.esri.arcgisruntime.data.Feature
+import com.esri.arcgisruntime.geometry.Point
 import com.esri.arcgisruntime.layers.FeatureLayer
 import mekong.ditagis.com.qlts.entities.DAppInfo
 import mekong.ditagis.com.qlts.entities.DLayerInfo
@@ -12,6 +13,8 @@ import mekong.ditagis.com.qlts.entities.entitiesDB.User
 import java.util.*
 
 class DApplication : Application() {
+    var address: String? = null
+    var addFeaturePoint: Point? = null
     var user: User? = null
     var progressDialog= DProgressDialog ()
     var layerVisible: HashMap<Any, Boolean> = HashMap()
@@ -23,7 +26,7 @@ class DApplication : Application() {
     var selectedBitmap: Bitmap? = null
     var appInfo: DAppInfo? = null
     var layerInfos: List<DLayerInfo>? = null
-    private val objectIDAddFeature: Long = 0
+     var objectIDAddFeature: Long = 0
     lateinit var alertDialog: DAlertDialog
-
+    var images: List<ByteArray>? = null
 }

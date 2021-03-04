@@ -2,6 +2,9 @@
     <style name="MyTextAppearance.Prime.Big" parent="MyTextAppearance.Prime">
         <item name="android:textSize">20sp</item>
     </style>
+    <style name="MyTextAppearance.Prime.Big.Bold" parent="MyTextAppearance.Prime.Big">
+        <item name="android:textStyle">bold</item>
+    </style>
     <style name="MyTextAppearance.Prime" parent="@android:style/TextAppearance">
         <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/colorPrimary</item>
@@ -26,6 +29,9 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="MyTextAppearance.White.Big" parent="MyTextAppearance.White">
+        <item name="android:textSize">17sp</item>
+    </style>
     <style name="datepicker" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorPrimary">@color/colorPrimary_1</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark_1</item>

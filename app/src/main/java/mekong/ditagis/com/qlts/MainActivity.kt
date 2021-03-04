@@ -264,7 +264,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         mMapViewHandler!!.setmPopUp(mPopup!!)
-        mMapViewHandler!!.setFeatureLayerDTGs(mFeatureLayerDTGS!!)
         thongKe = ThongKe(this, mFeatureLayerDTGS!!)
         mapViewEvent()
     }
@@ -273,6 +272,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     @SuppressLint("ClickableViewAccessibility")
     private fun mapViewEvent() {
         mBinding.appBar.content.mapView.onTouchListener = object : DefaultMapViewOnTouchListener(this, mBinding.appBar.content.mapView) {
+            override fun onLongPress(e: MotionEvent) {
+                addGraphicsAddFeature(e)
+                super.onLongPress(e)
+            }
             override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
                 try {
                     mMapViewHandler!!.onSingleTapMapView(e!!)
@@ -311,7 +314,44 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
     }
 
+    private fun addGraphicsAddFeature(vararg e: MotionEvent) {
+        val center: Point
+        if (e.isEmpty()) center = mBinding.appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center else {
+            center = mBinding.appBar.content.mapView.screenToLocation(android.graphics.Point(Math.round(e[0].x), Math.round(e[0].y)))
+            mBinding.appBar.content.mapView.setViewpointCenterAsync(center)
+        }
+        val symbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CROSS, Color.YELLOW, 20F)
+        val graphic = Graphic(center, symbol)
+        mGraphicsOverlay!!.graphics.clear()
+        mGraphicsOverlay!!.graphics.add(graphic)
+        if (mPopup != null) {
+            mPopup!!.showPopupAdd(center)
+        }
+    }
+    fun addFeature() {
+        if (mApplication.selectedFeatureLayer == null) {
+            Toast.makeText(mBinding.root.context, "Vui lòng chọn lớp thao tác bản đồ", Toast.LENGTH_LONG).show()
+            showDialogSelectLayer()
+            return
+        }
+        val intentAdd = Intent(this@MainActivity, AddFeatureActivity::class.java)
+        startActivityForResult(intentAdd, Constant.RequestCode.ADD)
+    }
 
+    fun handlingAddFeatureSuccess() {
+        handlingCancelAdd()
+        mMapViewHandler!!.query(String.format(Constant.QUERY_BY_OBJECTID, mApplication!!.objectIDAddFeature))
+        mApplication!!.address = null
+        mApplication.addFeaturePoint = null
+    }
+
+    fun handlingCancelAdd() {
+        val callout = mBinding.appBar.content.mapView.callout
+        if (callout != null && callout.isShowing) {
+            callout.dismiss()
+        }
+        mGraphicsOverlay!!.graphics.clear()
+    }
     private fun getFieldsDTG(stringFields: String?): Array<String>? {
         var returnFields: Array<String>? = null
         if (stringFields != null) {
@@ -567,12 +607,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val idLayer = itemAtPosition.idLayer
             mBinding.appBar.content.txtTitleSearch.text = itemAtPosition.titleLayer
             val featureLayer = getFeatureLayer(idLayer!!)
-            mMapViewHandler!!.setAddSFT(featureLayer!!.featureTable as ServiceFeatureTable)
-            mMapViewHandler!!.setIdentifyFeatureLayer(featureLayer)
+            mMapViewHandler!!.setIdentifyFeatureLayer(featureLayer!!)
             featureLayer.isVisible = true
-            mBinding.appBar.linearAddfeature.visibility = View.VISIBLE
-            mBinding.appBar.imgMapPin.visibility = View.VISIBLE
-            mBinding.appBar.floatBtnAdd.hide()
         }
     }
 
@@ -625,17 +661,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             mBinding.appBar.content.txtTitleSearch.text = itemAtPosition.titleLayer
             val featureLayer = getFeatureLayer(idLayer!!)
             featureLayer!!.isVisible = true
-            mMapViewHandler!!.setSearchSFT(featureLayer.featureTable as ServiceFeatureTable)
             //                mapView.getMap().setMaxScale(featureLayer.getMaxScale());
             mMapViewHandler!!.setIdentifyFeatureLayer(featureLayer)
             isSearchingFeature = true
         }
-    }
-
-    fun closeAddFeature() {
-        mBinding.appBar.linearAddfeature.visibility = View.GONE
-        mBinding.appBar.imgMapPin.visibility = View.GONE
-        mBinding.appBar.floatBtnAdd.show()
     }
 
     private fun getFeatureLayer(idLayer: String): FeatureLayer? {
@@ -725,13 +754,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun hiddenFloatButton() {
         mBinding.appBar.floatBtnLayer.hide()
         mBinding.appBar.floatBtnLocation.hide()
-        mBinding.appBar.floatBtnAdd.hide()
     }
 
     private fun showFloatButton() {
         mBinding.appBar.floatBtnLayer.show()
         mBinding.appBar.floatBtnLocation.show()
-        mBinding.appBar.floatBtnAdd.show()
     }
 
     private fun toogleFloatButton() {
@@ -745,21 +772,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         else
             mBinding.appBar.floatBtnLocation.show()
 
-        if (mBinding.appBar.floatBtnAdd.isOrWillBeShown)
-            mBinding.appBar.floatBtnAdd.hide()
-        else
-            mBinding.appBar.floatBtnAdd.show()
-
     }
 
     private fun setOnClickListener() {
         mBinding.appBar.layoutLayerOpenStreetMap.setOnClickListener(this)
         mBinding.appBar.layoutLayerStreetMap.setOnClickListener(this)
         mBinding.appBar.layoutLayerTopo.setOnClickListener(this)
-        mBinding.appBar.floatBtnAdd.setOnClickListener(this)
-        mBinding.appBar.btnAddFeatureClose.setOnClickListener(this)
-        mBinding.appBar.imgLayvitri.setOnClickListener(this)
-
 
         mBinding.appBar.content.imgSelectLayer.setOnClickListener(this)
         mBinding.appBar.content.imgClearSelectLayer.setOnClickListener(this)
@@ -813,9 +831,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 setViewPointCenter(mLocationDisplay!!.mapLocation)
             } else
                 mLocationDisplay!!.stop()
-            R.id.floatBtnAdd -> showDialogSelectAddFeatureLayer()
-            R.id.btn_add_feature_close -> closeAddFeature()
-            R.id.img_layvitri -> mMapViewHandler!!.addFeature()
         }
     }
 
@@ -865,11 +880,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 } else finish()
                 Constant.RequestCode.UPDATE -> mPopup!!.refreshPopup()
 //                Constant.RequestCode.LIST_TASK -> if (resultCode == Activity.RESULT_OK) handlingListTaskActivityResult()
-//                Constant.RequestCode.ADD -> if (resultCode == Activity.RESULT_OK) {
-//                    handlingAddFeatureSuccess()
-//                } else {
-//                    handlingCancelAdd()
-//                }
+                Constant.RequestCode.ADD -> if (resultCode == Activity.RESULT_OK) {
+                    handlingAddFeatureSuccess()
+                } else {
+                    handlingCancelAdd()
+                }
 //                Constant.RequestCode.UPDATE -> mPopUp!!.refreshPopup(mApplication!!.selectedArcGISFeature)
 //                Constant.RequestCode.REQUEST_ID_UPDATE_ATTACHMENT -> if (resultCode == Activity.RESULT_OK) {
 //                    if (mUri != null) {

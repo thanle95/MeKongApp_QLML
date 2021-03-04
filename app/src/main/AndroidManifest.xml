@@ -29,8 +29,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".UpdateActivity" android:parentActivityName=".MainActivity"
-            android:label="Cập nhật thông tin"/>
+        <activity android:name=".AddFeatureActivity" android:parentActivityName=".MainActivity" ></activity>
+        <activity
+            android:name=".UpdateActivity"
+            android:label="Cập nhật thông tin"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".ViewImageActivity" />
         <activity
             android:name=".ShowCaptureActivity"
