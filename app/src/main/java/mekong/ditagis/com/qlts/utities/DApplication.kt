@@ -4,6 +4,7 @@ import android.app.Application
 import android.graphics.Bitmap
 import com.esri.arcgisruntime.data.Attachment
 import com.esri.arcgisruntime.data.Feature
+import com.esri.arcgisruntime.layers.FeatureLayer
 import mekong.ditagis.com.qlts.entities.DAppInfo
 import mekong.ditagis.com.qlts.entities.DLayerInfo
 import mekong.ditagis.com.qlts.entities.LayerLegend
@@ -18,6 +19,7 @@ class DApplication : Application() {
     var selectedFeature: Feature? = null
     var layerLegendList: MutableList<LayerLegend> = ArrayList()
     var selectedAttachment: Attachment? = null
+    var selectedFeatureLayer: FeatureLayer? = null
     var selectedBitmap: Bitmap? = null
     var appInfo: DAppInfo? = null
     var layerInfos: List<DLayerInfo>? = null

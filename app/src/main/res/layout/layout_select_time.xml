@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_small">
+
+    <TextView
+        android:id="@+id/txtTitle"
+        style="@style/TextAppearance.AppCompat.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chọn thời gian"
+        android:textSize="17sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtDay"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_small"
+                android:text="Ngày" />
+
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/number_picker_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:np_dividerColor="@color/colorPrimary"
+                app:np_max="31"
+                app:np_min="1"
+                app:np_selectedTextColor="@color/colorPrimary"
+                app:np_selectedTextSize="20sp"
+                app:np_textColor="@color/colorPrimary"
+                app:np_textSize="17sp"
+                app:np_value="1"
+                app:np_width="64dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtMonth"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_small"
+                android:text="Tháng" />
+
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/number_picker_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:np_dividerColor="@color/colorPrimary"
+                app:np_max="12"
+                app:np_min="1"
+                app:np_selectedTextColor="@color/colorPrimary"
+                app:np_selectedTextSize="20sp"
+                app:np_textColor="@color/colorPrimary"
+                app:np_textSize="17sp"
+                app:np_value="1"
+                app:np_width="64dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/margin_small"
+
+                android:text="Năm" />
+
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/number_picker_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:np_dividerColor="@color/colorPrimary"
+                app:np_max="2050"
+                app:np_min="2010"
+                app:np_selectedTextColor="@color/colorPrimary"
+                app:np_selectedTextSize="20sp"
+                app:np_textColor="@color/colorPrimary"
+                app:np_textSize="17sp"
+                app:np_value="2020"
+                app:np_width="64dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btnOK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:background="@drawable/button_background_color_primary"
+        android:padding="@dimen/padding_small"
+        android:text="✓ Chọn"
+        android:textColor="@drawable/button_text_color_primary"></Button>
+</LinearLayout>

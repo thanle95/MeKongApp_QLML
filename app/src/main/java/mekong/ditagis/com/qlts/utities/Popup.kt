@@ -2,15 +2,11 @@ package mekong.ditagis.com.qlts.utities
 
 import android.content.Intent
 import android.net.Uri
-import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.esri.arcgisruntime.data.*
@@ -22,14 +18,11 @@ import com.esri.arcgisruntime.symbology.UniqueValueRenderer
 import mekong.ditagis.com.qlts.AttachmentActivity
 import mekong.ditagis.com.qlts.MainActivity
 import mekong.ditagis.com.qlts.R
+import mekong.ditagis.com.qlts.UpdateActivity
 import mekong.ditagis.com.qlts.adapter.FeatureViewInfoAdapter
 import mekong.ditagis.com.qlts.adapter.FeatureViewMoreInfoAdapter
-import mekong.ditagis.com.qlts.async.EditAsync
 import mekong.ditagis.com.qlts.async.QueryHanhChinhAsync
-import mekong.ditagis.com.qlts.databinding.DateTimePickerBinding
-import mekong.ditagis.com.qlts.databinding.LayoutDialogUpdateFeatureListviewBinding
 import mekong.ditagis.com.qlts.databinding.LayoutPopupInfosBinding
-import mekong.ditagis.com.qlts.databinding.LayoutViewmoreinfoFeatureBinding
 import mekong.ditagis.com.qlts.libs.FeatureLayerDTG
 import java.util.*
 
@@ -157,137 +150,6 @@ class Popup(private val mMainActivity: MainActivity, private val mMapView: MapVi
         }
     }
 
-
-    private fun viewMoreInfo() {
-        val attr = mApplication.selectedFeature!!.attributes
-        val builder = AlertDialog.Builder(mMainActivity, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen)
-        val bindingLayout = LayoutViewmoreinfoFeatureBinding.inflate(mMainActivity.layoutInflater)
-        mFeatureViewMoreInfoAdapter = FeatureViewMoreInfoAdapter(mMainActivity, ArrayList())
-        val lstViewInfo = bindingLayout.lstViewAlertdialogInfo
-        lstViewInfo.adapter = mFeatureViewMoreInfoAdapter
-        lstViewInfo.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id -> edit(parent, view, position, id) }
-
-        val updateFields = mFeatureLayerDTG!!.updateFields
-        val unedit_Fields = mMainActivity.resources.getStringArray(R.array.unedit_Fields)
-        val hiddenFields = mMainActivity.resources.getStringArray(R.array.hiddenFields)
-        val renderer = (mApplication.selectedFeature!!.featureTable as ServiceFeatureTable).layerInfo.drawingInfo.renderer
-        var uniqueValueRenderer: UniqueValueRenderer? = null
-        if (renderer is UniqueValueRenderer) {
-            uniqueValueRenderer = renderer
-        }
-        var checkHiddenField: Boolean
-        val idHanhChinh = attr[mMainActivity.getString(R.string.MAXA)]
-        if (idHanhChinh != null) {
-            getHanhChinhFeature(idHanhChinh.toString())
-        }
-        for (field in this.mApplication.selectedFeature!!.featureTable.fields) {
-            checkHiddenField = false
-            for (hiddenField in hiddenFields) {
-                if (field.name.toUpperCase() == hiddenField.toUpperCase()) {
-                    checkHiddenField = true
-                    break
-                }
-            }
-            if (checkHiddenField) continue
-            val value = attr[field.name]
-            if (field.name == Constant.IDSU_CO) {
-                if (value != null)
-                    bindingLayout.txtAlertdialogIdSuCo.text = value.toString()
-            } else {
-                val item = FeatureViewMoreInfoAdapter.Item()
-                item.alias = field.alias
-                item.fieldName = field.name
-                if (updateFields!!.isNotEmpty()) {
-                    if (updateFields[0] == "*" || updateFields[0] == "" || updateFields[0] === "null") {
-                        item.isEdit = true
-                    } else {
-                        for (updateField in updateFields) {
-                            if (item.fieldName == updateField) {
-                                item.isEdit = true
-                                break
-                            }
-                        }
-                    }
-                }
-                for (unedit_Field in unedit_Fields) {
-                    if (unedit_Field.toUpperCase() == item.fieldName!!.toUpperCase()) {
-                        item.isEdit = false
-                        break
-                    }
-                }
-                if (value != null) {
-                    if (item.fieldName == fieldNameDrawInfo) {
-                        val uniqueValues = uniqueValueRenderer!!.uniqueValues
-                        if (uniqueValues.size > 0) {
-                            val valueFeatureType = getLabelUniqueRenderer(uniqueValues, value.toString())
-                            if (valueFeatureType != null)
-                                item.value = valueFeatureType.toString()
-                        } else
-                            item.value = value.toString()
-
-                    } else if (item.fieldName!!.toUpperCase() == mMainActivity.getString(R.string.MAXA)) {
-                        if (quanhuyen_feature != null)
-                            item.value = quanhuyen_feature!!.attributes[mMainActivity.getString(R.string.TENHANHCHINH)].toString()
-                        else
-                            item.value = value.toString()
-                    } else if (item.fieldName!!.toUpperCase() == mMainActivity.getString(R.string.MAHUYEN)) {
-                        if (quanhuyen_feature != null)
-                            item.value = quanhuyen_feature!!.attributes[mMainActivity.getString(R.string.TENHUYEN)].toString()
-                        else
-                            item.value = value.toString()
-                    } else if (field.domain != null) {
-                        val codedValues = (this.mApplication.selectedFeature!!.featureTable.getField(item.fieldName!!).domain as CodedValueDomain).codedValues
-                        val valueDomainObject = getValueDomain(codedValues, value.toString())
-                        if (valueDomainObject != null) item.value = valueDomainObject.toString()
-                    } else
-                        when (field.fieldType) {
-                            Field.Type.DATE -> item.value = Constant.DATE_FORMAT.format((value as Calendar).time)
-                            Field.Type.OID, Field.Type.TEXT -> item.value = value.toString()
-                            Field.Type.DOUBLE, Field.Type.INTEGER, Field.Type.SHORT -> item.value = value.toString()
-                        }
-                }
-
-
-                item.fieldType = field.fieldType
-                mFeatureViewMoreInfoAdapter!!.add(item)
-                mFeatureViewMoreInfoAdapter!!.notifyDataSetChanged()
-            }
-        }
-
-        builder.setView(bindingLayout.root)
-        builder.setCancelable(false)
-        builder.setPositiveButton("Thoát") { dialog, which -> }
-        builder.setNegativeButton("Cập nhật") { dialog, which -> }
-        val dialog = builder.create()
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setOnShowListener {
-            val button = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-            val buttonPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            buttonPositive.setOnClickListener { dialog.dismiss() }
-            button.setOnClickListener {
-                if ((mApplication.selectedFeature!! as ArcGISFeature).canUpdateGeometry()) {
-                    EditAsync(mMainActivity, mServiceFeatureTable!!, (mApplication.selectedFeature as ArcGISFeature?)!!, object :
-                            EditAsync.AsyncResponse {
-                        override fun processFinish(isSuccess: Boolean) {
-                            if (isSuccess) {
-                                dialog.dismiss()
-                                refreshPopup()
-                                DAlertDialog().show(mMainActivity, "Thông báo", "Cập nhật thành công")
-                            } else {
-                                DAlertDialog().show(mMainActivity, "Thông báo", "Cập nhật thất bại")
-                            }
-                        }
-                    }).execute(mFeatureViewMoreInfoAdapter)
-                } else
-                    Toast.makeText(mMainActivity, "Không được quyền chỉnh sửa dữ liệu!!!", Toast.LENGTH_LONG).show()
-            }
-        }
-        dialog.show()
-
-
-    }
-
-
     private fun getValueDomain(codedValues: List<CodedValue>, code: String): Any? {
         var value: Any? = null
         for (codedValue in codedValues) {
@@ -296,17 +158,6 @@ class Popup(private val mMainActivity: MainActivity, private val mMapView: MapVi
                 break
             }
 
-        }
-        return value
-    }
-
-    private fun getValueFeatureType(featureTypes: List<FeatureType>, code: String): Any? {
-        var value: Any? = null
-        for (featureType in featureTypes) {
-            if (featureType.id != null && featureType.id.toString() == code) {
-                value = featureType.name
-                break
-            }
         }
         return value
     }
@@ -320,136 +171,6 @@ class Popup(private val mMainActivity: MainActivity, private val mMapView: MapVi
             }
         }
         return value
-    }
-
-    private fun edit(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-        if (parent.getItemAtPosition(position) is FeatureViewMoreInfoAdapter.Item) {
-            val item = parent.getItemAtPosition(position) as FeatureViewMoreInfoAdapter.Item
-            if (item.isEdit) {
-                val bindingLayout = LayoutDialogUpdateFeatureListviewBinding.inflate(mMainActivity.layoutInflater)
-
-                val layoutTextView = bindingLayout.layoutEditViewmoreinfoTextView
-                val textView = bindingLayout.txtEditViewmoreinfo
-                val txtNotifyInCorrect = bindingLayout.txtNotifyInCorrect
-                val img_selectTime = bindingLayout.imgSelectLayer
-                val layoutEditText = bindingLayout.layoutEditViewmoreinfoEditext
-                val editText = bindingLayout.etxtEditViewmoreinfo
-                val layoutSpin = bindingLayout.layoutEditViewmoreinfoSpinner
-                val spin = bindingLayout.spinEditViewmoreinfo
-
-                val domain = mApplication.selectedFeature!!.featureTable.getField(item.fieldName!!).domain
-                if (item.fieldName == fieldNameDrawInfo) {
-                    if (lstUniqueValues!!.size > 0) {
-                        layoutSpin.visibility = View.VISIBLE
-                        val adapter = ArrayAdapter(bindingLayout.root.context, android.R.layout.simple_list_item_1, lstUniqueValues!!)
-                        spin.adapter = adapter
-                        if (item.value != null)
-                            spin.setSelection(lstUniqueValues!!.indexOf(item.value!!))
-                    } else {
-                        layoutEditText.visibility = View.VISIBLE
-                        editText.inputType = InputType.TYPE_CLASS_NUMBER
-                        editText.setText(item.value)
-                    }
-                } else if (domain != null) {
-                    layoutSpin.visibility = View.VISIBLE
-                    val codedValues = (domain as CodedValueDomain).codedValues
-                    if (codedValues != null) {
-                        val codes = ArrayList<String>()
-                        for (codedValue in codedValues)
-                            codes.add(codedValue.name)
-                        val adapter = ArrayAdapter(bindingLayout.root.context, android.R.layout.simple_list_item_1, codes)
-                        spin.adapter = adapter
-                        if (item.value != null)
-                            spin.setSelection(codes.indexOf(item.value!!))
-
-                    }
-                } else
-                    when (item.fieldType) {
-                        Field.Type.DATE -> {
-                            layoutTextView.visibility = View.VISIBLE
-                            textView.text = item.value
-                            img_selectTime.setOnClickListener {
-                                val dialogView = DateTimePickerBinding.inflate(mMainActivity.layoutInflater)
-                                val alertDialog = android.app.AlertDialog.Builder(mMainActivity).create()
-                                dialogView.dateTimeSet.setOnClickListener {
-                                    val datePicker = dialogView.datePicker
-                                    val s = String.format(mMainActivity.resources.getString(R.string.format_typeday), datePicker.dayOfMonth, datePicker.month + 1, datePicker.year)
-                                    textView.setText(s)
-                                    alertDialog.dismiss()
-                                }
-                                alertDialog.setView(dialogView.root)
-                                alertDialog.show()
-                            }
-                        }
-                        Field.Type.TEXT -> {
-                            layoutEditText.visibility = View.VISIBLE
-                            editText.setText(item.value)
-                        }
-                        Field.Type.INTEGER, Field.Type.SHORT -> {
-                            layoutEditText.visibility = View.VISIBLE
-                            editText.inputType = InputType.TYPE_CLASS_NUMBER
-                            editText.setText(item.value)
-                        }
-                        Field.Type.DOUBLE, Field.Type.FLOAT -> {
-                            layoutEditText.visibility = View.VISIBLE
-                            editText.inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL
-                            editText.setText(item.value)
-                        }
-                    }
-                val dialog = AlertDialog.Builder(mMainActivity)
-                        .setView(bindingLayout.root)
-                        .setMessage(item.alias)
-                        .setTitle("Cập nhật thuộc tính")
-                        .setPositiveButton(R.string.btn_Update, null) //Set to null. We override the onclick
-                        .setNegativeButton(R.string.btn_Esc, null)
-                        .create()
-
-                dialog.setOnShowListener { dialogInterface ->
-
-                    val button = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
-                    button.setOnClickListener { view1 ->
-                        var value: String? = null
-                        if (lstUniqueValues!!.size > 0 && item.fieldName == fieldNameDrawInfo || domain != null) {
-                            value = spin.selectedItem.toString()
-                        } else {
-                            when (item.fieldType) {
-                                Field.Type.DATE -> value = textView.text.toString()
-                                Field.Type.FLOAT, Field.Type.DOUBLE -> try {
-                                    val x = java.lang.Double.parseDouble(editText.text.toString())
-                                    value = editText.text.toString()
-                                } catch (e: Exception) {
-                                    txtNotifyInCorrect.visibility = View.VISIBLE
-                                }
-
-                                Field.Type.TEXT -> value = editText.text.toString()
-                                Field.Type.INTEGER -> try {
-                                    val x = Integer.parseInt(editText.text.toString())
-                                    value = editText.text.toString()
-                                } catch (e: Exception) {
-                                    txtNotifyInCorrect.visibility = View.VISIBLE
-                                }
-
-                                Field.Type.SHORT -> try {
-                                    val x = java.lang.Short.parseShort(editText.text.toString())
-                                    value = editText.text.toString()
-                                } catch (e: Exception) {
-                                    txtNotifyInCorrect.visibility = View.VISIBLE
-                                }
-
-                            }
-                        }
-                        if (value != null) {
-                            dialog.dismiss()
-                            item.value = value
-                            val adapter = parent.adapter as FeatureViewMoreInfoAdapter
-                            adapter.notifyDataSetChanged()
-                        } else
-                            txtNotifyInCorrect.visibility = View.VISIBLE
-                    }
-                }
-                dialog.show()
-            }
-        }
     }
 
     fun clearSelection() {
@@ -501,12 +222,13 @@ class Popup(private val mMainActivity: MainActivity, private val mMapView: MapVi
         mBindingLayoutInfos = LayoutPopupInfosBinding.inflate(inflater)
         refreshPopup()
         mBindingLayoutInfos.txtTitleLayer.text = mFeatureLayerDTG!!.featureLayer.name
-        val imgBtn_ViewMoreInfo = mBindingLayoutInfos.imgBtnViewMoreInfo
+        val btnUpdate = mBindingLayoutInfos.imgBtnUpdate
         if (mFeatureLayerDTG!!.action!!.isEdit) {
-            imgBtn_ViewMoreInfo.visibility = View.VISIBLE
-            imgBtn_ViewMoreInfo.setOnClickListener { v -> viewMoreInfo() }
+            btnUpdate.visibility = View.VISIBLE
+            btnUpdate.setOnClickListener { v ->  val updateIntent = Intent(mMainActivity, UpdateActivity::class.java)
+                mMainActivity.startActivityForResult(updateIntent, Constant.RequestCode.UPDATE) }
         } else
-            imgBtn_ViewMoreInfo.visibility = View.GONE
+            btnUpdate.visibility = View.GONE
         val imgBtn_view_attachment = mBindingLayoutInfos.imgBtnViewAttachment
         if ((this.mApplication.selectedFeature!! as ArcGISFeature).canEditAttachments()) {
             imgBtn_view_attachment.visibility = View.VISIBLE

@@ -54,8 +54,9 @@ class MapViewHandler(private val mMapView: MapView, private val mActivity: MainA
         this.addSFT = addSFT
     }
 
-    fun setIdentifyFeatureLayer(identifyFeatureLayer: FeatureLayer) {
-        this.identifyFeatureLayer = identifyFeatureLayer
+    fun setIdentifyFeatureLayer(featureLayer: FeatureLayer) {
+        this.identifyFeatureLayer = featureLayer
+        mApplication.selectedFeatureLayer = featureLayer
     }
 
     private fun getFeatureLayerDTG(featureLayer: FeatureLayer?): FeatureLayerDTG? {

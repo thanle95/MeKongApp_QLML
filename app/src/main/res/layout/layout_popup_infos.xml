@@ -3,30 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-    <LinearLayout
+     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="@color/colorWhite"
+        android:padding="@dimen/padding_title_popup">
 
         <TextView
             android:id="@+id/txt_title_layer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/padding_title_popup"
-            android:textColor="@color/colorBlack"
-            android:layout_weight="10"
-            android:text="Tên"
-            android:textSize="20sp" />
-        <Button
-            android:id="@+id/btn_layer_close"
 
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:background="@color/colorRed"
-            android:text="x"
-            />
-    </LinearLayout>
+            android:textSize="20sp" />
+
+
+        <ImageButton
+            android:id="@+id/btn_layer_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@android:color/white"
+            android:contentDescription="Đóng popup"
+            android:src="@drawable/ic_cancel" />
+     </FrameLayout>
 
     <ListView
         android:id="@+id/lstview_thongtinsuco"
@@ -45,7 +44,7 @@
             android:gravity="right"
             android:orientation="horizontal">
             <ImageButton
-                android:id="@+id/imgBtn_ViewMoreInfo"
+                android:id="@+id/img_btn_update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"

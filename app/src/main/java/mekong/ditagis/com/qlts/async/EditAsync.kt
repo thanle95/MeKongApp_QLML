@@ -1,197 +1,149 @@
 package mekong.ditagis.com.qlts.async
 
+import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.ProgressDialog
 import android.os.AsyncTask
+import android.util.Log
+import android.view.View
 import com.esri.arcgisruntime.data.*
-import com.esri.arcgisruntime.symbology.UniqueValueRenderer
-import mekong.ditagis.com.qlts.R
-import mekong.ditagis.com.qlts.adapter.FeatureViewMoreInfoAdapter
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
+import mekong.ditagis.com.qlts.databinding.LayoutProgressDialogBinding
 import mekong.ditagis.com.qlts.utities.Constant
 import mekong.ditagis.com.qlts.utities.DApplication
-import java.text.ParseException
 import java.util.*
-
+import java.util.concurrent.ExecutionException
 /**
  * Created by ThanLe on 4/16/2018.
  */
-
-class EditAsync(private val mMainActivity: Activity, private val mServiceFeatureTable: ServiceFeatureTable,
-                selectedArcGISFeature: ArcGISFeature, private val delegate: AsyncResponse)
-    : AsyncTask<FeatureViewMoreInfoAdapter, Boolean, Void>() {
-
-    private val mDialog: ProgressDialog
-    private var mSelectedArcGISFeature: ArcGISFeature? = null
-    private val mDApplication: DApplication
+@SuppressLint("StaticFieldLeak")
+class EditAsync(private val mView: View, private val mActivity: Activity,
+                private val mServiceFeatureTable: ServiceFeatureTable,
+                selectedArcGISFeature: ArcGISFeature,
+                private val mDelegate: AsyncResponse) : AsyncTask<HashMap<String, Any>, Boolean, Void>() {
+    private lateinit var mDialog: BottomSheetDialog
+    private var mSelectedArcGISFeature: ArcGISFeature = selectedArcGISFeature
+    private val mApplication: DApplication = mActivity.application as DApplication
 
     interface AsyncResponse {
-        fun processFinish(isSuccess: Boolean)
+        fun processFinish(feature: Boolean?)
     }
 
-    init {
-        mSelectedArcGISFeature = selectedArcGISFeature
-        mDialog = ProgressDialog(mMainActivity, android.R.style.Theme_Material_Dialog_Alert)
-        this.mDApplication = mMainActivity.application as DApplication
-    }
-
+    @SuppressLint("SetTextI18n")
     override fun onPreExecute() {
         super.onPreExecute()
-        mDialog.setMessage(mMainActivity.getString(R.string.async_dang_xu_ly))
+        mDialog = BottomSheetDialog(this.mActivity)
+        val bindingView = LayoutProgressDialogBinding.inflate(mActivity.layoutInflater)
+        bindingView.txtProgressDialogTitle.text = "Đang cập nhật thông tin..."
+        mDialog.setContentView(bindingView.root)
         mDialog.setCancelable(false)
-        mDialog.setButton("Hủy") { dialogInterface, i -> publishProgress() }
+
         mDialog.show()
 
     }
 
-    override fun doInBackground(vararg params: FeatureViewMoreInfoAdapter): Void? {
-        val adapter = params[0]
-        val renderer = mSelectedArcGISFeature!!.featureTable.layerInfo.drawingInfo.renderer
-        var uniqueValues: List<UniqueValueRenderer.UniqueValue>? = null
-        var fieldName: String? = null
-        if (renderer is UniqueValueRenderer) {
-            uniqueValues = renderer.uniqueValues
-            fieldName = renderer.fieldNames[0]
-        }
-        try {
-            for (item in adapter.getItems()) {
-                if (item.value == null || !item.isEdit) continue
-                val domain = mSelectedArcGISFeature!!.featureTable.getField(item.fieldName!!).domain
-                var codeDomain: Any? = null
-                var valueUniqueRenderer: Any? = null
-                if (domain != null) {
-                    val codedValues = (this.mSelectedArcGISFeature!!.featureTable.getField(item.fieldName!!).domain as CodedValueDomain).codedValues
-                    codeDomain = getCodeDomain(codedValues, item.value)
-                }
-                if (uniqueValues != null && uniqueValues.size > 0 && item.fieldName == fieldName) {
-                    valueUniqueRenderer = getValueUniqueRenderer(uniqueValues, item.value)
-                }
-                when (item.fieldType) {
-                    Field.Type.DATE -> {
-                        var date: Date? = null
-                        try {
-                            date = Constant.DATE_FORMAT.parse(item.value)
-                            val c = Calendar.getInstance()
-                            c.time = date
-                            mSelectedArcGISFeature!!.attributes[item.fieldName] = c
-                        } catch (e: ParseException) {
+    override fun doInBackground(vararg params: HashMap<String, Any>): Void? {
+        if (params.isNotEmpty()) {
+            val attributes = params[0]
+            for (fieldName in attributes.keys) {
+                try {
+                    val value = attributes[fieldName]
+                    if (value == null)
+                        mSelectedArcGISFeature.attributes[fieldName] = null
+                    else {
+                        val valueString = value.toString().trim { it <= ' ' }
+                        val field = mServiceFeatureTable.getField(fieldName)
+                        when (field.fieldType) {
+                            Field.Type.TEXT -> mSelectedArcGISFeature.attributes[fieldName] = valueString
+                            Field.Type.DOUBLE -> {
+                                mSelectedArcGISFeature.attributes[fieldName] = java.lang.Double.parseDouble(valueString)
+                            }
+                            Field.Type.FLOAT -> {
+                                mSelectedArcGISFeature.attributes[fieldName] = java.lang.Float.parseFloat(valueString)
+                            }
+                            Field.Type.INTEGER -> {
+                                mSelectedArcGISFeature.attributes[fieldName] = Integer.parseInt(valueString)
+                            }
+                            Field.Type.SHORT -> mSelectedArcGISFeature.attributes[fieldName] = java.lang.Short.parseShort(valueString)
+                            Field.Type.DATE -> {
+                                val calendar = Calendar.getInstance()
+                                calendar.time = Constant.DATE_FORMAT.parse(valueString)
+                                mSelectedArcGISFeature.attributes[fieldName] = calendar
+                            }
+                            else -> {
+                            }
                         }
+                    }
+                    when(fieldName){
+                        Constant.Field.CREATED_DATE, Constant.Field.LAST_EDITED_DATE-> mSelectedArcGISFeature.attributes[fieldName] = Calendar.getInstance()
+                        Constant.Field.CREATED_USER, Constant.Field.LAST_EDITED_USER,
+                        -> mSelectedArcGISFeature.attributes[fieldName] = mApplication.user!!.username
 
                     }
 
-                    Field.Type.TEXT -> if (valueUniqueRenderer != null) {
-                        mSelectedArcGISFeature!!.attributes[item.fieldName] = valueUniqueRenderer.toString()
-                    } else if (codeDomain != null) {
-                        mSelectedArcGISFeature!!.attributes[item.fieldName] = codeDomain.toString()
-                    } else
-                        mSelectedArcGISFeature!!.attributes[item.fieldName] = item.value
-                    Field.Type.DOUBLE -> mSelectedArcGISFeature!!.attributes[item.fieldName] = java.lang.Double.parseDouble(item.value!!)
-                    Field.Type.FLOAT -> mSelectedArcGISFeature!!.attributes[item.fieldName] = java.lang.Float.parseFloat(item.value!!)
-                    Field.Type.INTEGER -> if (valueUniqueRenderer != null) {
-                        mSelectedArcGISFeature!!.attributes[item.fieldName] = Integer.parseInt(valueUniqueRenderer.toString())
-                    } else if (codeDomain != null) {
-                        mSelectedArcGISFeature!!.attributes[item.fieldName] = Integer.parseInt(codeDomain.toString())
-                    } else
-                        mSelectedArcGISFeature!!.attributes[item.fieldName] = Integer.parseInt(item.value!!)
-                    Field.Type.SHORT -> if (valueUniqueRenderer != null) {
-                        mSelectedArcGISFeature!!.attributes[item.fieldName] = java.lang.Short.parseShort(valueUniqueRenderer.toString())
-                    } else if (codeDomain != null) {
-                        mSelectedArcGISFeature!!.attributes[item.fieldName] = java.lang.Short.parseShort(codeDomain.toString())
-                    } else
-                        mSelectedArcGISFeature!!.attributes[item.fieldName] = java.lang.Short.parseShort(item.value)
+                } catch (e: Exception) {
+                    mSelectedArcGISFeature.attributes[fieldName] = null
+                    Log.e("Lỗi thêm điểm", e.toString())
+
                 }
             }
-        } catch (e: Exception) {
-            publishProgress(false)
         }
-
-        val fields = mSelectedArcGISFeature!!.featureTable.fields
-        for (field in fields) {
-            if (field.name.toUpperCase() == mMainActivity.resources.getString(R.string.NGAYCAPNHAT)) {
-                val currentTime = Calendar.getInstance()
-                mSelectedArcGISFeature!!.attributes[field.name] = currentTime
-            }
-            if (field.name.toUpperCase() == mMainActivity.resources.getString(R.string.NGUOICAPNHAT)) {
-                val username = this.mDApplication.user!!.username
-                mSelectedArcGISFeature!!.attributes[field.name] = username
-            }
-        }
-
-
-        mServiceFeatureTable.loadAsync()
-        mServiceFeatureTable.addDoneLoadingListener {
+        val voidListenableFuture = mServiceFeatureTable.updateFeatureAsync(mSelectedArcGISFeature)
+        voidListenableFuture.addDoneListener {
             try {
-                updateFeature(mSelectedArcGISFeature)
-            } catch (e: Exception) {
-                publishProgress(false)
+                voidListenableFuture.get()
+                val listListenableFuture = mServiceFeatureTable.applyEditsAsync()
+                listListenableFuture.addDoneListener {
+                    try {
+                        val featureEditResults = listListenableFuture.get()
+                        if (featureEditResults.size > 0) {
+                            if (!featureEditResults[0].hasCompletedWithErrors()) {
+                                publishProgress(true)
+                            } else {
+                                publishProgress()
+                            }
+                        } else {
+                            publishProgress()
+                        }
+                    } catch (e: InterruptedException) {
+                        publishProgress()
+                        e.printStackTrace()
+                    } catch (e: ExecutionException) {
+                        publishProgress()
+                        e.printStackTrace()
+                    }
+
+
+                }
+            } catch (e: InterruptedException) {
+                publishProgress()
+                e.printStackTrace()
+            } catch (e: ExecutionException) {
+                publishProgress()
+                e.printStackTrace()
             }
         }
         return null
     }
 
-    private fun updateFeature(feature: Feature?) {
-        val mapViewResult = mServiceFeatureTable.updateFeatureAsync(feature!!)
-        mapViewResult.addDoneListener {
-            val listListenableEditAsync = mServiceFeatureTable.applyEditsAsync()
-            listListenableEditAsync.addDoneListener {
-                try {
-                    mDialog.dismiss()
-                    val featureEditResults = listListenableEditAsync.get()
-                    if (featureEditResults.size > 0) {
-                        val objectId = featureEditResults[0].objectId
-                        publishProgress(true)
-                    } else publishProgress(false)
-
-                } catch (e: Exception) {
-                    publishProgress(false)
-                }
-            }
-        }
+    private fun notifyError() {
+        publishProgress()
+        Snackbar.make(mView, "Đã xảy ra lỗi", Snackbar.LENGTH_SHORT).show()
     }
 
-
-    private fun getIdFeatureTypes(featureTypes: List<FeatureType>, value: String): Any? {
-        var code: Any? = null
-        for (featureType in featureTypes) {
-            if (featureType.name == value) {
-                code = featureType.id
-                break
-            }
-        }
-        return code
-    }
-
-    private fun getValueUniqueRenderer(uniqueValues: List<UniqueValueRenderer.UniqueValue>, label: String?): Any? {
-        var value: Any? = null
-        for (uniqueValue in uniqueValues) {
-            if (uniqueValue.label != null && uniqueValue.label.toString() == label) {
-                value = uniqueValue.values[0].toString()
-                break
-            }
-        }
-        return value
-    }
-
-    private fun getCodeDomain(codedValues: List<CodedValue>, value: String?): Any? {
-        var code: Any? = null
-        for (codedValue in codedValues) {
-            if (codedValue.name == value) {
-                code = codedValue.code
-                break
-            }
-
-        }
-        return code
-    }
 
     override fun onProgressUpdate(vararg values: Boolean?) {
         super.onProgressUpdate(*values)
-        if (values.isNotEmpty())
-            delegate!!.processFinish(values.first()!!)
-        else
-            delegate.processFinish(false)
-
+        if (values[0] != null) {
+            mDelegate.processFinish(true)
+        } else {
+            notifyError()
+            mDelegate.processFinish(false)
+        }
+        if (mDialog.isShowing) {
+            mDialog.dismiss()
+        }
     }
 
 
 }
-

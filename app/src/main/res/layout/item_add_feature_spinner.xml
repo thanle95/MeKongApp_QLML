@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/llayout_add_feature_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:hintEnabled="true">
+
+        <TextView
+            android:id="@+id/txt_spin_title"
+            style="@style/InputLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Domain" />
+
+        <Spinner
+            android:id="@+id/spinner_add_spinner_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_right_menu" />
+    </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>

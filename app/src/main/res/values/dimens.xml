@@ -23,4 +23,7 @@
     <dimen name="height_text_add_attachment">35dp</dimen>
 
     <dimen name="height_item_add_attachment">200dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="input_label_vertical_spacing">8dp</dimen>
+    <dimen name="input_label_horizontal_spacing">4dp</dimen>
 </resources>

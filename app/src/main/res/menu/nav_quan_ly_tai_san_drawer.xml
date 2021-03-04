@@ -15,6 +15,7 @@
                 <item
                     android:id="@+id/nav_thongke"
                     android:icon="@drawable/ic_thongke"
+                    android:visible="false"
                     android:title="@string/nav_thong_ke" />
                 <item
                     android:id="@+id/nav_chuthich"
@@ -22,8 +23,8 @@
                     android:title="@string/nav_chu_thich" />
                 <item
                     android:id="@+id/nav_tracuu"
-                    android:icon="@drawable/ic_search"
                     android:visible="false"
+                    android:icon="@drawable/ic_search"
                     android:title="@string/nav_tra_cuu" />
                 <item
                     android:id="@+id/nav_thaotacbando"

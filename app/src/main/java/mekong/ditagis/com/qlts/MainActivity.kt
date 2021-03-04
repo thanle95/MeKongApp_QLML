@@ -59,7 +59,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     private var mUri: Uri? = null
-    private var popupInfos: Popup? = null
+    private var mPopup: Popup? = null
     private var mMap: ArcGISMap? = null
     private var mCallout: Callout? = null
     private var mMapViewHandler: MapViewHandler? = null
@@ -187,7 +187,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mFeatureLayerDTGS = ArrayList()
         mCallout = mBinding.appBar.content.mapView.callout
         mMapViewHandler = MapViewHandler(mBinding.appBar.content.mapView, this@MainActivity)
-        popupInfos = Popup(this@MainActivity, mBinding.appBar.content.mapView, mCallout)
+        mPopup = Popup(this@MainActivity, mBinding.appBar.content.mapView, mCallout)
         val size = AtomicInteger(mApplication.layerInfos!!.size)
         val layerVisible = HashMap<Any, Boolean>()
         for (layerInfo in mApplication.layerInfos!!) {
@@ -228,7 +228,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         }
                         val url_HanhChinh = "$finalUrl/5"
                         val serviceFeatureTable = ServiceFeatureTable(url_HanhChinh)
-                        popupInfos!!.setmSFTHanhChinh(serviceFeatureTable)
+                        mPopup!!.setmSFTHanhChinh(serviceFeatureTable)
                     }
                     if (size.get() == 0) {
                         mApplication!!.layerVisible = layerVisible
@@ -263,7 +263,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         }
 
-        mMapViewHandler!!.setmPopUp(popupInfos!!)
+        mMapViewHandler!!.setmPopUp(mPopup!!)
         mMapViewHandler!!.setFeatureLayerDTGs(mFeatureLayerDTGS!!)
         thongKe = ThongKe(this, mFeatureLayerDTGS!!)
         mapViewEvent()
@@ -863,6 +863,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Constant.RequestCode.LOGIN -> if (resultCode == Activity.RESULT_OK) {
                     startMain()
                 } else finish()
+                Constant.RequestCode.UPDATE -> mPopup!!.refreshPopup()
 //                Constant.RequestCode.LIST_TASK -> if (resultCode == Activity.RESULT_OK) handlingListTaskActivityResult()
 //                Constant.RequestCode.ADD -> if (resultCode == Activity.RESULT_OK) {
 //                    handlingAddFeatureSuccess()
