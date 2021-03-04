@@ -12,7 +12,14 @@
 
     <!--Layout top hiển thị logo-->
 
-
+    <TextView
+        android:id="@+id/txt_version"
+        android:layout_gravity="left"
+        style="@style/MyTextAppearance.Black.Small.Italic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        android:text="v1.0.0"/>
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
@@ -50,7 +57,6 @@
             android:background="@drawable/layout_edittext_none_border"
             android:hint="Nhập tên đăng nhập"
             android:inputType="text"
-            android:maxLength="20"
             android:maxLines="1"
             android:nextFocusDown="@+id/txtPassword"
             android:textColor="@color/colorTextLogin_1"
@@ -116,6 +122,7 @@
 
 
     <FrameLayout
+        android:visibility="gone"
         android:id="@+id/layout_login_tool"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

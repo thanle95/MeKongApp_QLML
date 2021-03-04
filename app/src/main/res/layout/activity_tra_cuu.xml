@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="vinhlong.ditagis.com.qlts.TraCuuActivity">
+    tools:context="mekong.ditagis.com.qlts.TraCuuActivity">
 
 
    <include layout="@layout/layout_viewmoreinfo_feature" android:id="@+id/layout_tracuu_include"/>

@@ -98,7 +98,7 @@
 
     <string name="validate_no_connect">Không có kết nối internet</string>
     <string name="info_login_empty">Danh bạ hoặc mật khẩu không được để trống</string>
-    <string name="validate_login_fail">Sai danh bạ hoặc mật khẩu</string>
+    <string name="validate_login_fail">Sai tên đăng nhập hoặc mật khẩu</string>
 
 
     <string name="preparing">Đang khởi tạo bản đồ…</string>

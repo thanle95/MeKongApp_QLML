@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="@dimen/activity_vertical_margin">
 
-    <android:com.github.chrisbanes.photoview.PhotoView
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/img_view_attachment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -58,13 +58,6 @@
                 android:tint="@android:color/white"
                 android:background="@android:color/transparent"
                 /></LinearLayout>
-        <Button
-            android:id="@+id/btn_update"
-            android:textColor="@android:color/white"
-            android:background="@android:color/transparent"
-            android:layout_gravity="center_vertical|end"
-            android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Cập nhật"
-            />
     </FrameLayout>
 
 </FrameLayout>

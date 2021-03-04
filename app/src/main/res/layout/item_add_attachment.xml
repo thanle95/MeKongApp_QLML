@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:id="@+id/layout_add_attachment"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_item_add_attachment"
+        android:layout_margin="@dimen/margin_medium"
+        android:background="@drawable/layout_border_dashed">
+
+        <ImageView
+            android:id="@+id/img_add_attachment"
+            android:layout_width="@dimen/size_image_add_attachment"
+            android:layout_height="@dimen/size_image_add_attachment"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_image" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_small"
+            android:layout_gravity="bottom"
+            android:alpha="0.5"
+            android:background="@android:color/black"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txt_add_attachment__title"
+                style="@style/MyTextAppearance.White.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="Lắp cụm kiềng" />
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>

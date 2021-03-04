@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="vinhlong.ditagis.com.qlts.MainActivity">
+    tools:context="mekong.ditagis.com.qlts.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include
-
+        android:id="@+id/content"
         layout="@layout/content" />
 
     <LinearLayout

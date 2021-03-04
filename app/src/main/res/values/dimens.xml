@@ -19,4 +19,8 @@
     <dimen name="divider_small">8dp</dimen>
     <dimen name="padding_small">8dp</dimen>
     <dimen name="size_capture_image">40dp</dimen>
+    <dimen name="size_image_add_attachment">50dp</dimen>
+    <dimen name="height_text_add_attachment">35dp</dimen>
+
+    <dimen name="height_item_add_attachment">200dp</dimen>
 </resources>
