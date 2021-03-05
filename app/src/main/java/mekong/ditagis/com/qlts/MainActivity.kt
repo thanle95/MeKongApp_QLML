@@ -59,16 +59,16 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     private var mUri: Uri? = null
-    private var mPopup: Popup? = null
+    var popup: Popup? = null
     private var mMap: ArcGISMap? = null
-    private var mCallout: Callout? = null
+    var callout: Callout? = null
     private var mMapViewHandler: MapViewHandler? = null
     private var mSearchAdapter: ObjectsAdapter? = null
-    private var mLocationDisplay: LocationDisplay? = null
+    var locationDisplay: LocationDisplay? = null
     private val requestCode = 2
     private var mCurrentPoint: Point? = null
     private var mGeocoder: Geocoder? = null
-    private var mGraphicsOverlay: GraphicsOverlay? = null
+    var graphicsOverlay: GraphicsOverlay? = null
     private var isSearchingFeature = false
     private var mFeatureLayerDTGS: MutableList<FeatureLayerDTG>? = null
     private var thongKe: ThongKe? = null
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var states: Array<IntArray>? = null
     private var colors: IntArray? = null
     private lateinit var mApplication: DApplication
-
+    private lateinit var mAddHandling: AddHandling
     private var mSelectedArcGISFeature: ArcGISFeature? = null
     internal var reqPermissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
     lateinit var mBinding: ActivityQuanLyTaiSanBinding
@@ -96,6 +96,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mBinding = ActivityQuanLyTaiSanBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         mApplication = application as DApplication
+        mAddHandling = AddHandling(this)
         mGeocoder = Geocoder(this)
         //        // create an empty map instance
         setUp()
@@ -176,18 +177,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }).execute(this@MainActivity, mApplication!!)
 
         changeStatusOfLocationDataSource()
-        mLocationDisplay!!.addLocationChangedListener { locationChangedEvent -> }
-        mGraphicsOverlay = GraphicsOverlay()
-        mBinding.appBar.content.mapView.graphicsOverlays.add(mGraphicsOverlay)
+        locationDisplay!!.addLocationChangedListener { locationChangedEvent -> }
+        graphicsOverlay = GraphicsOverlay()
+        mBinding.appBar.content.mapView.graphicsOverlays.add(graphicsOverlay)
         mApplication.progressDialog.changeTitle(this, mBinding.drawerLayout, "Đang khởi tạo ứng dụng...")
     }
 
     private fun setFeatureService() {
         // config feature layer service
         mFeatureLayerDTGS = ArrayList()
-        mCallout = mBinding.appBar.content.mapView.callout
+        callout = mBinding.appBar.content.mapView.callout
         mMapViewHandler = MapViewHandler(mBinding.appBar.content.mapView, this@MainActivity)
-        mPopup = Popup(this@MainActivity, mBinding.appBar.content.mapView, mCallout)
+        popup = Popup(this@MainActivity, mBinding.appBar.content.mapView, callout)
         val size = AtomicInteger(mApplication.layerInfos!!.size)
         val layerVisible = HashMap<Any, Boolean>()
         for (layerInfo in mApplication.layerInfos!!) {
@@ -228,7 +229,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         }
                         val url_HanhChinh = "$finalUrl/5"
                         val serviceFeatureTable = ServiceFeatureTable(url_HanhChinh)
-                        mPopup!!.setmSFTHanhChinh(serviceFeatureTable)
+                        popup!!.setmSFTHanhChinh(serviceFeatureTable)
                     }
                     if (size.get() == 0) {
                         mApplication!!.layerVisible = layerVisible
@@ -263,7 +264,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         }
 
-        mMapViewHandler!!.setmPopUp(mPopup!!)
+        mMapViewHandler!!.setmPopUp(popup!!)
         thongKe = ThongKe(this, mFeatureLayerDTGS!!)
         mapViewEvent()
     }
@@ -273,9 +274,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun mapViewEvent() {
         mBinding.appBar.content.mapView.onTouchListener = object : DefaultMapViewOnTouchListener(this, mBinding.appBar.content.mapView) {
             override fun onLongPress(e: MotionEvent) {
-                addGraphicsAddFeature(e)
+//                addGraphicsAddFeature(e)
+                mAddHandling.selectOptionAdd(e)
                 super.onLongPress(e)
             }
+
             override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
                 try {
                     mMapViewHandler!!.onSingleTapMapView(e!!)
@@ -322,12 +325,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         val symbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CROSS, Color.YELLOW, 20F)
         val graphic = Graphic(center, symbol)
-        mGraphicsOverlay!!.graphics.clear()
-        mGraphicsOverlay!!.graphics.add(graphic)
-        if (mPopup != null) {
-            mPopup!!.showPopupAdd(center)
+        graphicsOverlay!!.graphics.clear()
+        graphicsOverlay!!.graphics.add(graphic)
+        if (popup != null) {
+            popup!!.showPopupAdd(center)
         }
     }
+
     fun addFeature() {
         if (mApplication.selectedFeatureLayer == null) {
             Toast.makeText(mBinding.root.context, "Vui lòng chọn lớp thao tác bản đồ", Toast.LENGTH_LONG).show()
@@ -350,8 +354,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (callout != null && callout.isShowing) {
             callout.dismiss()
         }
-        mGraphicsOverlay!!.graphics.clear()
+        graphicsOverlay!!.graphics.clear()
     }
+
     private fun getFieldsDTG(stringFields: String?): Array<String>? {
         var returnFields: Array<String>? = null
         if (stringFields != null) {
@@ -464,9 +469,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun changeStatusOfLocationDataSource() {
-        mLocationDisplay = mBinding.appBar.content.mapView.locationDisplay
+        locationDisplay = mBinding.appBar.content.mapView.locationDisplay
         //        changeStatusOfLocationDataSource();
-        mLocationDisplay!!.addDataSourceStatusChangedListener(LocationDisplay.DataSourceStatusChangedListener { dataSourceStatusChangedEvent ->
+        locationDisplay!!.addDataSourceStatusChangedListener(LocationDisplay.DataSourceStatusChangedListener { dataSourceStatusChangedEvent ->
             // If LocationDisplay started OK, then continue.
             if (dataSourceStatusChangedEvent.isStarted) return@DataSourceStatusChangedListener
 
@@ -497,7 +502,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val symbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CROSS, Color.RED, 20f)
         val graphic = Graphic(point, symbol)
-        mGraphicsOverlay!!.graphics.add(graphic)
+        graphicsOverlay!!.graphics.add(graphic)
 
         mBinding.appBar.content.mapView.setViewpointCenterAsync(point)
     }
@@ -717,7 +722,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_logOut -> startSignIn()
             R.id.nav_reload -> initMapView()
             R.id.nav_delete_searching -> {
-                mGraphicsOverlay!!.graphics.clear()
+                graphicsOverlay!!.graphics.clear()
                 mSearchAdapter!!.clear()
                 mSearchAdapter!!.notifyDataSetChanged()
             }
@@ -744,7 +749,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            mLocationDisplay!!.startAsync()
+            locationDisplay!!.startAsync()
 
         } else {
             Toast.makeText(this@MainActivity, resources.getString(R.string.location_permission_denied), Toast.LENGTH_SHORT).show()
@@ -826,11 +831,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 mBinding.appBar.layoutLayer.visibility = View.INVISIBLE
                 toogleFloatButton()
             }
-            R.id.floatBtnLocation -> if (!mLocationDisplay!!.isStarted) {
-                mLocationDisplay!!.startAsync()
-                setViewPointCenter(mLocationDisplay!!.mapLocation)
+            R.id.floatBtnLocation -> if (!locationDisplay!!.isStarted) {
+                locationDisplay!!.startAsync()
+                setViewPointCenter(locationDisplay!!.mapLocation)
             } else
-                mLocationDisplay!!.stop()
+                locationDisplay!!.stop()
         }
     }
 
@@ -878,7 +883,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Constant.RequestCode.LOGIN -> if (resultCode == Activity.RESULT_OK) {
                     startMain()
                 } else finish()
-                Constant.RequestCode.UPDATE -> mPopup!!.refreshPopup()
+                Constant.RequestCode.UPDATE -> popup!!.refreshPopup()
 //                Constant.RequestCode.LIST_TASK -> if (resultCode == Activity.RESULT_OK) handlingListTaskActivityResult()
                 Constant.RequestCode.ADD -> if (resultCode == Activity.RESULT_OK) {
                     handlingAddFeatureSuccess()

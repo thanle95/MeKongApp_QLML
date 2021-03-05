@@ -23,11 +23,11 @@ class FindLocationAsycn(private val mContext: Context, private val mIsFromLocati
         fun processFinish(output: List<DAddress>?)
     }
 
-    fun setmLongtitude(mLongtitude: Double) {
+    fun setLongtitude(mLongtitude: Double) {
         this.mLongtitude = mLongtitude
     }
 
-    fun setmLatitude(mLatitude: Double) {
+    fun setLatitude(mLatitude: Double) {
         this.mLatitude = mLatitude
     }
 

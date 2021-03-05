@@ -120,8 +120,8 @@ class Popup(private val mMainActivity: MainActivity, private val mMapView: MapVi
                     })
             val project = GeometryEngine.project(position, SpatialReferences.getWgs84())
             val location = doubleArrayOf(project.extent.center.x, project.extent.center.y)
-            findLocationAsycn.setmLongtitude(location[0])
-            findLocationAsycn.setmLatitude(location[1])
+            findLocationAsycn.setLongtitude(location[0])
+            findLocationAsycn.setLatitude(location[1])
             findLocationAsycn.execute()
         } catch (e: Exception) {
             Log.e("Popup tìm kiếm", e.toString())

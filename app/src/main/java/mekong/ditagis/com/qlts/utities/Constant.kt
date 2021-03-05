@@ -13,7 +13,12 @@ class Constant internal constructor() {
         const val VINH_LONG = "F21FBD2D-BC7C-EB11-80D2-E88E1868CDFA"
         val LIST = arrayOf(TIEN_GIANG, VINH_LONG)
     }
+    object IntentExtra {
 
+        const val ADD_ATTACHMENT_FROM_ADD_FEATURE = "ADD_ATTACHMENT_FROM_ADD_FEATURE"
+        const val ID_ADD_FEATURE = "ID_ADD_FEATURE"
+        const val IS_UPDATE_FEATURE = "IS_UPDATE_FEATURE"
+    }
     object LAYER_ID {
         const val SU_CO = "DiemSuCo"
         const val BASEMAP = "BASEMAP"
@@ -33,8 +38,8 @@ class Constant internal constructor() {
         const val UPDATE = 10
         const val UPDATE_ATTACHMENT = 11
         const val PICK_PHOTO = 12
-        const val NOTIFICATION = 100
-        const val REQUEST_ID_UPDATE_ATTACHMENT = 50
+        const val ADD_FEATURE = 13
+        const val ADD_BOOKMARK = 14
     }
     object FileType {
         const val VIDEO = "video/quicktime"

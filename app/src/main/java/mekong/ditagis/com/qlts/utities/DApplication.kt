@@ -8,11 +8,13 @@ import com.esri.arcgisruntime.geometry.Point
 import com.esri.arcgisruntime.layers.FeatureLayer
 import mekong.ditagis.com.qlts.entities.DAppInfo
 import mekong.ditagis.com.qlts.entities.DLayerInfo
+import mekong.ditagis.com.qlts.entities.FeatureLayerValueIDField
 import mekong.ditagis.com.qlts.entities.LayerLegend
 import mekong.ditagis.com.qlts.entities.entitiesDB.User
 import java.util.*
 
 class DApplication : Application() {
+    var idFeatureLayerToAdd: HashMap<Int, FeatureLayerValueIDField> = hashMapOf()
     var address: String? = null
     var addFeaturePoint: Point? = null
     var user: User? = null
