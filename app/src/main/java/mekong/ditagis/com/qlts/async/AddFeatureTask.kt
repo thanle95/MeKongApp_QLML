@@ -43,10 +43,8 @@ class AddFeatureTask(private val delegate: Response) {
                 feature = serviceFeatureTable.createFeature()
                 feature.geometry = application.addFeaturePoint
                 for (field in serviceFeatureTable.fields) {
-                    for (alias in attributes!!.keys) {
-                        if (field.alias == alias) {
                             try {
-                                val value = attributes!![alias].toString().trim { it <= ' ' }
+                                val value = attributes!![field.name].toString().trim { it <= ' ' }
                                 if (value.isEmpty()) continue
                                 when (field.fieldType) {
                                     Field.Type.TEXT -> feature.attributes[field.name] = value
@@ -58,9 +56,6 @@ class AddFeatureTask(private val delegate: Response) {
                             } catch (e: Exception) {
                                 Log.e("Lỗi thêm điểm", e.toString())
                             }
-                            break
-                        }
-                    }
                     when (field.name) {
                         Constant.Field.CREATED_DATE, Constant.Field.LAST_EDITED_DATE,
                         Constant.Field.CREATED_USER, Constant.Field.LAST_EDITED_USER -> feature.attributes[field.name] = application.user!!.username
@@ -96,7 +91,7 @@ class AddFeatureTask(private val delegate: Response) {
     private fun preExecute(activity: Activity) {
         mDialog = BottomSheetDialog(activity)
         val bindingView = LayoutProgressDialogBinding.inflate(activity.layoutInflater)
-        bindingView.txtProgressDialogTitle.text = "Đang phản ánh sự cố..."
+        bindingView.txtProgressDialogTitle.text = "Đang lưu..."
         mDialog.setContentView(bindingView.root)
         mDialog.setCancelable(false)
 

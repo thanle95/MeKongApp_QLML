@@ -12,9 +12,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Toast
-import com.esri.arcgisruntime.data.CodedValueDomain
-import com.esri.arcgisruntime.data.Feature
-import com.esri.arcgisruntime.data.Field
+import com.esri.arcgisruntime.data.*
 import com.esri.arcgisruntime.layers.FeatureLayer
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import mekong.ditagis.com.qlts.async.AddFeatureTask
@@ -27,12 +25,13 @@ import java.util.*
 
 
 class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
-    private var mApplication: DApplication? = null
+    private lateinit var mApplication: DApplication
     private var mImages: MutableList<ByteArray>? = null
     private var mUri: Uri? = null
     private val mAdapterLayer: ArrayAdapter<String>? = null
     private lateinit var mBinding: ActivityAddFeatureBinding
     private var mFeatureLayer: FeatureLayer? = null
+    private var mFeature: ArcGISFeature? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityAddFeatureBinding.inflate(layoutInflater)
@@ -48,10 +47,8 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
         mBinding.btnPickPhoto.setOnClickListener { view: View -> onClick(view) }
         Objects.requireNonNull(supportActionBar)?.setDisplayHomeAsUpEnabled(true)
         Objects.requireNonNull(supportActionBar)?.setDisplayShowHomeEnabled(true)
-        mBinding.txtProgress.text = "Đang khởi tạo thuộc tính..."
-        mBinding.llayoutProgress.visibility = View.VISIBLE
-        mBinding.llayoutMain.visibility = View.GONE
         mFeatureLayer = mApplication!!.selectedFeatureLayer
+        mFeature = (mFeatureLayer!!.featureTable as ServiceFeatureTable).createFeature() as ArcGISFeature
         loadData()
 //        LoadingDataFeatureAsync(this@AddFeatureActivity, mFeatureLayer!!.featureTable.fields,
 //                object : LoadingDataFeatureAsync.AsyncResponse {
@@ -68,10 +65,8 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun loadData() {
-
+        mApplication!!.progressDialog.changeTitle(this@AddFeatureActivity, mBinding.root, "Đang khởi tạo thuộc tính...")
         mBinding.llayoutField.removeAllViews()
-        mBinding.llayoutProgress.visibility = View.VISIBLE
-        mBinding.llayoutMain.visibility = View.GONE
         for (field in mFeatureLayer!!.featureTable.fields) {
             val fieldName = field.name
             if (Constant.Field.NONE_UPDATE_FIELDS.find { f -> f == fieldName } != null) continue
@@ -135,8 +130,11 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
-        mBinding.llayoutProgress.visibility = View.GONE
-        mBinding.llayoutMain.visibility = View.VISIBLE
+
+        mApplication!!.progressDialog.dismiss()
+        if (!mFeature!!.canEditAttachments()) {
+             mBinding.btnCapture.visibility = View.GONE
+        }
 
     }
 
@@ -208,7 +206,7 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
         return mApplication!!.addFeaturePoint != null
     }
 
-    fun capture() {
+    private fun capture() {
         val cameraIntent = Intent(this@AddFeatureActivity, CameraActivity::class.java)
         this.startActivityForResult(cameraIntent, Constant.RequestCode.ADD_FEATURE_ATTACHMENT)
 
@@ -240,9 +238,8 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
             } else if (mFeatureLayer == null) {
                 Toast.makeText(this@AddFeatureActivity, R.string.message_add_feature_had_not_feature, Toast.LENGTH_LONG).show()
             } else {
-                mBinding.llayoutProgress.visibility = View.VISIBLE
-                mBinding.llayoutMain.visibility = View.GONE
-                mBinding.txtProgress.text = "Đang lưu..."
+                mApplication.progressDialog.changeTitle(this@AddFeatureActivity, mBinding.root,
+                        "Đang lưu...")
                 AddFeatureTask(object : AddFeatureTask.Response {
                     override fun post(output: Feature?) {
                         if (output != null) {
@@ -250,8 +247,7 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
                         } else {
                             Toast.makeText(mBinding.root.context, "Nhập thiếu dữ liệu hoặc có lỗi xảy ra", Toast.LENGTH_SHORT).show()
                         }
-                        mBinding.llayoutProgress.visibility = View.GONE
-                        mBinding.llayoutMain.visibility = View.VISIBLE
+                       mApplication.progressDialog.dismiss()
                     }
 
                 }).execute(this@AddFeatureActivity, mApplication!!, mBinding.llayoutField)

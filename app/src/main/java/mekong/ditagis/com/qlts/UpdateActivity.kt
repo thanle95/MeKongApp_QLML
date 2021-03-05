@@ -89,14 +89,11 @@ class UpdateActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun update() {
-        mBinding.llayoutProgress.visibility = View.VISIBLE
-        mBinding.llayoutMain.visibility = View.GONE
-        mBinding.txtProgress.text = "Đang lưu..."
-        EditAsync(mBinding.txtProgress, this@UpdateActivity, mApplication.selectedFeatureLayer!!.featureTable as ServiceFeatureTable,
+        mApplication.progressDialog.changeTitle(this@UpdateActivity, mBinding.root, "Đang lưu...")
+        EditAsync(mBinding.btnUpdate, this@UpdateActivity, mApplication.selectedFeatureLayer!!.featureTable as ServiceFeatureTable,
                 mApplication.selectedFeature!! as ArcGISFeature, object : EditAsync.AsyncResponse {
             override fun processFinish(feature: Boolean?) {
-                mBinding.llayoutProgress.visibility = View.GONE
-                mBinding.llayoutMain.visibility = View.VISIBLE
+                mApplication.progressDialog.dismiss()
                 feature?.let {
                     Toast.makeText(this@UpdateActivity, "Cập nhật thành công", Toast.LENGTH_SHORT).show()
                 } ?: run {
@@ -121,10 +118,7 @@ class UpdateActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun initViews() {
         mBinding.btnUpdate.setOnClickListener { update() }
-
-        mBinding.txtProgress.text = "Đang khởi tạo thuộc tính..."
-        mBinding.llayoutProgress.visibility = View.VISIBLE
-        mBinding.llayoutMain.visibility = View.GONE
+        mApplication.progressDialog.changeTitle(this@UpdateActivity, mBinding.root, "Đang khởi tạo thuộc tính...")
         mArcGISFeature = mApplication.selectedFeature!! as ArcGISFeature
 
         mBinding.swipe.setOnRefreshListener {
@@ -138,8 +132,7 @@ class UpdateActivity : AppCompatActivity() {
     private fun loadData() {
 
         mBinding.llayoutField.removeAllViews()
-        mBinding.llayoutProgress.visibility = View.VISIBLE
-        mBinding.llayoutMain.visibility = View.GONE
+
 
         for (fieldName in mArcGISFeature!!.attributes.keys) {
             if (Constant.Field.NONE_UPDATE_FIELDS.find { f -> f == fieldName } != null) continue
@@ -213,8 +206,7 @@ class UpdateActivity : AppCompatActivity() {
                 }
             }
         }
-        mBinding.llayoutProgress.visibility = View.GONE
-        mBinding.llayoutMain.visibility = View.VISIBLE
+        mApplication.progressDialog.dismiss()
 
     }
 

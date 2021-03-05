@@ -45,15 +45,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_layer_close"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:background="@color/colorRed"
-                android:text="x"
-                tools:ignore="RtlHardcoded" />
-
+                android:background="@android:color/white"
+                android:contentDescription="Đóng popup"
+                android:src="@drawable/ic_cancel" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -246,7 +245,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_marginRight="@dimen/fab_margin"
-        android:layout_marginBottom="105dp"
+        android:layout_marginBottom="50dp"
         android:src="@drawable/location"
         android:visibility="visible"
         app:backgroundTint="@android:color/white"/>
