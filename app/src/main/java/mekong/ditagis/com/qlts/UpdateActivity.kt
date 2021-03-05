@@ -40,7 +40,7 @@ class UpdateActivity : AppCompatActivity() {
                         if (viewJ.visibility == View.VISIBLE
                                 && viewJ.hint != null) {
                             val fieldName = viewJ.tag.toString()
-                            val field = (mApplication.selectedFeatureLayer!!.featureTable as ServiceFeatureTable) .getField(fieldName)
+                            val field = (mArcGISFeature!!.featureTable as ServiceFeatureTable) .getField(fieldName)
                             currentFieldName = fieldName
                             if (currentFieldName.isEmpty()) continue
                             for (k in 0 until viewJ.childCount) {
@@ -90,7 +90,7 @@ class UpdateActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun update() {
         mApplication.progressDialog.changeTitle(this@UpdateActivity, mBinding.root, "Đang lưu...")
-        EditAsync(mBinding.btnUpdate, this@UpdateActivity, mApplication.selectedFeatureLayer!!.featureTable as ServiceFeatureTable,
+        EditAsync(mBinding.btnUpdate, this@UpdateActivity, mArcGISFeature!!.featureTable as ServiceFeatureTable,
                 mApplication.selectedFeature!! as ArcGISFeature, object : EditAsync.AsyncResponse {
             override fun processFinish(feature: Boolean?) {
                 mApplication.progressDialog.dismiss()

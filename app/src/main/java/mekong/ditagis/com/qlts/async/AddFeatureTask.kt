@@ -33,14 +33,12 @@ class AddFeatureTask(private val delegate: Response) {
         fun post(output: Feature?)
     }
 
-    fun execute(activity: Activity, application: DApplication, layoutField: LinearLayout, featureInput: Feature?) {
-        val serviceFeatureTable = application.selectedFeatureLayer!!.featureTable as ServiceFeatureTable
+    fun execute(activity: Activity, application: DApplication, layoutField: LinearLayout, feature: Feature) {
+        val serviceFeatureTable = feature.featureTable as ServiceFeatureTable
         val attributes = getAttributes(layoutField, serviceFeatureTable)
         preExecute(activity)
         executor.execute {
-            val feature: Feature
             try {
-                feature = featureInput ?: serviceFeatureTable.createFeature()
                 feature.geometry = application.addFeaturePoint
                 for (field in serviceFeatureTable.fields) {
                     try {

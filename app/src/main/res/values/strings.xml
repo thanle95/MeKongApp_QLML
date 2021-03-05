@@ -77,7 +77,6 @@
     <!--Action popup-->
     <string name="btn_Update">Cập nhật</string>
     <string name="btn_Esc">Thoát</string>
-    <string name="type_search_feature_layer">TYPE_SEARCH_FEATURE_LAYER</string>
     <string name="email_nv">username@gmail.com</string>
     <string name="name_nv">USER NAME</string>
 

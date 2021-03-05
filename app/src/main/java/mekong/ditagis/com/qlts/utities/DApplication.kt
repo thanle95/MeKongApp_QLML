@@ -24,7 +24,6 @@ class DApplication : Application() {
     var selectedFeature: Feature? = null
     var layerLegendList: MutableList<LayerLegend> = ArrayList()
     var selectedAttachment: Attachment? = null
-    var selectedFeatureLayer: FeatureLayer? = null
     var selectedBitmap: Bitmap? = null
     var appInfo: DAppInfo? = null
     var layerInfos: List<DLayerInfo>? = null

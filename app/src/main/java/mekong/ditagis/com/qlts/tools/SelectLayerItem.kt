@@ -2,7 +2,6 @@ package mekong.ditagis.com.qlts.tools
 
 import java.util.ArrayList
 
-import mekong.ditagis.com.qlts.R
 import mekong.ditagis.com.qlts.MainActivity
 import mekong.ditagis.com.qlts.adapter.FeatureLayerAdapter
 import mekong.ditagis.com.qlts.libs.FeatureLayerDTG
@@ -18,7 +17,8 @@ class SelectLayerItem(private val mFeatureLayerDTGS: List<FeatureLayerDTG>, quan
         items = ArrayList()
         for (featureLayerDTG in mFeatureLayerDTGS) {
             if (featureLayerDTG.action != null && featureLayerDTG.action!!.isView && featureLayerDTG.featureLayer.isVisible)
-                items!!.add(FeatureLayerAdapter.Item(quanLyTaiSan.getString(R.string.type_search_feature_layer), featureLayerDTG.featureLayer.name, featureLayerDTG.featureLayer.id))
+                items!!.add(FeatureLayerAdapter.Item(featureLayerDTG.featureLayer.name, featureLayerDTG.featureLayer.id,
+                featureLayerDTG.featureLayer))
         }
 
     }

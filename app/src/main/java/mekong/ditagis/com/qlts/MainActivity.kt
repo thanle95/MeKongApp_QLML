@@ -317,39 +317,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         })
     }
 
-    private fun addGraphicsAddFeature(vararg e: MotionEvent) {
-        val center: Point
-        if (e.isEmpty()) center = mBinding.appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center else {
-            center = mBinding.appBar.content.mapView.screenToLocation(android.graphics.Point(Math.round(e[0].x), Math.round(e[0].y)))
-            mBinding.appBar.content.mapView.setViewpointCenterAsync(center)
-        }
-        val symbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CROSS, Color.YELLOW, 20F)
-        val graphic = Graphic(center, symbol)
-        graphicsOverlay!!.graphics.clear()
-        graphicsOverlay!!.graphics.add(graphic)
-        if (popup != null) {
-            popup!!.showPopupAdd(center)
-        }
-    }
-
-    fun addFeature() {
-        if (mApplication.selectedFeatureLayer == null) {
-            Toast.makeText(mBinding.root.context, "Vui lòng chọn lớp thao tác bản đồ", Toast.LENGTH_LONG).show()
-            showDialogSelectLayer()
-            return
-        }
-        val intentAdd = Intent(this@MainActivity, AddFeatureActivity::class.java)
-        startActivityForResult(intentAdd, Constant.RequestCode.ADD)
-    }
-
-    fun handlingAddFeatureSuccess() {
+    private fun handlingAddFeatureSuccess() {
         handlingCancelAdd()
-        mMapViewHandler!!.query(String.format(Constant.QUERY_BY_OBJECTID, mApplication!!.objectIDAddFeature))
+        popup!!.showPopup(mApplication.selectedFeature!! as ArcGISFeature)
         mApplication!!.address = null
         mApplication.addFeaturePoint = null
     }
 
-    fun handlingCancelAdd() {
+    private fun handlingCancelAdd() {
         val callout = mBinding.appBar.content.mapView.callout
         if (callout != null && callout.isShowing) {
             callout.dismiss()
@@ -608,38 +583,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         listView.setOnItemClickListener { parent, view, position, id ->
             selectTimeDialog.dismiss()
-            val itemAtPosition = parent.getItemAtPosition(position) as FeatureLayerAdapter.Item
-            val idLayer = itemAtPosition.idLayer
-            mBinding.appBar.content.txtTitleSearch.text = itemAtPosition.titleLayer
+            val item = parent.getItemAtPosition(position) as FeatureLayerAdapter.Item
+
+            val idLayer = item.idLayer
+            mBinding.appBar.content.txtTitleSearch.text = item.titleLayer
             val featureLayer = getFeatureLayer(idLayer!!)
             mMapViewHandler!!.setIdentifyFeatureLayer(featureLayer!!)
             featureLayer.isVisible = true
-        }
-    }
-
-    fun showDialogSelectLayer() {
-        val selectLayerItem = SelectLayerItem(mFeatureLayerDTGS!!, this)
-        val items = selectLayerItem.getItems()
-        val featureLayerAdapter = FeatureLayerAdapter(this, items!!)
-        val builder = AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_NoActionBar_Fullscreen)
-        val bindingLayout = LayoutTitleListviewBinding.inflate(layoutInflater)
-        val listView = bindingLayout.listview
-        listView.adapter = featureLayerAdapter
-        val txt_Title_Layout = bindingLayout.txtTitleLayout
-        bindingLayout.imgRefresh.visibility = View.GONE
-        txt_Title_Layout.text = "Chọn lớp dữ liệu thao tác trên bản đồ"
-        builder.setView(bindingLayout.root)
-        val selectTimeDialog = builder.create()
-        selectTimeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        selectTimeDialog.show()
-        val finalItems = featureLayerAdapter.getItems()
-        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            selectTimeDialog.dismiss()
-            val itemAtPosition = parent.getItemAtPosition(position) as FeatureLayerAdapter.Item
-            val idLayer = itemAtPosition.idLayer
-            val featureLayer = getFeatureLayer(idLayer!!)
-            mMapViewHandler!!.setIdentifyFeatureLayer(featureLayer!!)
-            //                mapView.getMap().setMaxScale(featureLayer.getMaxScale());
         }
     }
 
@@ -716,7 +666,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 intent = Intent(this, LayerActivity::class.java)
                 this.startActivity(intent)
             }
-            R.id.nav_thaotacbando -> showDialogSelectLayer()
 
             R.id.nav_visible_float_button -> toogleFloatButton()
             R.id.nav_logOut -> startSignIn()

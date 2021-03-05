@@ -46,7 +46,6 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
         val id = intent.getIntExtra(Constant.IntentExtra.ID_ADD_FEATURE, 0)
         mFeatureLayerValueIDField = mApplication.idFeatureLayerToAdd[id]
         if (mFeatureLayerValueIDField != null) {
-            mApplication.selectedFeatureLayer = mFeatureLayerValueIDField!!.featureLayer
 
             mImages = ArrayList()
             mBinding.btnCapture.setOnClickListener { view: View -> onClick(view) }
@@ -54,7 +53,7 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
             mBinding.btnPickPhoto.setOnClickListener { view: View -> onClick(view) }
             Objects.requireNonNull(supportActionBar)?.setDisplayHomeAsUpEnabled(true)
             Objects.requireNonNull(supportActionBar)?.setDisplayShowHomeEnabled(true)
-            mFeatureLayer = mApplication!!.selectedFeatureLayer
+            mFeatureLayer = mFeatureLayerValueIDField!!.featureLayer
             mFeature = (mFeatureLayer!!.featureTable as ServiceFeatureTable).createFeature() as ArcGISFeature
             loadData()
 //        LoadingDataFeatureAsync(this@AddFeatureActivity, mFeatureLayer!!.featureTable.fields,
@@ -262,6 +261,7 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
                 AddFeatureTask(object : AddFeatureTask.Response {
                     override fun post(output: Feature?) {
                         if (output != null) {
+                            mApplication.selectedFeature = output
                             goHome()
                         } else {
                             Toast.makeText(mBinding.root.context, "Nhập thiếu dữ liệu hoặc có lỗi xảy ra", Toast.LENGTH_SHORT).show()
@@ -269,7 +269,7 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
                         mApplication.progressDialog.dismiss()
                     }
 
-                }).execute(this@AddFeatureActivity, mApplication!!, mBinding.llayoutField, mFeature)
+                }).execute(this@AddFeatureActivity, mApplication!!, mBinding.llayoutField, mFeature!!)
 
 
             }
