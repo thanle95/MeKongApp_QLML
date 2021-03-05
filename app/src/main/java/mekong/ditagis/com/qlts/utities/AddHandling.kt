@@ -10,9 +10,8 @@ import android.util.Log
 import android.view.MotionEvent
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import com.esri.arcgisruntime.geometry.GeometryEngine
+import com.esri.arcgisruntime.geometry.GeometryType
 import com.esri.arcgisruntime.geometry.Point
 import com.esri.arcgisruntime.geometry.SpatialReferences
 import com.esri.arcgisruntime.layers.FeatureLayer
@@ -154,52 +153,59 @@ class AddHandling(private val mMainActivity: MainActivity) {
         var sum = 0
         mMapView.map.operationalLayers.forEach { layer ->
             if (layer.loadStatus == LoadStatus.LOADED && layer is FeatureLayer) {
-                sum++
-                GetFeatureLegendAsync(mMainActivity, object : GetFeatureLegendAsync.AsyncResponse {
-                    override fun processFinish(o: Any) {
-                        when (o) {
-                            is Exception -> {
-                                DAlertDialog().show(mMainActivity, o)
 
-                            }
-                            is Boolean -> {
-                                DAlertDialog().show(mMainActivity, "Thông báo", Constant.Message.UNDEFINED)
-                            }
-                            is String -> {
+                if (layer.featureTable.geometryType == GeometryType.POINT) {
+                    sum++
+                    GetFeatureLegendAsync(mMainActivity, object : GetFeatureLegendAsync.AsyncResponse {
+                        override fun processFinish(o: Any) {
+                            when (o) {
+                                is Exception -> {
+                                    DAlertDialog().show(mMainActivity, o)
 
-                                DAlertDialog().show(mMainActivity, "Thông báo", o)
-                            }
-                            is HashMap<*, *> -> {
-                                count++
-                                o.keys.forEach { key ->
-                                    val bitmap = key as Bitmap
-                                    val value = o[key] as String
-                                    val title = layer.name.replace("Kiểm tra ", "") + ": " + value
-                                    id++
-                                    mApplication.idFeatureLayerToAdd[id] = FeatureLayerValueIDField(layer, value)
-                                    actions.add(ActionItem(id, title, BitmapDrawable(mMainActivity.resources,
-                                            bitmap)))
                                 }
-                                if (count == sum) {
-                                    actions.sortBy { actionItem -> actionItem.title.toString() }
-                                    SheetMenu(
-                                            title = "Thêm điểm tại ${address}",
-                                            layoutProvider = LinearLayoutProvider(), // linear layout enabled by default
-                                            actions = actions,
-                                            onClick = { actionItem: ActionItem ->
-                                                addFeature(actionItem.id)
-
-                                            }
-                                    ).show(mMainActivity)
+                                is Boolean -> {
+                                    DAlertDialog().show(mMainActivity, "Thông báo", Constant.Message.UNDEFINED)
                                 }
-                            }
-                            else -> {
-                                DAlertDialog().show(mMainActivity, "Thông báo", Constant.Message.UNDEFINED)
+                                is String -> {
+
+                                    DAlertDialog().show(mMainActivity, "Thông báo", o)
+                                }
+                                is HashMap<*, *> -> {
+                                    count++
+                                    o.keys.forEach { key ->
+                                        val bitmap = key as Bitmap
+                                        val value = o[key] as String
+                                        var title = layer.name + ": " + value
+                                        if (value.isNullOrEmpty())
+                                            title = layer.name
+                                        id++
+                                        mApplication.idFeatureLayerToAdd[id] = FeatureLayerValueIDField(layer, value)
+                                        actions.add(ActionItem(id, title, BitmapDrawable(mMainActivity.resources,
+                                                bitmap)))
+                                    }
+                                    if (count == sum) {
+                                        actions.sortBy { actionItem -> actionItem.title.toString() }
+                                        SheetMenu(
+                                                title = "Thêm điểm tại: ${address}",
+                                                layoutProvider = LinearLayoutProvider(), // linear layout enabled by default
+                                                actions = actions,
+                                                onClick = { actionItem: ActionItem ->
+                                                    addFeature(actionItem.id)
+
+                                                }
+                                        ).show(mMainActivity)
+                                    }
+                                }
+                                else -> {
+                                    DAlertDialog().show(mMainActivity, "Thông báo", Constant.Message.UNDEFINED)
+                                }
                             }
                         }
-                    }
 
-                }).execute(layer)
+                    }).execute(layer)
+                }
+
+
             }
         }
 
