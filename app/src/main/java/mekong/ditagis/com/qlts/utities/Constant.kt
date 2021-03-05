@@ -60,6 +60,8 @@ class Constant internal constructor() {
         const val LAST_EDITED_DATE = "last_edited_date"
         const val NGAY_CAP_NHAT = "NgayCapNhat"
         const val NGUOI_CAP_NHAT = "NguoiCapNhat"
+        const val MA_HUYEN = "MaHuyen"
+        const val MA_XA = "MaXa"
         val NONE_UPDATE_FIELDS = arrayOf(CREATED_DATE, CREATED_USER, LAST_EDITED_DATE,
                 LAST_EDITED_USER, OBJECTID, NGAY_CAP_NHAT,
                 NGUOI_CAP_NHAT)

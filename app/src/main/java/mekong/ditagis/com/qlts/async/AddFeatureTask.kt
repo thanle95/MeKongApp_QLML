@@ -56,32 +56,36 @@ class AddFeatureTask(private val delegate: Response) {
                     }
                     when (field.name) {
                         Constant.Field.CREATED_DATE, Constant.Field.LAST_EDITED_DATE,
-                            Constant.Field.NGAY_CAP_NHAT -> feature.attributes[field.name] = Calendar.getInstance()
+                        Constant.Field.NGAY_CAP_NHAT -> feature.attributes[field.name] = Calendar.getInstance()
                         Constant.Field.CREATED_USER, Constant.Field.LAST_EDITED_USER,
-                        Constant.Field.NGUOI_CAP_NHAT-> feature.attributes[field.name] = application.user!!.username
+                        Constant.Field.NGUOI_CAP_NHAT -> feature.attributes[field.name] = application.user!!.username
                     }
                 }
-//                var queryParameters = QueryParameters()
-//                queryParameters.geometry = application.addFeaturePoint
-//                var listenableFuture = application.mSFTAdministrator!!.queryFeaturesAsync(queryParameters, ServiceFeatureTable.QueryFeatureFields.LOAD_ALL)
-//                listenableFuture.addDoneListener {
-//                    try {
-//                        var featureQueryResult = listenableFuture.get()
-//                        val iterator = featureQueryResult.iterator()
-//
-//                        while (iterator.hasNext()) {
-//                            val featureHanhChinh = iterator.next() as Feature
-//                            feature.attributes[Constant.FieldSuCo.MA_QUAN] = featureHanhChinh.attributes[
-//                                    application.appInfo!!.config.MaHuyen]
-//                            feature.attributes[Constant.FieldSuCo.MA_PHUONG] = featureHanhChinh.attributes[
-//                                    application.appInfo!!.config.IDHanhChinh]
-//                        }
-//                        addFeatureAsync(feature, serviceFeatureTable, application)
-//                    } catch (e: Exception) {
-//                        addFeatureAsync(feature, serviceFeatureTable, application)
-//                    }
-//                }
-                addFeatureAsync(feature, serviceFeatureTable, application)
+                var queryParameters = QueryParameters()
+                queryParameters.geometry = application.addFeaturePoint
+                var listenableFuture = application.SFTAdministrator!!.queryFeaturesAsync(queryParameters, ServiceFeatureTable.QueryFeatureFields.LOAD_ALL)
+                listenableFuture.addDoneListener {
+                    try {
+                        var featureQueryResult = listenableFuture.get()
+                        val iterator = featureQueryResult.iterator()
+
+                        while (iterator.hasNext()) {
+                            val featureHanhChinh = iterator.next() as Feature
+                            for (field in serviceFeatureTable.fields) {
+                                when (field.name) {
+                                    Constant.Field.MA_HUYEN -> feature.attributes[field.name] = featureHanhChinh.attributes[
+                                            application.appInfo!!.config.MaHuyen]
+                                    Constant.Field.MA_XA -> feature.attributes[field.name] = featureHanhChinh.attributes[
+                                            application.appInfo!!.config.IDHanhChinh]
+                                }
+                            }
+                        }
+                        addFeatureAsync(feature, serviceFeatureTable, application)
+                    } catch (e: Exception) {
+                        addFeatureAsync(feature, serviceFeatureTable, application)
+                    }
+                }
+//                addFeatureAsync(feature, serviceFeatureTable, application)
             } catch (e: Exception) {
                 postExecute()
             }

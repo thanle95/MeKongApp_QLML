@@ -227,8 +227,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             addCheckBoxSubLayer(sublayer as ArcGISMapImageSublayer)
                             layerVisible[sublayer] = hanhChinhImageLayers!!.isVisible
                         }
-                        val url_HanhChinh = "$finalUrl/5"
-                        val serviceFeatureTable = ServiceFeatureTable(url_HanhChinh)
+                        val urlHanhChinh = "$url/${mApplication!!.appInfo!!.config.hanhChinhID}"
+                        val serviceFeatureTable = ServiceFeatureTable(urlHanhChinh)
                         popup!!.setmSFTHanhChinh(serviceFeatureTable)
                     }
                     if (size.get() == 0) {

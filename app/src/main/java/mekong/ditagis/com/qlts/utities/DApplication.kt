@@ -4,6 +4,7 @@ import android.app.Application
 import android.graphics.Bitmap
 import com.esri.arcgisruntime.data.Attachment
 import com.esri.arcgisruntime.data.Feature
+import com.esri.arcgisruntime.data.ServiceFeatureTable
 import com.esri.arcgisruntime.geometry.Point
 import com.esri.arcgisruntime.layers.FeatureLayer
 import mekong.ditagis.com.qlts.entities.DAppInfo
@@ -25,6 +26,7 @@ class DApplication : Application() {
     var layerLegendList: MutableList<LayerLegend> = ArrayList()
     var selectedAttachment: Attachment? = null
     var selectedBitmap: Bitmap? = null
+    var SFTAdministrator: ServiceFeatureTable? = null
     var appInfo: DAppInfo? = null
     var layerInfos: List<DLayerInfo>? = null
      var objectIDAddFeature: Long = 0

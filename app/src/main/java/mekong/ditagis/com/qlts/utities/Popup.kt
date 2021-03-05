@@ -1,6 +1,5 @@
 package mekong.ditagis.com.qlts.utities
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,13 +22,9 @@ import mekong.ditagis.com.qlts.MainActivity
 import mekong.ditagis.com.qlts.R
 import mekong.ditagis.com.qlts.UpdateActivity
 import mekong.ditagis.com.qlts.adapter.FeatureViewInfoAdapter
-import mekong.ditagis.com.qlts.async.FindLocationAsycn
 import mekong.ditagis.com.qlts.async.QueryHanhChinhAsync
-import mekong.ditagis.com.qlts.databinding.LayoutDialogSearchAddressBinding
 import mekong.ditagis.com.qlts.databinding.LayoutPopupInfosBinding
-import mekong.ditagis.com.qlts.entities.DAddress
 import java.util.*
-import java.util.concurrent.atomic.AtomicReference
 
 
 class Popup(private val mMainActivity: MainActivity, private val mMapView: MapView, private val mCallout: Callout?) : AppCompatActivity() {
@@ -73,9 +68,10 @@ class Popup(private val mMainActivity: MainActivity, private val mMapView: MapVi
         return geometryWebMercator.extent.center
     }
 
-    fun setmSFTHanhChinh(mSFTHanhChinh: ServiceFeatureTable) {
+    fun setmSFTHanhChinh(SFTHanhChinh: ServiceFeatureTable) {
+        mApplication.SFTAdministrator = SFTHanhChinh
         mApplication.progressDialog.changeTitle(mMainActivity, mMainActivity.mBinding.drawerLayout, "Đang lấy dữ liệu hành chính...")
-        QueryHanhChinhAsync(mSFTHanhChinh, object : QueryHanhChinhAsync.AsyncResponse {
+        QueryHanhChinhAsync(SFTHanhChinh, object : QueryHanhChinhAsync.AsyncResponse {
             override fun processFinish(output: ArrayList<Feature>?) {
                 mApplication.progressDialog.dismiss()
                 quanhuyen_features = output
