@@ -17,6 +17,7 @@ import com.esri.arcgisruntime.layers.FeatureLayer
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import mekong.ditagis.com.qlts.async.AddFeatureTask
 import mekong.ditagis.com.qlts.databinding.*
+import mekong.ditagis.com.qlts.entities.FeatureLayerValueIDField
 import mekong.ditagis.com.qlts.utities.Constant
 import mekong.ditagis.com.qlts.utities.DApplication
 import java.io.ByteArrayOutputStream
@@ -28,6 +29,7 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var mApplication: DApplication
     private var mImages: MutableList<ByteArray>? = null
     private var mUri: Uri? = null
+    private var mFeatureLayerValueIDField: FeatureLayerValueIDField? = null
     private val mAdapterLayer: ArrayAdapter<String>? = null
     private lateinit var mBinding: ActivityAddFeatureBinding
     private var mFeatureLayer: FeatureLayer? = null
@@ -41,15 +43,20 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun initViews() {
-        mImages = ArrayList()
-        mBinding.btnCapture.setOnClickListener { view: View -> onClick(view) }
-        mBinding.btnAdd.setOnClickListener { view: View -> onClick(view) }
-        mBinding.btnPickPhoto.setOnClickListener { view: View -> onClick(view) }
-        Objects.requireNonNull(supportActionBar)?.setDisplayHomeAsUpEnabled(true)
-        Objects.requireNonNull(supportActionBar)?.setDisplayShowHomeEnabled(true)
-        mFeatureLayer = mApplication!!.selectedFeatureLayer
-        mFeature = (mFeatureLayer!!.featureTable as ServiceFeatureTable).createFeature() as ArcGISFeature
-        loadData()
+        val id = intent.getIntExtra(Constant.IntentExtra.ID_ADD_FEATURE, 0)
+        mFeatureLayerValueIDField = mApplication.idFeatureLayerToAdd[id]
+        if (mFeatureLayerValueIDField != null) {
+            mApplication.selectedFeatureLayer = mFeatureLayerValueIDField!!.featureLayer
+
+            mImages = ArrayList()
+            mBinding.btnCapture.setOnClickListener { view: View -> onClick(view) }
+            mBinding.btnAdd.setOnClickListener { view: View -> onClick(view) }
+            mBinding.btnPickPhoto.setOnClickListener { view: View -> onClick(view) }
+            Objects.requireNonNull(supportActionBar)?.setDisplayHomeAsUpEnabled(true)
+            Objects.requireNonNull(supportActionBar)?.setDisplayShowHomeEnabled(true)
+            mFeatureLayer = mApplication!!.selectedFeatureLayer
+            mFeature = (mFeatureLayer!!.featureTable as ServiceFeatureTable).createFeature() as ArcGISFeature
+            loadData()
 //        LoadingDataFeatureAsync(this@AddFeatureActivity, mFeatureLayer!!.featureTable.fields,
 //                object : LoadingDataFeatureAsync.AsyncResponse {
 //                    override fun processFinish(views: List<View?>?) {
@@ -61,7 +68,7 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
 //                    }
 //
 //                }).execute(true)
-
+        }
     }
 
     private fun loadData() {
@@ -130,10 +137,22 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
+        val typeIDFieldName = mFeature!!.featureTable.typeIdField
+        if (!typeIDFieldName.isNullOrEmpty()) {
+            val typeIDField = mFeature!!.featureTable.getField(typeIDFieldName)
+            if (typeIDField.domain != null) {
+                val codedValueDomain = typeIDField.domain as CodedValueDomain
+                val codedValue = codedValueDomain.codedValues.find { codedValue -> codedValue.name == mFeatureLayerValueIDField!!.valueIDField }
+                if (codedValue != null) {
+                    mFeature!!.attributes[typeIDFieldName] = codedValue.code
+                } else {
 
+                }
+            }
+        }
         mApplication!!.progressDialog.dismiss()
         if (!mFeature!!.canEditAttachments()) {
-             mBinding.btnCapture.visibility = View.GONE
+            mBinding.btnCapture.visibility = View.GONE
         }
 
     }
@@ -247,10 +266,10 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
                         } else {
                             Toast.makeText(mBinding.root.context, "Nhập thiếu dữ liệu hoặc có lỗi xảy ra", Toast.LENGTH_SHORT).show()
                         }
-                       mApplication.progressDialog.dismiss()
+                        mApplication.progressDialog.dismiss()
                     }
 
-                }).execute(this@AddFeatureActivity, mApplication!!, mBinding.llayoutField)
+                }).execute(this@AddFeatureActivity, mApplication!!, mBinding.llayoutField, mFeature)
 
 
             }

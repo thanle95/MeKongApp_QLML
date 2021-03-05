@@ -33,32 +33,34 @@ class AddFeatureTask(private val delegate: Response) {
         fun post(output: Feature?)
     }
 
-    fun execute(activity: Activity, application: DApplication, layoutField: LinearLayout) {
+    fun execute(activity: Activity, application: DApplication, layoutField: LinearLayout, featureInput: Feature?) {
         val serviceFeatureTable = application.selectedFeatureLayer!!.featureTable as ServiceFeatureTable
         val attributes = getAttributes(layoutField, serviceFeatureTable)
         preExecute(activity)
         executor.execute {
             val feature: Feature
             try {
-                feature = serviceFeatureTable.createFeature()
+                feature = featureInput ?: serviceFeatureTable.createFeature()
                 feature.geometry = application.addFeaturePoint
                 for (field in serviceFeatureTable.fields) {
-                            try {
-                                val value = attributes!![field.name].toString().trim { it <= ' ' }
-                                if (value.isEmpty()) continue
-                                when (field.fieldType) {
-                                    Field.Type.TEXT -> feature.attributes[field.name] = value
-                                    Field.Type.DOUBLE -> feature.attributes[field.name] = value.toDouble()
-                                    Field.Type.FLOAT -> feature.attributes[field.name] = value.toFloat()
-                                    Field.Type.INTEGER -> feature.attributes[field.name] = value.toInt()
-                                    Field.Type.SHORT -> feature.attributes[field.name] = value.toShort()
-                                }
-                            } catch (e: Exception) {
-                                Log.e("Lỗi thêm điểm", e.toString())
-                            }
+                    try {
+                        val value = attributes!![field.name].toString().trim { it <= ' ' }
+                        if (value.isEmpty()) continue
+                        when (field.fieldType) {
+                            Field.Type.TEXT -> feature.attributes[field.name] = value
+                            Field.Type.DOUBLE -> feature.attributes[field.name] = value.toDouble()
+                            Field.Type.FLOAT -> feature.attributes[field.name] = value.toFloat()
+                            Field.Type.INTEGER -> feature.attributes[field.name] = value.toInt()
+                            Field.Type.SHORT -> feature.attributes[field.name] = value.toShort()
+                        }
+                    } catch (e: Exception) {
+                        Log.e("Lỗi thêm điểm", e.toString())
+                    }
                     when (field.name) {
                         Constant.Field.CREATED_DATE, Constant.Field.LAST_EDITED_DATE,
-                        Constant.Field.CREATED_USER, Constant.Field.LAST_EDITED_USER -> feature.attributes[field.name] = application.user!!.username
+                            Constant.Field.NGAY_CAP_NHAT -> feature.attributes[field.name] = Calendar.getInstance()
+                        Constant.Field.CREATED_USER, Constant.Field.LAST_EDITED_USER,
+                        Constant.Field.NGUOI_CAP_NHAT-> feature.attributes[field.name] = application.user!!.username
                     }
                 }
 //                var queryParameters = QueryParameters()

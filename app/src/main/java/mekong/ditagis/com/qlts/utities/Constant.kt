@@ -13,12 +13,14 @@ class Constant internal constructor() {
         const val VINH_LONG = "F21FBD2D-BC7C-EB11-80D2-E88E1868CDFA"
         val LIST = arrayOf(TIEN_GIANG, VINH_LONG)
     }
+
     object IntentExtra {
 
         const val ADD_ATTACHMENT_FROM_ADD_FEATURE = "ADD_ATTACHMENT_FROM_ADD_FEATURE"
         const val ID_ADD_FEATURE = "ID_ADD_FEATURE"
         const val IS_UPDATE_FEATURE = "IS_UPDATE_FEATURE"
     }
+
     object LAYER_ID {
         const val SU_CO = "DiemSuCo"
         const val BASEMAP = "BASEMAP"
@@ -41,6 +43,7 @@ class Constant internal constructor() {
         const val ADD_FEATURE = 13
         const val ADD_BOOKMARK = 14
     }
+
     object FileType {
         const val VIDEO = "video/quicktime"
         const val PNG = "image/png"
@@ -48,13 +51,18 @@ class Constant internal constructor() {
         const val PDF = "application/pdf"
         const val DOC = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     }
+
     object Field {
         const val OBJECTID = "OBJECTID"
         const val CREATED_USER = "created_user"
         const val CREATED_DATE = "created_date"
         const val LAST_EDITED_USER = "last_edited_user"
         const val LAST_EDITED_DATE = "last_edited_date"
-        val NONE_UPDATE_FIELDS = arrayOf(CREATED_DATE, CREATED_USER, LAST_EDITED_DATE, LAST_EDITED_USER, OBJECTID)
+        const val NGAY_CAP_NHAT = "NgayCapNhat"
+        const val NGUOI_CAP_NHAT = "NguoiCapNhat"
+        val NONE_UPDATE_FIELDS = arrayOf(CREATED_DATE, CREATED_USER, LAST_EDITED_DATE,
+                LAST_EDITED_USER, OBJECTID, NGAY_CAP_NHAT,
+                NGUOI_CAP_NHAT)
     }
 
     object PreferenceKey {

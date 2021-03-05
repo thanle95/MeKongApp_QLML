@@ -13,6 +13,7 @@ import mekong.ditagis.com.qlts.utities.Constant
 import mekong.ditagis.com.qlts.utities.DApplication
 import java.util.*
 import java.util.concurrent.ExecutionException
+
 /**
  * Created by ThanLe on 4/16/2018.
  */
@@ -74,9 +75,11 @@ class EditAsync(private val mView: View, private val mActivity: Activity,
                             }
                         }
                     }
-                    when(fieldName){
-                        Constant.Field.CREATED_DATE, Constant.Field.LAST_EDITED_DATE-> mSelectedArcGISFeature.attributes[fieldName] = Calendar.getInstance()
+                    when (fieldName) {
+                        Constant.Field.CREATED_DATE, Constant.Field.LAST_EDITED_DATE,
+                        Constant.Field.NGAY_CAP_NHAT -> mSelectedArcGISFeature.attributes[fieldName] = Calendar.getInstance()
                         Constant.Field.CREATED_USER, Constant.Field.LAST_EDITED_USER,
+                        Constant.Field.NGUOI_CAP_NHAT
                         -> mSelectedArcGISFeature.attributes[fieldName] = mApplication.user!!.username
 
                     }
