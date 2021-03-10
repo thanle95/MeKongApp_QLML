@@ -3,12 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-     <FrameLayout
+     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
+         android:orientation="horizontal"
         android:padding="@dimen/padding_title_popup">
 
+         <ImageButton
+             android:id="@+id/btn_layer_close"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:background="@android:color/white"
+             android:contentDescription="Đóng popup"
+             android:layout_marginRight="@dimen/margin_medium"
+             android:src="@drawable/ic_cancel" />
         <TextView
             android:id="@+id/txt_title_layer"
             android:layout_width="wrap_content"
@@ -17,15 +26,7 @@
             android:textSize="20sp" />
 
 
-        <ImageButton
-            android:id="@+id/btn_layer_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="@android:color/white"
-            android:contentDescription="Đóng popup"
-            android:src="@drawable/ic_cancel" />
-     </FrameLayout>
+     </LinearLayout>
 
     <ListView
         android:id="@+id/lstview_thongtinsuco"
