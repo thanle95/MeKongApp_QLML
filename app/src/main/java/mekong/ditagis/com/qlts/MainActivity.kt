@@ -143,7 +143,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mBinding.navView.setNavigationItemSelectedListener(this)
         val headerLayout = mBinding.navView.getHeaderView(0)
         val nav_name_nv = headerLayout.findViewById<TextView>(R.id.nav_name_nv)
-        nav_name_nv.setText(displayName)
+        nav_name_nv.text = displayName
     }
 
     private fun startMain() {

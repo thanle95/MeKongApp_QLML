@@ -7,9 +7,7 @@ import android.util.Log
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import mekong.ditagis.com.qlts.R
 import mekong.ditagis.com.qlts.databinding.LayoutProgressDialogBinding
-import mekong.ditagis.com.qlts.entities.entitiesDB.User
 import mekong.ditagis.com.qlts.utities.Constant
 import org.json.JSONObject
 import java.io.BufferedReader

@@ -1,4 +1,5 @@
-package mekong.ditagis.com.qlts.entities.entitiesDB
+package mekong.ditagis.com.qlts.entities
+
 class User(
         val username: String?,
         val displayName: String?,

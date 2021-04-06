@@ -6,12 +6,7 @@ import com.esri.arcgisruntime.data.Attachment
 import com.esri.arcgisruntime.data.Feature
 import com.esri.arcgisruntime.data.ServiceFeatureTable
 import com.esri.arcgisruntime.geometry.Point
-import com.esri.arcgisruntime.layers.FeatureLayer
-import mekong.ditagis.com.qlts.entities.DAppInfo
-import mekong.ditagis.com.qlts.entities.DLayerInfo
-import mekong.ditagis.com.qlts.entities.FeatureLayerValueIDField
-import mekong.ditagis.com.qlts.entities.LayerLegend
-import mekong.ditagis.com.qlts.entities.entitiesDB.User
+import mekong.ditagis.com.qlts.entities.*
 import java.util.*
 
 class DApplication : Application() {
