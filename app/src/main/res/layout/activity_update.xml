@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/padding_medium"
     android:paddingRight="@dimen/padding_medium"
+    android:id="@+id/root"
     android:paddingTop="@dimen/padding_medium">
 
 

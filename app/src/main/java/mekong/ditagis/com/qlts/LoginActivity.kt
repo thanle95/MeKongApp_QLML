@@ -8,6 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import mekong.ditagis.com.qlts.async.LoginTask
 import mekong.ditagis.com.qlts.databinding.ActivityLoginBinding
+import mekong.ditagis.com.qlts.entities.User
 import mekong.ditagis.com.qlts.utities.CheckConnectInternet
 import mekong.ditagis.com.qlts.utities.Constant
 import mekong.ditagis.com.qlts.utities.DApplication

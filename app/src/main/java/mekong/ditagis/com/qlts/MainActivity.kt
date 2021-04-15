@@ -96,6 +96,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mBinding = ActivityQuanLyTaiSanBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         mApplication = application as DApplication
+        mApplication.alertDialog = DAlertDialog()
         mAddHandling = AddHandling(this)
         mGeocoder = Geocoder(this)
         //        // create an empty map instance
@@ -293,10 +294,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onScroll(e1: MotionEvent, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
                 if (mMapViewHandler != null) {
                     val location = mMapViewHandler!!.onScroll(e1, e2!!, distanceX, distanceY)
-                    val log = Math.round(location!![0] * 100000).toFloat() / 100000
-                    val lat = Math.round(location[1] * 100000).toFloat() / 100000
-                    val text = "$lat, $log"
-                    mBinding.appBar.content.txtToado.text = text
+                    if(location != null) {
+                        val log = Math.round(location!![0] * 100000).toFloat() / 100000
+                        val lat = Math.round(location[1] * 100000).toFloat() / 100000
+                        val text = "$lat, $log"
+                        mBinding.appBar.content.txtToado.text = text
+                    }
                 }
                 return super.onScroll(e1, e2, distanceX, distanceY)
             }
