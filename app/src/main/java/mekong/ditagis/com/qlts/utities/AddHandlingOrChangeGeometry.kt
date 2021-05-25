@@ -32,7 +32,7 @@ import ru.whalemare.sheetmenu.SheetMenu
 import ru.whalemare.sheetmenu.layout.LinearLayoutProvider
 import kotlin.math.roundToInt
 
-class AddHandling(private val mMainActivity: MainActivity) {
+class AddHandlingOrChangeGeometry(private val mMainActivity: MainActivity) {
     private val mApplication: DApplication = mMainActivity.application as DApplication
     private val mMapView = mMainActivity.mBinding.appBar.content.mapView
     fun selectOptionAdd(e: MotionEvent?) {
@@ -51,7 +51,7 @@ class AddHandling(private val mMainActivity: MainActivity) {
                             if (output != null && output.isNotEmpty()) {
                                 val dAddress = output[0]
                                 val addressLine = dAddress.location
-                                mApplication.addFeaturePoint = center
+                                mApplication.center = center
                                 selectLayerToAdd(addressLine)
 //                                val actions = mutableListOf<ActionItem>()
 //                                val drawableBookmark = ResourcesCompat.getDrawable(mMainActivity.resources, R.drawable.ic_bookmark, null)
@@ -99,7 +99,7 @@ class AddHandling(private val mMainActivity: MainActivity) {
         }
     }
 
-    private fun addGraphics(center: Point) {
+    fun addGraphics(center: Point) {
         mMapView.setViewpointCenterAsync(center)
         val color: Int = Color.YELLOW
         val symbol = SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CROSS, color, 20f)
@@ -144,6 +144,7 @@ class AddHandling(private val mMainActivity: MainActivity) {
             mMainActivity.callout!!.dismiss()
         }
         mMainActivity.graphicsOverlay!!.graphics.clear()
+        mApplication.statusCode = Constant.StatusCode.NORMAL.value
     }
 
     fun selectLayerToAdd(address: String) {

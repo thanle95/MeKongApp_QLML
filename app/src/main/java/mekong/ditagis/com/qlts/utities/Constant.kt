@@ -8,6 +8,11 @@ import java.text.SimpleDateFormat
  */
 
 class Constant internal constructor() {
+    enum class StatusCode(val value: Int) {
+        NORMAL(1),
+        IS_ADDING_NEW(3),
+        IS_CHANGING_GEOMETRY(4),
+    }
     object AppID {
         const val TIEN_GIANG = "7F385322-BC7C-EB11-80D2-E88E1868CDFA"
         const val VINH_LONG = "F21FBD2D-BC7C-EB11-80D2-E88E1868CDFA"

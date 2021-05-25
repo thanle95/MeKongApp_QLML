@@ -39,7 +39,7 @@ class AddFeatureTask(private val delegate: Response) {
         preExecute(activity)
         executor.execute {
             try {
-                feature.geometry = application.addFeaturePoint
+                feature.geometry = application.center
                 for (field in serviceFeatureTable.fields) {
                     try {
                         val value = attributes!![field.name].toString().trim { it <= ' ' }
@@ -62,7 +62,7 @@ class AddFeatureTask(private val delegate: Response) {
                     }
                 }
                 var queryParameters = QueryParameters()
-                queryParameters.geometry = application.addFeaturePoint
+                queryParameters.geometry = application.center
                 var listenableFuture = application.SFTAdministrator!!.queryFeaturesAsync(queryParameters, ServiceFeatureTable.QueryFeatureFields.LOAD_ALL)
                 listenableFuture.addDoneListener {
                     try {

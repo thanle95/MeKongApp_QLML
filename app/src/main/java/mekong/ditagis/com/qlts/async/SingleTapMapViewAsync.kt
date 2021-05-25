@@ -9,20 +9,18 @@ import android.graphics.Point
 import android.os.AsyncTask
 import com.esri.arcgisruntime.concurrent.ListenableFuture
 import com.esri.arcgisruntime.data.ArcGISFeature
-import com.esri.arcgisruntime.data.ArcGISFeatureTable
 import com.esri.arcgisruntime.mapping.GeoElement
 import com.esri.arcgisruntime.mapping.view.IdentifyLayerResult
 import com.esri.arcgisruntime.mapping.view.MapView
 import mekong.ditagis.com.qlts.MainActivity
-import mekong.ditagis.com.qlts.entities.DFeatureLayer
 import mekong.ditagis.com.qlts.utities.DApplication
-import mekong.ditagis.com.qlts.utities.Popup
+import mekong.ditagis.com.qlts.utities.DCallout
 import java.util.concurrent.ExecutionException
 
 /**
  * Created by ThanLe on 4/16/2018.
  */
-class SingleTapMapViewAsync constructor(activity: MainActivity,  @field:SuppressLint("StaticFieldLeak") private val mPopUp: Popup,
+class SingleTapMapViewAsync constructor(activity: MainActivity, @field:SuppressLint("StaticFieldLeak") private val mPopUp: DCallout,
                                         private val mClickPoint: Point, @field:SuppressLint("StaticFieldLeak") private val mMapView: MapView) : AsyncTask<com.esri.arcgisruntime.geometry.Point?, ArcGISFeature?, Void?>() {
     private val mDialog: ProgressDialog?
 

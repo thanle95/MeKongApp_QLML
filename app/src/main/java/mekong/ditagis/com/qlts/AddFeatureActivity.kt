@@ -221,7 +221,7 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun hadPoint(): Boolean {
-        return mApplication!!.addFeaturePoint != null
+        return mApplication!!.center != null
     }
 
     private fun capture() {

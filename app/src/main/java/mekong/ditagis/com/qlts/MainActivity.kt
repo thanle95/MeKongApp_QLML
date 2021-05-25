@@ -59,7 +59,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     private var mUri: Uri? = null
-    var popup: Popup? = null
+    var DCallout: DCallout? = null
     private var mMap: ArcGISMap? = null
     var callout: Callout? = null
     private var mMapViewHandler: MapViewHandler? = null
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var states: Array<IntArray>? = null
     private var colors: IntArray? = null
     private lateinit var mApplication: DApplication
-    private lateinit var mAddHandling: AddHandling
+     lateinit var mAddHandlingOrChangeGeometry: AddHandlingOrChangeGeometry
     private var mSelectedArcGISFeature: ArcGISFeature? = null
     internal var reqPermissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
     lateinit var mBinding: ActivityQuanLyTaiSanBinding
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(mBinding.root)
         mApplication = application as DApplication
         mApplication.alertDialog = DAlertDialog()
-        mAddHandling = AddHandling(this)
+        mAddHandlingOrChangeGeometry = AddHandlingOrChangeGeometry(this)
         mGeocoder = Geocoder(this)
         //        // create an empty map instance
         setUp()
@@ -189,7 +189,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mFeatureLayerDTGS = ArrayList()
         callout = mBinding.appBar.content.mapView.callout
         mMapViewHandler = MapViewHandler(mBinding.appBar.content.mapView, this@MainActivity)
-        popup = Popup(this@MainActivity, mBinding.appBar.content.mapView, callout)
+        DCallout = DCallout(this@MainActivity, mBinding.appBar.content.mapView, callout)
         val size = AtomicInteger(mApplication.layerInfos!!.size)
         val layerVisible = HashMap<Any, Boolean>()
         for (layerInfo in mApplication.layerInfos!!) {
@@ -230,7 +230,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         }
                         val urlHanhChinh = "$url/${mApplication!!.appInfo!!.config.hanhChinhID}"
                         val serviceFeatureTable = ServiceFeatureTable(urlHanhChinh)
-                        popup!!.setmSFTHanhChinh(serviceFeatureTable)
+                        DCallout!!.setmSFTHanhChinh(serviceFeatureTable)
                     }
                     if (size.get() == 0) {
                         mApplication!!.layerVisible = layerVisible
@@ -265,7 +265,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         }
 
-        mMapViewHandler!!.setmPopUp(popup!!)
+        mMapViewHandler!!.setmPopUp(DCallout!!)
         thongKe = ThongKe(this, mFeatureLayerDTGS!!)
         mapViewEvent()
     }
@@ -276,7 +276,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mBinding.appBar.content.mapView.onTouchListener = object : DefaultMapViewOnTouchListener(this, mBinding.appBar.content.mapView) {
             override fun onLongPress(e: MotionEvent) {
 //                addGraphicsAddFeature(e)
-                mAddHandling.selectOptionAdd(e)
+                mAddHandlingOrChangeGeometry.selectOptionAdd(e)
                 super.onLongPress(e)
             }
 
@@ -292,6 +292,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             @SuppressLint("SetTextI18n")
             override fun onScroll(e1: MotionEvent, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+                if (mApplication.statusCode == Constant.StatusCode.IS_CHANGING_GEOMETRY.value) {
+                    val center: Point = mBinding.appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center
+                   mAddHandlingOrChangeGeometry.addGraphics(center)
+                    if (mBinding.appBar.content.mapView.callout.isShowing)mBinding.appBar.content.mapView.callout.dismiss()
+                } else mAddHandlingOrChangeGeometry.handlingCancelAdd()
+
+
                 if (mMapViewHandler != null) {
                     val location = mMapViewHandler!!.onScroll(e1, e2!!, distanceX, distanceY)
                     if(location != null) {
@@ -304,6 +311,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return super.onScroll(e1, e2, distanceX, distanceY)
             }
 
+            override fun onUp(e: MotionEvent?): Boolean {
+                if (mApplication.statusCode == Constant.StatusCode.IS_CHANGING_GEOMETRY.value) {
+                    if (mBinding.appBar.content.mapView.callout.isShowing) mBinding.appBar.content.mapView.callout.dismiss()
+                    DCallout!!.showPopupChangeGeometry()
+
+                }
+                return super.onUp(e)
+            }
         }
         mBinding.appBar.skbrHanhchinhLayers.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
@@ -322,9 +337,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun handlingAddFeatureSuccess() {
         handlingCancelAdd()
-        popup!!.showPopup(mApplication.selectedFeature!! as ArcGISFeature)
+        DCallout!!.showPopup(mApplication.selectedFeature!! as ArcGISFeature)
         mApplication!!.address = null
-        mApplication.addFeaturePoint = null
+        mApplication.center = null
     }
 
     private fun handlingCancelAdd() {
@@ -786,6 +801,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.floatBtnLocation -> if (!locationDisplay!!.isStarted) {
                 locationDisplay!!.startAsync()
                 setViewPointCenter(locationDisplay!!.mapLocation)
+                Log.d("tọa độ", locationDisplay!!.mapLocation!!.toJson())
+                if(mApplication.statusCode == Constant.StatusCode.IS_CHANGING_GEOMETRY.value){
+                    DCallout!!.showPopupChangeGeometry(locationDisplay!!.mapLocation)
+                }
             } else
                 locationDisplay!!.stop()
         }
@@ -835,7 +854,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Constant.RequestCode.LOGIN -> if (resultCode == Activity.RESULT_OK) {
                     startMain()
                 } else finish()
-                Constant.RequestCode.UPDATE -> popup!!.refreshPopup()
+                Constant.RequestCode.UPDATE -> DCallout!!.refreshPopup()
 //                Constant.RequestCode.LIST_TASK -> if (resultCode == Activity.RESULT_OK) handlingListTaskActivityResult()
                 Constant.RequestCode.ADD -> if (resultCode == Activity.RESULT_OK) {
                     handlingAddFeatureSuccess()

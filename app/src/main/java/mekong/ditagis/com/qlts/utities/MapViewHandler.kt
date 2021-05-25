@@ -1,10 +1,10 @@
 package mekong.ditagis.com.qlts.utities
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.MotionEvent
 import android.widget.ListView
 import android.widget.Toast
-import com.esri.arcgisruntime.concurrent.ListenableFuture
 import com.esri.arcgisruntime.data.*
 import com.esri.arcgisruntime.geometry.GeometryEngine
 import com.esri.arcgisruntime.geometry.SpatialReferences
@@ -16,8 +16,8 @@ import mekong.ditagis.com.qlts.MainActivity
 import mekong.ditagis.com.qlts.adapter.ObjectsAdapter
 import mekong.ditagis.com.qlts.async.QuerySearchAsycn
 import mekong.ditagis.com.qlts.async.SingleTapMapViewAsync
-import mekong.ditagis.com.qlts.libs.FeatureLayerDTG
 import java.util.concurrent.ExecutionException
+import kotlin.math.roundToInt
 
 
 /**
@@ -27,11 +27,11 @@ import java.util.concurrent.ExecutionException
 class MapViewHandler(private val mMapView: MapView, private val mActivity: MainActivity) : Activity() {
     internal var loc = LocatorTask("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer")
     private var mClickPoint: android.graphics.Point? = null
-    private var mPopUp: Popup? = null
+    private var mPopUp: DCallout? = null
     private var mApplication: DApplication = mActivity.application as DApplication
     private lateinit var mFeatureLayer: FeatureLayer
 
-    fun setmPopUp(mPopUp: Popup) {
+    fun setmPopUp(mPopUp: DCallout) {
         this.mPopUp = mPopUp
     }
 

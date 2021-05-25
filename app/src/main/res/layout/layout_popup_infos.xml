@@ -46,24 +46,32 @@
             android:orientation="horizontal">
             <ImageButton
                 android:id="@+id/img_btn_update"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/width_image_popup"
+                android:layout_height="@dimen/width_image_popup"
                 android:background="@android:color/white"
-                android:paddingRight="@dimen/padding_title_popup"
+                android:layout_marginRight="@dimen/padding_title_popup"
                 android:src="@drawable/ic_info" />
             <ImageButton
-                android:id="@+id/imgBtn_view_attachment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/img_btn_change_geometry"
+                android:layout_width="@dimen/width_image_popup"
+                android:layout_height="@dimen/width_image_popup"
                 android:background="@android:color/white"
-                android:paddingRight="@dimen/padding_title_popup"
+
+                android:layout_marginRight="@dimen/padding_title_popup"
+                android:src="@drawable/ic_dialog_map" />
+            <ImageButton
+                android:id="@+id/imgBtn_view_attachment"
+                android:layout_width="@dimen/width_image_popup"
+                android:layout_height="@dimen/width_image_popup"
+                android:background="@android:color/white"
+                android:layout_marginRight="@dimen/padding_title_popup"
                 android:src="@drawable/ic_colections" />
             <ImageButton
                 android:id="@+id/imgBtn_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/width_image_popup"
+                android:layout_height="@dimen/width_image_popup"
                 android:background="@android:color/white"
-                android:paddingRight="@dimen/padding_title_popup"
+                android:layout_marginRight="@dimen/padding_title_popup"
                 android:src="@drawable/ic_delete" />
         </LinearLayout>
     </LinearLayout>

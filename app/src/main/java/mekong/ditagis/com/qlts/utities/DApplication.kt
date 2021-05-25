@@ -12,7 +12,7 @@ import java.util.*
 class DApplication : Application() {
     var idFeatureLayerToAdd: HashMap<Int, FeatureLayerValueIDField> = hashMapOf()
     var address: String? = null
-    var addFeaturePoint: Point? = null
+    var center: Point? = null
     var user: User? = null
     var progressDialog= DProgressDialog ()
     var layerVisible: HashMap<Any, Boolean> = HashMap()
@@ -27,4 +27,5 @@ class DApplication : Application() {
      var objectIDAddFeature: Long = 0
     lateinit var alertDialog: DAlertDialog
     var images: List<ByteArray>? = null
+    var statusCode = Constant.StatusCode.NORMAL.value
 }

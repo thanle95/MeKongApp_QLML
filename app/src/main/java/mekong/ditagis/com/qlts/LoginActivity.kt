@@ -25,8 +25,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         this.mApplication = application as DApplication
         mBinding.btnLogin.setOnClickListener(this)
 
-        mBinding.txtUsername.setText("tiwamytho_qlml")
-        mBinding.txtPassword.setText("tiwamytho_qlml")
+//        mBinding.txtUsername.setText("tiwamytho_qlml")
+//        mBinding.txtPassword.setText("tiwamytho_qlml")
         mBinding.txtVersion.text = "v" + packageManager.getPackageInfo(packageName, 0).versionName
         create()
     }

@@ -10,10 +10,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.esri.arcgisruntime.data.*
 import com.esri.arcgisruntime.geometry.GeometryEngine
+import com.esri.arcgisruntime.geometry.GeometryType
 import com.esri.arcgisruntime.geometry.Point
 import com.esri.arcgisruntime.geometry.SpatialReferences
 import com.esri.arcgisruntime.layers.FeatureLayer
 import com.esri.arcgisruntime.loadable.LoadStatus
+import com.esri.arcgisruntime.mapping.Viewpoint
 import com.esri.arcgisruntime.mapping.view.Callout
 import com.esri.arcgisruntime.mapping.view.MapView
 import com.esri.arcgisruntime.symbology.UniqueValueRenderer
@@ -23,11 +25,12 @@ import mekong.ditagis.com.qlts.R
 import mekong.ditagis.com.qlts.UpdateActivity
 import mekong.ditagis.com.qlts.adapter.FeatureViewInfoAdapter
 import mekong.ditagis.com.qlts.async.QueryHanhChinhAsync
+import mekong.ditagis.com.qlts.databinding.DialogChangeGeometryBinding
 import mekong.ditagis.com.qlts.databinding.LayoutPopupInfosBinding
 import java.util.*
 
 
-class Popup(private val mMainActivity: MainActivity, private val mMapView: MapView, private val mCallout: Callout?) : AppCompatActivity() {
+class DCallout(private val mMainActivity: MainActivity, private val mMapView: MapView, private val mCallout: Callout?) : AppCompatActivity() {
     private var lstUniqueValues: MutableList<String>? = null
     private var fieldNameDrawInfo: String? = null
     private lateinit var mBindingLayoutInfos: LayoutPopupInfosBinding
@@ -171,7 +174,7 @@ class Popup(private val mMainActivity: MainActivity, private val mMapView: MapVi
 
     fun clearSelection() {
         mMapView.map.operationalLayers.forEach { layer ->
-            if(layer is FeatureLayer)
+            if (layer is FeatureLayer)
                 layer.clearSelection()
         }
     }
@@ -195,7 +198,7 @@ class Popup(private val mMainActivity: MainActivity, private val mMapView: MapVi
         }
     }
 
-    fun showPopup( selectedFeature: ArcGISFeature) {
+    fun showPopup(selectedFeature: ArcGISFeature) {
         dimissCallout()
         this.mApplication.selectedFeature = selectedFeature
         val featureLayer = selectedFeature.featureTable.layer as FeatureLayer
@@ -221,6 +224,12 @@ class Popup(private val mMainActivity: MainActivity, private val mMapView: MapVi
         btnUpdate.setOnClickListener { v ->
             val updateIntent = Intent(mMainActivity, UpdateActivity::class.java)
             mMainActivity.startActivityForResult(updateIntent, Constant.RequestCode.UPDATE)
+        }
+        if(selectedFeature.geometry.geometryType != GeometryType.POINT){
+            mBindingLayoutInfos.imgBtnChangeGeometry.visibility = View.GONE
+        }
+        mBindingLayoutInfos.imgBtnChangeGeometry.setOnClickListener {
+            showPopupChangeGeometry()
         }
         val imgBtn_view_attachment = mBindingLayoutInfos.imgBtnViewAttachment
         if ((this.mApplication.selectedFeature!! as ArcGISFeature).canEditAttachments()) {
@@ -251,6 +260,38 @@ class Popup(private val mMainActivity: MainActivity, private val mMapView: MapVi
 //            mCallout.show()
 //        }
         showCallout(envelope.center, mBindingLayoutInfos.root, mMainActivity.mBinding.appBar.content.mapView.mapScale)
+    }
+
+     fun showPopupChangeGeometry(point: Point? = null) {
+        mApplication.statusCode = Constant.StatusCode.IS_CHANGING_GEOMETRY.value
+         if(point != null)
+             mApplication.center = GeometryEngine.project(point, SpatialReferences.getWebMercator()).extent.center
+else        mApplication.center = mMainActivity.mBinding.appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center
+        try {
+            val inflater = LayoutInflater.from(this.mMainActivity.applicationContext)
+            var bindingLinearLayout = DialogChangeGeometryBinding.inflate(inflater)
+            bindingLinearLayout.txtVitriCskd.text = ""
+            bindingLinearLayout.btnClose.setOnClickListener { mMainActivity.mAddHandlingOrChangeGeometry.handlingCancelAdd() }
+            bindingLinearLayout.btnChangeGeometry.setOnClickListener {
+
+                if (mApplication.statusCode == Constant.StatusCode.IS_CHANGING_GEOMETRY.value) {
+
+
+                } else {
+
+                }
+            }
+            mCallout!!.location = mApplication.center
+            mCallout.content = bindingLinearLayout.root
+            mMainActivity.runOnUiThread {
+                mCallout.refresh()
+                if (!mCallout.isShowing) mCallout.show()
+            }
+        } catch (e: Exception) {
+            mApplication.progressDialog.dismiss()
+            mApplication.alertDialog.show(mMainActivity, e)
+
+        }
     }
 
     private fun showCallout(point: Point?, view: View?, scale: Double) {
