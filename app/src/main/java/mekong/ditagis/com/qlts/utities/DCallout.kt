@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.esri.arcgisruntime.data.*
@@ -25,6 +26,7 @@ import mekong.ditagis.com.qlts.R
 import mekong.ditagis.com.qlts.UpdateActivity
 import mekong.ditagis.com.qlts.adapter.FeatureViewInfoAdapter
 import mekong.ditagis.com.qlts.async.QueryHanhChinhAsync
+import mekong.ditagis.com.qlts.async.UpdateGeometryAsync
 import mekong.ditagis.com.qlts.databinding.DialogChangeGeometryBinding
 import mekong.ditagis.com.qlts.databinding.LayoutPopupInfosBinding
 import java.util.*
@@ -220,17 +222,37 @@ class DCallout(private val mMainActivity: MainActivity, private val mMapView: Ma
         mBindingLayoutInfos = LayoutPopupInfosBinding.inflate(inflater)
         refreshPopup()
         mBindingLayoutInfos.txtTitleLayer.text = featureLayer.name
+
+        mBindingLayoutInfos.imgBtnZoomIn.setOnClickListener {
+            if (selectedFeature.geometry != null) {
+
+                var maxScale = 1000.0
+                val maxScaleLayer = selectedFeature.featureTable.layer.maxScale
+                if (maxScaleLayer != null && maxScaleLayer != 0.0)
+                    maxScale = maxScaleLayer
+                val center = selectedFeature.geometry.extent.center
+
+            var mapScale = mMainActivity.mBinding.appBar.content.mapView.mapScale
+//            if (mapScale < maxScale)
+//                mapScale = maxScale
+
+                mMainActivity.mBinding.appBar.content.mapView.setViewpointCenterAsync(center, maxScale)
+            }
+        }
         val btnUpdate = mBindingLayoutInfos.imgBtnUpdate
         btnUpdate.setOnClickListener { v ->
             val updateIntent = Intent(mMainActivity, UpdateActivity::class.java)
             mMainActivity.startActivityForResult(updateIntent, Constant.RequestCode.UPDATE)
         }
-        if(selectedFeature.geometry.geometryType != GeometryType.POINT){
+        if (selectedFeature.geometry.geometryType != GeometryType.POINT) {
             mBindingLayoutInfos.imgBtnChangeGeometry.visibility = View.GONE
         }
+
         mBindingLayoutInfos.imgBtnChangeGeometry.setOnClickListener {
+           mMainActivity.mBinding.appBar.content.mapView.setViewpointCenterAsync(selectedFeature.geometry.extent.center)
             showPopupChangeGeometry()
         }
+
         val imgBtn_view_attachment = mBindingLayoutInfos.imgBtnViewAttachment
         if ((this.mApplication.selectedFeature!! as ArcGISFeature).canEditAttachments()) {
             imgBtn_view_attachment.setOnClickListener { v ->
@@ -262,20 +284,35 @@ class DCallout(private val mMainActivity: MainActivity, private val mMapView: Ma
         showCallout(envelope.center, mBindingLayoutInfos.root, mMainActivity.mBinding.appBar.content.mapView.mapScale)
     }
 
-     fun showPopupChangeGeometry(point: Point? = null) {
+    fun showPopupChangeGeometry(point: Point? = null) {
         mApplication.statusCode = Constant.StatusCode.IS_CHANGING_GEOMETRY.value
-         if(point != null)
-             mApplication.center = GeometryEngine.project(point, SpatialReferences.getWebMercator()).extent.center
-else        mApplication.center = mMainActivity.mBinding.appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center
+        if (point != null)
+            mApplication.center = GeometryEngine.project(point, SpatialReferences.getWebMercator()).extent.center
+        else mApplication.center = mMainActivity.mBinding.appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center
+        mMainActivity.mAddHandlingOrChangeGeometry.addGraphics(mApplication.center!!)
         try {
             val inflater = LayoutInflater.from(this.mMainActivity.applicationContext)
-            var bindingLinearLayout = DialogChangeGeometryBinding.inflate(inflater)
-            bindingLinearLayout.txtVitriCskd.text = ""
+            val bindingLinearLayout = DialogChangeGeometryBinding.inflate(inflater)
+            bindingLinearLayout.txtTitle.text = "Cập nhật tọa độ: ${mApplication.selectedFeature!!.featureTable.displayName}"
             bindingLinearLayout.btnClose.setOnClickListener { mMainActivity.mAddHandlingOrChangeGeometry.handlingCancelAdd() }
             bindingLinearLayout.btnChangeGeometry.setOnClickListener {
 
                 if (mApplication.statusCode == Constant.StatusCode.IS_CHANGING_GEOMETRY.value) {
-
+                    mApplication.progressDialog.changeTitle(mMainActivity, mMainActivity.mBinding.appBar.content.mapView, "Đang đổi tọa độ...")
+                    UpdateGeometryAsync(mMainActivity.mBinding.appBar.content.mapView, mMainActivity,
+                            mApplication.selectedFeature!!.featureTable as ServiceFeatureTable,
+                            mApplication.selectedFeature!! as ArcGISFeature,
+                            object: UpdateGeometryAsync.AsyncResponse{
+                        override fun processFinish(feature: Boolean?) {
+                            mApplication.progressDialog.dismiss()
+                            feature?.let {
+                                Toast.makeText(mMainActivity, "Cập nhật thành công", Toast.LENGTH_SHORT).show()
+                                mMainActivity.mAddHandlingOrChangeGeometry.handlingCancelAdd()
+                            } ?: run {
+                                Toast.makeText(mMainActivity, "Cập nhật thất bại", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }).execute(mApplication.center!!)
 
                 } else {
 

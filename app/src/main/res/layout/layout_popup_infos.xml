@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -45,12 +46,21 @@
             android:gravity="right"
             android:orientation="horizontal">
             <ImageButton
+                android:id="@+id/img_btn_zoom_in"
+                android:layout_width="@dimen/width_image_popup"
+                android:layout_height="@dimen/width_image_popup"
+                android:background="@android:color/white"
+                android:layout_marginRight="@dimen/padding_title_popup"
+                android:src="@drawable/ic_dialog_zoom_in"
+                app:tint="@color/colorPrimary"/>
+            <ImageButton
                 android:id="@+id/img_btn_update"
                 android:layout_width="@dimen/width_image_popup"
                 android:layout_height="@dimen/width_image_popup"
                 android:background="@android:color/white"
                 android:layout_marginRight="@dimen/padding_title_popup"
-                android:src="@drawable/ic_info" />
+                android:src="@drawable/ic_dialog_edit"
+                app:tint="@color/colorPrimary"/>
             <ImageButton
                 android:id="@+id/img_btn_change_geometry"
                 android:layout_width="@dimen/width_image_popup"
@@ -58,20 +68,23 @@
                 android:background="@android:color/white"
 
                 android:layout_marginRight="@dimen/padding_title_popup"
-                android:src="@drawable/ic_dialog_map" />
+                android:src="@drawable/ic_dialog_edit_location"
+                app:tint="@color/colorPrimary"/>
             <ImageButton
                 android:id="@+id/imgBtn_view_attachment"
                 android:layout_width="@dimen/width_image_popup"
                 android:layout_height="@dimen/width_image_popup"
                 android:background="@android:color/white"
                 android:layout_marginRight="@dimen/padding_title_popup"
-                android:src="@drawable/ic_colections" />
+                android:src="@drawable/ic_colections"
+                app:tint="@color/colorPrimary"/>
             <ImageButton
                 android:id="@+id/imgBtn_delete"
                 android:layout_width="@dimen/width_image_popup"
                 android:layout_height="@dimen/width_image_popup"
                 android:background="@android:color/white"
                 android:layout_marginRight="@dimen/padding_title_popup"
+
                 android:src="@drawable/ic_delete" />
         </LinearLayout>
     </LinearLayout>

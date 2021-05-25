@@ -213,6 +213,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         if (fullExtent != null && fullExtent.xMin != 0.0 && fullExtent.yMin != 0.0
                                 && fullExtent.xMax != 0.0 && fullExtent.yMax != 0.0) {
                             try {
+                                locationDisplay!!.stop()
                                 mBinding.appBar.content.mapView.setViewpointGeometryAsync(fullExtent, 50.0)
 
                                 break
@@ -296,7 +297,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     val center: Point = mBinding.appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center
                    mAddHandlingOrChangeGeometry.addGraphics(center)
                     if (mBinding.appBar.content.mapView.callout.isShowing)mBinding.appBar.content.mapView.callout.dismiss()
-                } else mAddHandlingOrChangeGeometry.handlingCancelAdd()
+                }
+//                else mAddHandlingOrChangeGeometry.handlingCancelAdd()
 
 
                 if (mMapViewHandler != null) {
@@ -463,6 +465,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun changeStatusOfLocationDataSource() {
         locationDisplay = mBinding.appBar.content.mapView.locationDisplay
+        locationDisplay!!.startAsync()
         //        changeStatusOfLocationDataSource();
         locationDisplay!!.addDataSourceStatusChangedListener(LocationDisplay.DataSourceStatusChangedListener { dataSourceStatusChangedEvent ->
             // If LocationDisplay started OK, then continue.

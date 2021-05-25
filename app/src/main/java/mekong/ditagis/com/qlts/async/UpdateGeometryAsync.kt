@@ -6,6 +6,7 @@ import android.os.AsyncTask
 import android.util.Log
 import android.view.View
 import com.esri.arcgisruntime.data.*
+import com.esri.arcgisruntime.geometry.Point
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import mekong.ditagis.com.qlts.databinding.LayoutProgressDialogBinding
@@ -18,10 +19,10 @@ import java.util.concurrent.ExecutionException
  * Created by ThanLe on 4/16/2018.
  */
 @SuppressLint("StaticFieldLeak")
-class EditAsync(private val mView: View, private val mActivity: Activity,
-                private val mServiceFeatureTable: ServiceFeatureTable,
-                selectedArcGISFeature: ArcGISFeature,
-                private val mDelegate: AsyncResponse) : AsyncTask<HashMap<String, Any>, Boolean, Void>() {
+class UpdateGeometryAsync(private val mView: View, private val mActivity: Activity,
+                          private val mServiceFeatureTable: ServiceFeatureTable,
+                          selectedArcGISFeature: ArcGISFeature,
+                          private val mDelegate: AsyncResponse) : AsyncTask<Point, Boolean, Void>() {
     private lateinit var mDialog: BottomSheetDialog
     private var mSelectedArcGISFeature: ArcGISFeature = selectedArcGISFeature
     private val mApplication: DApplication = mActivity.application as DApplication
@@ -43,55 +44,39 @@ class EditAsync(private val mView: View, private val mActivity: Activity,
 
     }
 
-    override fun doInBackground(vararg params: HashMap<String, Any>): Void? {
+    override fun doInBackground(vararg params: Point): Void? {
 
         if (params.isNotEmpty()) {
-            val attributes = params[0]
-            for (fieldName in attributes.keys) {
+            mSelectedArcGISFeature.geometry = params[0]
+            var queryParameters = QueryParameters()
+            queryParameters.geometry = params[0]
+            var listenableFuture = mApplication.SFTAdministrator!!.queryFeaturesAsync(queryParameters, ServiceFeatureTable.QueryFeatureFields.LOAD_ALL)
+            listenableFuture.addDoneListener {
                 try {
-                    val value = attributes[fieldName]
-                    if (value == null)
-                        mSelectedArcGISFeature.attributes[fieldName] = null
-                    else {
-                        val valueString = value.toString().trim { it <= ' ' }
-                        val field = mServiceFeatureTable.getField(fieldName)
-                        when (field.fieldType) {
-                            Field.Type.TEXT -> mSelectedArcGISFeature.attributes[fieldName] = valueString
-                            Field.Type.DOUBLE -> {
-                                mSelectedArcGISFeature.attributes[fieldName] = java.lang.Double.parseDouble(valueString)
-                            }
-                            Field.Type.FLOAT -> {
-                                mSelectedArcGISFeature.attributes[fieldName] = java.lang.Float.parseFloat(valueString)
-                            }
-                            Field.Type.INTEGER -> {
-                                mSelectedArcGISFeature.attributes[fieldName] = Integer.parseInt(valueString)
-                            }
-                            Field.Type.SHORT -> mSelectedArcGISFeature.attributes[fieldName] = java.lang.Short.parseShort(valueString)
-                            Field.Type.DATE -> {
-                                val calendar = Calendar.getInstance()
-                                calendar.time = Constant.DATE_FORMAT.parse(valueString)
-                                mSelectedArcGISFeature.attributes[fieldName] = calendar
-                            }
-                            else -> {
+                    var featureQueryResult = listenableFuture.get()
+                    val iterator = featureQueryResult.iterator()
+
+                    while (iterator.hasNext()) {
+                        val featureHanhChinh = iterator.next() as Feature
+                        for (field in mServiceFeatureTable.fields) {
+                            when (field.name) {
+                                Constant.Field.MA_HUYEN -> mSelectedArcGISFeature.attributes[field.name] = featureHanhChinh.attributes[
+                                        mApplication.appInfo!!.config.MaHuyen]
+                                Constant.Field.MA_XA -> mSelectedArcGISFeature.attributes[field.name] = featureHanhChinh.attributes[
+                                        mApplication.appInfo!!.config.IDHanhChinh]
                             }
                         }
                     }
-                    when (fieldName) {
-                        Constant.Field.CREATED_DATE, Constant.Field.LAST_EDITED_DATE,
-                        Constant.Field.NGAY_CAP_NHAT -> mSelectedArcGISFeature.attributes[fieldName] = Calendar.getInstance()
-                        Constant.Field.CREATED_USER, Constant.Field.LAST_EDITED_USER,
-                        Constant.Field.NGUOI_CAP_NHAT
-                        -> mSelectedArcGISFeature.attributes[fieldName] = mApplication.user!!.username
-
-                    }
-
+                    applyEdit()
                 } catch (e: Exception) {
-                    mSelectedArcGISFeature.attributes[fieldName] = null
-                    Log.e("Lỗi thêm điểm", e.toString())
-
+                    applyEdit()
                 }
             }
         }
+
+        return null
+    }
+    private fun applyEdit(){
         val voidListenableFuture = mServiceFeatureTable.updateFeatureAsync(mSelectedArcGISFeature)
         voidListenableFuture.addDoneListener {
             try {
@@ -127,9 +112,7 @@ class EditAsync(private val mView: View, private val mActivity: Activity,
                 e.printStackTrace()
             }
         }
-        return null
     }
-
     private fun notifyError() {
         publishProgress()
         Snackbar.make(mView, "Đã xảy ra lỗi", Snackbar.LENGTH_SHORT).show()
