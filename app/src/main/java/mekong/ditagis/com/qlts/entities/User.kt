@@ -5,5 +5,6 @@ class User(
         val displayName: String?,
         var roleId: String?,
         var accessToken: String?,
+        var capabilities: Array<String>?,
         var capability: String?
 )

@@ -67,8 +67,14 @@ class PreparingTask(private val delegate: Response) {
     }
 
     private fun isAccess(application: DApplication): Boolean {
-        if (Constant.AppID.LIST.find { id -> application.user!!.capability == id } != null)
-            return true
+        for( i in Constant.AppID.LIST){
+            for(j in application.user!!.capabilities!!){
+                if(i == j) {
+                    application.user!!.capability = i
+                    return true
+                }
+            }
+        }
         return false
     }
 
@@ -88,7 +94,7 @@ class PreparingTask(private val delegate: Response) {
                 while (bufferedReader.readLine().also { line = it } != null) {
                     builder.append(line)
                 }
-                application.user!!.capability = parseStringArray(builder.toString())!![0]
+                application.user!!.capabilities = parseStringArray(builder.toString())!!
             } catch (e: Exception) {
                 Log.e("error", e.toString())
             } finally {
