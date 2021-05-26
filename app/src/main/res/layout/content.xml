@@ -15,7 +15,7 @@
         android:layout_height="match_parent" />
 
     <LinearLayout
-        android:id="@+id/layout_tim_kiem"
+        android:id="@+id/layoutTimKiem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
@@ -34,7 +34,7 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/txt_title_search"
+                android:id="@+id/txtTitleSearch"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -45,7 +45,7 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/img_clearSelectLayer"
+                android:id="@+id/imgClearSelectLayer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -53,7 +53,7 @@
                 android:src="@drawable/ic_clear_select_layer" />
 
             <ImageView
-                android:id="@+id/img_selectLayer"
+                android:id="@+id/imgSelectLayer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -61,7 +61,7 @@
                 android:src="@drawable/ic_dropdown_primary" />
         </LinearLayout>
         <ListView
-            android:id="@+id/lstview_search"
+            android:id="@+id/lstviewSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -112,7 +112,7 @@
         android:orientation="vertical">
         <TextView
             android:layout_gravity="right"
-            android:id="@+id/txt_toado"
+            android:id="@+id/txtToado"
             android:textColor="@color/colorWhite"
             android:layout_marginRight="5dp"
             android:layout_marginTop="3dp"

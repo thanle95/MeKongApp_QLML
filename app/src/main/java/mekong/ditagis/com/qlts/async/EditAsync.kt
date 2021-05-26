@@ -8,7 +8,8 @@ import android.view.View
 import com.esri.arcgisruntime.data.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
-import mekong.ditagis.com.qlts.databinding.LayoutProgressDialogBinding
+import kotlinx.android.synthetic.main.layout_progress_dialog.view.*
+import mekong.ditagis.com.qlts.R
 import mekong.ditagis.com.qlts.utities.Constant
 import mekong.ditagis.com.qlts.utities.DApplication
 import java.util.*
@@ -34,9 +35,9 @@ class EditAsync(private val mView: View, private val mActivity: Activity,
     override fun onPreExecute() {
         super.onPreExecute()
         mDialog = BottomSheetDialog(this.mActivity)
-        val bindingView = LayoutProgressDialogBinding.inflate(mActivity.layoutInflater)
-        bindingView.txtProgressDialogTitle.text = "Đang cập nhật thông tin..."
-        mDialog.setContentView(bindingView.root)
+        val layoutView = mActivity.layoutInflater.inflate(R.layout.layout_progress_dialog, null)
+        layoutView.txtProgressDialogTitle.text = "Đang cập nhật thông tin..."
+        mDialog!!.setContentView(layoutView)
         mDialog.setCancelable(false)
 
         mDialog.show()

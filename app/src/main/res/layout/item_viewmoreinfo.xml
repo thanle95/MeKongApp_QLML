@@ -16,7 +16,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/txt_viewmoreinfo_alias"
+                android:id="@+id/txtViewmoreinfoAlias"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -28,7 +28,7 @@
 
             <TextView
             android:layout_weight="1"
-            android:id="@+id/txt_viewmoreinfo_value"
+            android:id="@+id/txtViewmoreinfoValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
@@ -47,7 +47,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/img_viewmoreinfo_edit"
+            android:id="@+id/imgViewmoreinfoEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"

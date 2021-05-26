@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import com.esri.arcgisruntime.data.Field
+import kotlinx.android.synthetic.main.item_viewmoreinfo.view.*
 import mekong.ditagis.com.qlts.R
-import mekong.ditagis.com.qlts.databinding.ItemViewmoreinfoBinding
-
 /**
  * Created by ThanLe on 04/10/2017.
  */
@@ -36,7 +35,7 @@ class FeatureViewMoreInfoAdapter(private val mContext: Context, private val item
         val holder: DHolder
         if (convertView == null) {
             val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            holder = DHolder(ItemViewmoreinfoBinding.inflate(inflater))
+            holder = DHolder(inflater.inflate(R.layout.item_viewmoreinfo, null))
             holder.view.tag = holder
         }
         else{
@@ -44,19 +43,19 @@ class FeatureViewMoreInfoAdapter(private val mContext: Context, private val item
         }
         val item = items[position]
 
-        holder.binding.txtViewmoreinfoAlias.text = item.alias
+        holder.view.txtViewmoreinfoAlias.text = item.alias
 
-        val txtValue = holder.binding.txtViewmoreinfoValue
+        val txtValue = holder.view.txtViewmoreinfoValue
         if (item.fieldName == "ViTri" || item.fieldName == "GhiChu" || item.fieldName == "GhiChuVatTu") {
             txtValue.width = 550
         }
         txtValue.text = item.value
         if (item.isEdit) {
             holder.view.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorAccent_1))
-            holder.binding.imgViewmoreinfoEdit.visibility = View.VISIBLE
+            holder.view.imgViewmoreinfoEdit.visibility = View.VISIBLE
         } else {
             holder.view.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorBackground_1))
-            holder.binding.imgViewmoreinfoEdit.visibility = View.INVISIBLE
+            holder.view.imgViewmoreinfoEdit.visibility = View.INVISIBLE
 
         }
         if (item.value == null)
@@ -78,7 +77,6 @@ class FeatureViewMoreInfoAdapter(private val mContext: Context, private val item
             isEdit = false
         }
     }
-    private class DHolder(var binding: ItemViewmoreinfoBinding) {
-        var view: View = binding.root
+    private class DHolder(var view: View) {
     }
 }

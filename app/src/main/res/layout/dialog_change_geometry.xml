@@ -57,14 +57,14 @@
 
 
                     <ImageButton
-                        android:id="@+id/btn_change_geometry"
+                        android:id="@+id/btnChangeGeometry"
                         android:layout_width="@dimen/width_image_popup"
                         android:layout_height="@dimen/width_image_popup"
                         android:background="@android:color/white"
                         android:layout_marginRight="@dimen/margin_medium"
                         android:src="@drawable/ic_dialog_check" />
                 <ImageButton
-                    android:id="@+id/btn_close"
+                    android:id="@+id/btnClose"
                     android:layout_width="@dimen/width_image_popup"
                     android:layout_height="@dimen/width_image_popup"
                     android:background="@android:color/white"

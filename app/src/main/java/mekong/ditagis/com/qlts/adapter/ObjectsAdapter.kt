@@ -6,7 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import mekong.ditagis.com.qlts.databinding.ItemTracuuBinding
+import kotlinx.android.synthetic.main.item_tracuu.view.*
+import mekong.ditagis.com.qlts.R
 
 class ObjectsAdapter(private var mContext: Context, items: MutableList<Item>)
     : ArrayAdapter<ObjectsAdapter.Item>(mContext, 0, items) {
@@ -46,16 +47,16 @@ class ObjectsAdapter(private var mContext: Context, items: MutableList<Item>)
         val holder: DHolder
         if (convertView == null) {
             val inflater = mContext!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            holder = DHolder(ItemTracuuBinding.inflate(inflater))
+            holder = DHolder(inflater.inflate(R.layout.item_tracuu, null))
             holder.view.tag = holder
         }
         else{
             holder = convertView.tag as DHolder
         }
         val item = items!![position]
-        holder.binding.txtTracuuId.text = item.idSuCo
-        holder.binding.txtTracuuNgaycapnhat.text = item.ngayXayRa
-        holder.binding.txtTracuuDiachi.text = item.diaChi
+        holder.layout.txtTracuuId.text = item.idSuCo
+        holder.layout.txtTracuuNgaycapnhat.text = item.ngayXayRa
+        holder.layout.txtTracuuDiachi.text = item.diaChi
         return holder.view
     }
 
@@ -75,7 +76,7 @@ class ObjectsAdapter(private var mContext: Context, items: MutableList<Item>)
             this.ngayXayRa = ngayXayRa
         }
     }
-    private class DHolder( var binding: ItemTracuuBinding) {
-        var view: View = binding.root
+    private class DHolder( var layout: View) {
+        var view: View = layout
     }
 }

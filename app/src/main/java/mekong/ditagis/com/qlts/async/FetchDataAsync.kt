@@ -6,9 +6,9 @@ import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import androidx.appcompat.app.AlertDialog
-import android.widget.LinearLayout
 import com.esri.arcgisruntime.data.Attachment
-import mekong.ditagis.com.qlts.databinding.LayoutProgressDialogBinding
+import kotlinx.android.synthetic.main.layout_progress_dialog.view.*
+import mekong.ditagis.com.qlts.R
 import mekong.ditagis.com.qlts.entities.DAttachment
 import mekong.ditagis.com.qlts.utities.Constant
 
@@ -31,9 +31,9 @@ class FetchDataAsync(@field:SuppressLint("StaticFieldLeak") private val mActivit
 
 
         mDialog = BottomSheetDialog(this.mActivity)
-        val bindingView = LayoutProgressDialogBinding.inflate(mActivity.layoutInflater)
-        bindingView.txtProgressDialogTitle.text = "Đang tải hình ảnh..."
-        mDialog!!.setContentView(bindingView.root)
+        val view = mActivity.layoutInflater.inflate(R.layout.layout_progress_dialog, null)
+        view.txtProgressDialogTitle.text = "Đang tải hình ảnh..."
+        mDialog!!.setContentView(view)
         mDialog!!.setCancelable(false)
 
         mDialog!!.show()

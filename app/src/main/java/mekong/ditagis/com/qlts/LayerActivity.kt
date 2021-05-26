@@ -13,21 +13,19 @@ import com.esri.arcgisruntime.layers.ArcGISMapImageLayer
 import com.esri.arcgisruntime.layers.ArcGISSublayer
 import com.esri.arcgisruntime.layers.FeatureLayer
 import com.esri.arcgisruntime.layers.Layer
-import mekong.ditagis.com.qlts.databinding.ActivityLayerBinding
-import mekong.ditagis.com.qlts.databinding.ItemListLayerBinding
+import kotlinx.android.synthetic.main.activity_layer.*
+import kotlinx.android.synthetic.main.item_list_layer.view.*
 import mekong.ditagis.com.qlts.utities.DApplication
 
 
 class LayerActivity : AppCompatActivity() {
     private var mApplication: DApplication? = null
-    private lateinit var mBinding: ActivityLayerBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityLayerBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
+        setContentView(R.layout.activity_layer)
         mApplication = application as DApplication
 
-        mBinding.llayoutActivityLayer.removeAllViews()
+        llayoutActivityLayer.removeAllViews()
 
         try {
             for (`object` in mApplication!!.layerVisible.keys) {
@@ -39,8 +37,8 @@ class LayerActivity : AppCompatActivity() {
                 }
                 if (name.isEmpty())
                     continue
-                val bindingView = ItemListLayerBinding.inflate(layoutInflater)
-                val layoutImage = bindingView.llayoutItemListLayerImages
+                val layoutView = layoutInflater.inflate(R.layout.item_list_layer, null)
+                val layoutImage = layoutView.llayoutItemListLayerImages
                 for (layerLegend in mApplication!!.layerLegendList) {
                     if (layerLegend.`object` == `object`) {
                         for (bitmap in layerLegend.legendMap) {
@@ -52,9 +50,9 @@ class LayerActivity : AppCompatActivity() {
                 }
                 if (layoutImage.childCount == 0)
                     layoutImage.visibility = View.GONE
-                val textView = bindingView.txtItemFeature
+                val textView = layoutView.txtItemFeature
                 textView.text = name
-                mBinding.llayoutActivityLayer.addView(bindingView.root)
+                llayoutActivityLayer.addView(layoutView)
                 //
             }
         } catch (e: Exception) {

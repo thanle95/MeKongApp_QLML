@@ -4,9 +4,10 @@ import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.esri.arcgisruntime.data.QueryParameters
+import kotlinx.android.synthetic.main.layout_title_listview.view.*
 import mekong.ditagis.com.qlts.MainActivity
+import mekong.ditagis.com.qlts.R
 import mekong.ditagis.com.qlts.adapter.ThongKeAdapter
-import mekong.ditagis.com.qlts.databinding.LayoutTitleListviewBinding
 import mekong.ditagis.com.qlts.libs.FeatureLayerDTG
 import java.util.*
 import java.util.concurrent.ExecutionException
@@ -39,15 +40,15 @@ class ThongKe {
         items = ArrayList()
         thongKeAdapter = ThongKeAdapter(mainActivity, items)
         val builder = AlertDialog.Builder(mainActivity!!, android.R.style.Theme_Holo_Light_NoActionBar_Fullscreen)
-        val bindingLayout = LayoutTitleListviewBinding.inflate(mainActivity.layoutInflater)
-        val imageView = bindingLayout.imgRefresh
+        val layout = mainActivity.layoutInflater.inflate(R.layout.layout_title_listview, null)
+        val imageView = layout.imgRefresh
         imageView.setOnClickListener {
             refresh()
             Toast.makeText(mainActivity, "Đã làm mới dữ liệu", Toast.LENGTH_LONG).show()
         }
-        val listView = bindingLayout.listview
+        val listView = layout.listview
         listView.adapter = thongKeAdapter
-        builder.setView(bindingLayout.root)
+        builder.setView(layout)
         selectTimeDialog = builder.create()
         selectTimeDialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
         refresh()

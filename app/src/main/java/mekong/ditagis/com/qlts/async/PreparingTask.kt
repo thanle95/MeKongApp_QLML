@@ -7,8 +7,8 @@ import android.util.Log
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.android.synthetic.main.layout_progress_dialog.view.*
 import mekong.ditagis.com.qlts.R
-import mekong.ditagis.com.qlts.databinding.LayoutProgressDialogBinding
 import mekong.ditagis.com.qlts.entities.DAppInfo
 import mekong.ditagis.com.qlts.entities.DLayerInfo
 import mekong.ditagis.com.qlts.utities.Constant
@@ -53,9 +53,9 @@ class PreparingTask(private val delegate: Response) {
 
     private fun preExecute(activity: Activity) {
         mDialog = BottomSheetDialog(activity)
-        val layout = LayoutProgressDialogBinding.inflate(activity.layoutInflater)
-        layout.txtProgressDialogTitle.text = "Đang tải dữ liệu.."
-        mDialog.setContentView(layout.root)
+        val layoutView = activity.layoutInflater.inflate(R.layout.layout_progress_dialog, null)
+        layoutView.txtProgressDialogTitle.text = "Đang tải dữ liệu..."
+        mDialog.setContentView(layoutView)
         mDialog.setCancelable(false)
 
         mDialog.show()

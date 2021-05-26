@@ -7,7 +7,7 @@
     android:padding="16dp">
 
     <LinearLayout
-        android:id="@+id/llayout__handle_image__view"
+        android:id="@+id/llayoutHandleImageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -31,7 +31,7 @@
             android:textSize="16sp" />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/llayout__handle_image__capture"
+        android:id="@+id/llayoutHandleImageCapture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -56,7 +56,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llayout__handle_image__pick"
+        android:id="@+id/llayoutHandleImagePick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -82,7 +82,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llayout__handle_image__delete"
+        android:id="@+id/llayoutHandleImageDelete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"

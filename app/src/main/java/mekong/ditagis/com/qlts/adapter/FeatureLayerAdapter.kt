@@ -6,7 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.esri.arcgisruntime.layers.FeatureLayer
-import mekong.ditagis.com.qlts.databinding.ItemSearchTypeBinding
+import kotlinx.android.synthetic.main.item_search_type.view.*
+import mekong.ditagis.com.qlts.R
 
 /**
  * Created by ThanLe on 04/10/2017.
@@ -17,14 +18,14 @@ class FeatureLayerAdapter(private val mContext: Context, private val items: Muta
         val holder: DHolder
         if (convertView == null) {
             val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            holder = DHolder(ItemSearchTypeBinding.inflate(inflater))
+            holder = DHolder(inflater.inflate(R.layout.item_search_type, null))
             holder.view.tag = holder
         }
         else{
             holder = convertView.tag as DHolder
         }
         val item = items[position]
-        holder.binding.txtTitleLayer.text = item.titleLayer
+        holder.view.txtTitleLayer.text = item.titleLayer
         return holder.view
     }
 
@@ -57,7 +58,6 @@ class FeatureLayerAdapter(private val mContext: Context, private val items: Muta
 //            this.idLayer = idLayer
 //        }
     ){}
-    private class DHolder( var binding: ItemSearchTypeBinding) {
-        var view: View = binding.root
+    private class DHolder( var view: View) {
     }
 }

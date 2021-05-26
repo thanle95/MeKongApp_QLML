@@ -8,14 +8,14 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/llayout_add_feature_edittext"
+        android:id="@+id/llayoutAddFeatureEdittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:hintEnabled="true">
 
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etxt_number"
+            android:id="@+id/etxtNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_right_menu" />

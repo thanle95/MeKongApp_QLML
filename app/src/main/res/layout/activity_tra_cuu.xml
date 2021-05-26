@@ -8,6 +8,6 @@
     tools:context="mekong.ditagis.com.qlts.TraCuuActivity">
 
 
-   <include layout="@layout/layout_viewmoreinfo_feature" android:id="@+id/layout_tracuu_include"/>
+   <include layout="@layout/layout_viewmoreinfo_feature" android:id="@+id/layoutTracuuInclude"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

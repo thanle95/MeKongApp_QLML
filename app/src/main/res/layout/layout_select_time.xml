@@ -36,7 +36,7 @@
                 android:text="Ngày" />
 
             <com.shawnlin.numberpicker.NumberPicker
-                android:id="@+id/number_picker_day"
+                android:id="@+id/numberPickerDay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -66,7 +66,7 @@
                 android:text="Tháng" />
 
             <com.shawnlin.numberpicker.NumberPicker
-                android:id="@+id/number_picker_month"
+                android:id="@+id/numberPickerMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -96,7 +96,7 @@
                 android:text="Năm" />
 
             <com.shawnlin.numberpicker.NumberPicker
-                android:id="@+id/number_picker_year"
+                android:id="@+id/numberPickerYear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"

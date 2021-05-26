@@ -12,7 +12,7 @@
         android:padding="@dimen/padding_title_popup">
 
          <ImageButton
-             android:id="@+id/btn_layer_close"
+             android:id="@+id/btnLayerClose"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:background="@android:color/white"
@@ -30,7 +30,7 @@
      </LinearLayout>
 
     <ListView
-        android:id="@+id/lstview_thongtinsuco"
+        android:id="@+id/lstviewThongtinsuco"
         android:layout_width="match_parent"
         android:layout_height="250dp"></ListView>
 
@@ -46,7 +46,7 @@
             android:gravity="right"
             android:orientation="horizontal">
             <ImageButton
-                android:id="@+id/img_btn_zoom_in"
+                android:id="@+id/imgBtnZoomIn"
                 android:layout_width="@dimen/width_image_popup"
                 android:layout_height="@dimen/width_image_popup"
                 android:background="@android:color/white"
@@ -54,7 +54,7 @@
                 android:src="@drawable/ic_dialog_zoom_in"
                 app:tint="@color/colorPrimary"/>
             <ImageButton
-                android:id="@+id/img_btn_update"
+                android:id="@+id/imgBtnUpdate"
                 android:layout_width="@dimen/width_image_popup"
                 android:layout_height="@dimen/width_image_popup"
                 android:background="@android:color/white"
@@ -62,7 +62,7 @@
                 android:src="@drawable/ic_dialog_edit"
                 app:tint="@color/colorPrimary"/>
             <ImageButton
-                android:id="@+id/img_btn_change_geometry"
+                android:id="@+id/imgBtnChangeGeometry"
                 android:layout_width="@dimen/width_image_popup"
                 android:layout_height="@dimen/width_image_popup"
                 android:background="@android:color/white"
@@ -71,7 +71,7 @@
                 android:src="@drawable/ic_dialog_edit_location"
                 app:tint="@color/colorPrimary"/>
             <ImageButton
-                android:id="@+id/imgBtn_view_attachment"
+                android:id="@+id/imgBtnViewAttachment"
                 android:layout_width="@dimen/width_image_popup"
                 android:layout_height="@dimen/width_image_popup"
                 android:background="@android:color/white"
@@ -79,7 +79,7 @@
                 android:src="@drawable/ic_colections"
                 app:tint="@color/colorPrimary"/>
             <ImageButton
-                android:id="@+id/imgBtn_delete"
+                android:id="@+id/imgBtnDelete"
                 android:layout_width="@dimen/width_image_popup"
                 android:layout_height="@dimen/width_image_popup"
                 android:background="@android:color/white"

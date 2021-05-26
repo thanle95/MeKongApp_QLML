@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import kotlinx.android.synthetic.main.item_add_attachment.view.*
 import mekong.ditagis.com.qlts.R
-import mekong.ditagis.com.qlts.databinding.ItemAddAttachmentBinding
 import mekong.ditagis.com.qlts.entities.DAttachment
 
 
@@ -35,7 +35,7 @@ class AttachmentAdapter(private val mContext: Context, private var items: Mutabl
         val holder: DHolder
         if (convertView == null) {
             val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            holder = DHolder(ItemAddAttachmentBinding.inflate(inflater))
+            holder = DHolder(inflater.inflate(R.layout.item_add_attachment, null))
             holder.view.tag = holder
         }
         else{
@@ -43,20 +43,19 @@ class AttachmentAdapter(private val mContext: Context, private var items: Mutabl
         }
             val item = items[position]
             if (item.image != null) {
-                holder.binding.imgAddAttachment.visibility = View.INVISIBLE
+                holder.view.imgAddAttachment.visibility = View.INVISIBLE
                 val background = BitmapDrawable(mContext.resources, item.image)
-                holder.binding.layoutAddAttachment.background = background
+                holder.view.layoutAddAttachment.background = background
             } else {
-                holder.binding.imgAddAttachment.visibility = View.VISIBLE
-                holder.binding.layoutAddAttachment.background = mContext.getDrawable(R.drawable.layout_border_dashed)
+                holder.view.imgAddAttachment.visibility = View.VISIBLE
+                holder.view.layoutAddAttachment.background = mContext.getDrawable(R.drawable.layout_border_dashed)
             }
-            holder.binding.txtAddAttachmentTitle.text = item.title
+            holder.view.txtAddAttachmentTitle.text = item.title
             return holder.view
 
     }
 
-    private class DHolder( var binding: ItemAddAttachmentBinding) {
-        var view: View = binding.root
+    private class DHolder( var view: View) {
     }
 }
 

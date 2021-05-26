@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,13 @@ import com.esri.arcgisruntime.mapping.Viewpoint
 import com.esri.arcgisruntime.mapping.view.Callout
 import com.esri.arcgisruntime.mapping.view.MapView
 import com.esri.arcgisruntime.symbology.UniqueValueRenderer
+import kotlinx.android.synthetic.main.activity_quan_ly_tai_san.*
+import kotlinx.android.synthetic.main.app_bar.view.*
+import kotlinx.android.synthetic.main.app_bar.view.btnLayerClose
+import kotlinx.android.synthetic.main.content.view.*
+import kotlinx.android.synthetic.main.dialog_change_geometry.view.*
+import kotlinx.android.synthetic.main.item_search_type.view.*
+import kotlinx.android.synthetic.main.layout_popup_infos.view.*
 import mekong.ditagis.com.qlts.AttachmentActivity
 import mekong.ditagis.com.qlts.MainActivity
 import mekong.ditagis.com.qlts.R
@@ -27,15 +35,13 @@ import mekong.ditagis.com.qlts.UpdateActivity
 import mekong.ditagis.com.qlts.adapter.FeatureViewInfoAdapter
 import mekong.ditagis.com.qlts.async.QueryHanhChinhAsync
 import mekong.ditagis.com.qlts.async.UpdateGeometryAsync
-import mekong.ditagis.com.qlts.databinding.DialogChangeGeometryBinding
-import mekong.ditagis.com.qlts.databinding.LayoutPopupInfosBinding
 import java.util.*
 
 
 class DCallout(private val mMainActivity: MainActivity, private val mMapView: MapView, private val mCallout: Callout?) : AppCompatActivity() {
     private var lstUniqueValues: MutableList<String>? = null
     private var fieldNameDrawInfo: String? = null
-    private lateinit var mBindingLayoutInfos: LayoutPopupInfosBinding
+    private lateinit var mLayoutInfos: LinearLayout
     private var quanhuyen_features: ArrayList<Feature>? = null
     private var quanhuyen_feature: Feature? = null
 
@@ -75,7 +81,7 @@ class DCallout(private val mMainActivity: MainActivity, private val mMapView: Ma
 
     fun setmSFTHanhChinh(SFTHanhChinh: ServiceFeatureTable) {
         mApplication.SFTAdministrator = SFTHanhChinh
-        mApplication.progressDialog.changeTitle(mMainActivity, mMainActivity.mBinding.drawerLayout, "Đang lấy dữ liệu hành chính...")
+        mApplication.progressDialog.changeTitle(mMainActivity, mMainActivity.drawerLayout, "Đang lấy dữ liệu hành chính...")
         QueryHanhChinhAsync(SFTHanhChinh, object : QueryHanhChinhAsync.AsyncResponse {
             override fun processFinish(output: ArrayList<Feature>?) {
                 mApplication.progressDialog.dismiss()
@@ -87,7 +93,7 @@ class DCallout(private val mMainActivity: MainActivity, private val mMapView: Ma
     fun refreshPopup() {
         val hiddenFields = mMainActivity.resources.getStringArray(R.array.hiddenFields)
         val attributes = mApplication.selectedFeature!!.attributes
-        val listView = mBindingLayoutInfos.lstviewThongtinsuco
+        val listView = mLayoutInfos.lstviewThongtinsuco
         val featureViewInfoAdapter = FeatureViewInfoAdapter(mMainActivity, ArrayList())
         listView.adapter = featureViewInfoAdapter
 
@@ -219,11 +225,11 @@ class DCallout(private val mMainActivity: MainActivity, private val mMapView: Ma
         }
 
         val inflater = LayoutInflater.from(this.mMainActivity.applicationContext)
-        mBindingLayoutInfos = LayoutPopupInfosBinding.inflate(inflater)
+        mLayoutInfos = inflater.inflate(R.layout.layout_popup_infos, null)  as LinearLayout
         refreshPopup()
-        mBindingLayoutInfos.txtTitleLayer.text = featureLayer.name
+        mLayoutInfos.txtTitleLayer.text = featureLayer.name
 
-        mBindingLayoutInfos.imgBtnZoomIn.setOnClickListener {
+        mLayoutInfos.imgBtnZoomIn.setOnClickListener {
             if (selectedFeature.geometry != null) {
 
                 var maxScale = 1000.0
@@ -232,28 +238,28 @@ class DCallout(private val mMainActivity: MainActivity, private val mMapView: Ma
                     maxScale = maxScaleLayer
                 val center = selectedFeature.geometry.extent.center
 
-            var mapScale = mMainActivity.mBinding.appBar.content.mapView.mapScale
+            var mapScale = mMainActivity.appBar.content.mapView.mapScale
 //            if (mapScale < maxScale)
 //                mapScale = maxScale
 
-                mMainActivity.mBinding.appBar.content.mapView.setViewpointCenterAsync(center, maxScale)
+                mMainActivity.appBar.content.mapView.setViewpointCenterAsync(center, maxScale)
             }
         }
-        val btnUpdate = mBindingLayoutInfos.imgBtnUpdate
+        val btnUpdate = mLayoutInfos.imgBtnUpdate
         btnUpdate.setOnClickListener { v ->
             val updateIntent = Intent(mMainActivity, UpdateActivity::class.java)
             mMainActivity.startActivityForResult(updateIntent, Constant.RequestCode.UPDATE)
         }
         if (selectedFeature.geometry.geometryType != GeometryType.POINT) {
-            mBindingLayoutInfos.imgBtnChangeGeometry.visibility = View.GONE
+            mLayoutInfos.imgBtnChangeGeometry.visibility = View.GONE
         }
 
-        mBindingLayoutInfos.imgBtnChangeGeometry.setOnClickListener {
-           mMainActivity.mBinding.appBar.content.mapView.setViewpointCenterAsync(selectedFeature.geometry.extent.center)
+        mLayoutInfos.imgBtnChangeGeometry.setOnClickListener {
+           mMainActivity.appBar.content.mapView.setViewpointCenterAsync(selectedFeature.geometry.extent.center)
             showPopupChangeGeometry()
         }
 
-        val imgBtn_view_attachment = mBindingLayoutInfos.imgBtnViewAttachment
+        val imgBtn_view_attachment = mLayoutInfos.imgBtnViewAttachment
         if ((this.mApplication.selectedFeature!! as ArcGISFeature).canEditAttachments()) {
             imgBtn_view_attachment.setOnClickListener { v ->
                 val intent = Intent(mMainActivity, AttachmentActivity::class.java)
@@ -261,14 +267,14 @@ class DCallout(private val mMainActivity: MainActivity, private val mMapView: Ma
             }
         } else
             imgBtn_view_attachment.visibility = View.GONE
-        val imgBtn_delete = mBindingLayoutInfos.imgBtnDelete
+        val imgBtn_delete = mLayoutInfos.imgBtnDelete
         imgBtn_delete.setOnClickListener { v ->
             mApplication.selectedFeature!!.featureTable.featureLayer.clearSelection()
             deleteFeature()
         }
-        mBindingLayoutInfos.btnLayerClose.setOnClickListener { v -> dimissCallout() }
+        mLayoutInfos.btnLayerClose.setOnClickListener { v -> dimissCallout() }
 
-        mBindingLayoutInfos.root.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        mLayoutInfos.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         val envelope = mApplication.selectedFeature!!.geometry.extent
 //        if (!clickMap!!) mMapView.setViewpointGeometryAsync(envelope, 0.0)
 //        mMapView.setViewpointCenterAsync(envelope.center)
@@ -281,25 +287,25 @@ class DCallout(private val mMainActivity: MainActivity, private val mMapView: Ma
 //            mCallout.refresh()
 //            mCallout.show()
 //        }
-        showCallout(envelope.center, mBindingLayoutInfos.root, mMainActivity.mBinding.appBar.content.mapView.mapScale)
+        showCallout(envelope.center, mLayoutInfos, mMainActivity.appBar.content.mapView.mapScale)
     }
 
     fun showPopupChangeGeometry(point: Point? = null) {
         mApplication.statusCode = Constant.StatusCode.IS_CHANGING_GEOMETRY.value
         if (point != null)
             mApplication.center = GeometryEngine.project(point, SpatialReferences.getWebMercator()).extent.center
-        else mApplication.center = mMainActivity.mBinding.appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center
+        else mApplication.center = mMainActivity.appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center
         mMainActivity.mAddHandlingOrChangeGeometry.addGraphics(mApplication.center!!)
         try {
             val inflater = LayoutInflater.from(this.mMainActivity.applicationContext)
-            val bindingLinearLayout = DialogChangeGeometryBinding.inflate(inflater)
-            bindingLinearLayout.txtTitle.text = "Cập nhật tọa độ: ${mApplication.selectedFeature!!.featureTable.displayName}"
-            bindingLinearLayout.btnClose.setOnClickListener { mMainActivity.mAddHandlingOrChangeGeometry.handlingCancelAdd() }
-            bindingLinearLayout.btnChangeGeometry.setOnClickListener {
+            val layout = inflater.inflate(R.layout.dialog_change_geometry, null)
+            layout.txtTitle.text = "Cập nhật tọa độ: ${mApplication.selectedFeature!!.featureTable.displayName}"
+            layout.btnClose.setOnClickListener { mMainActivity.mAddHandlingOrChangeGeometry.handlingCancelAdd() }
+            layout.btnChangeGeometry.setOnClickListener {
 
                 if (mApplication.statusCode == Constant.StatusCode.IS_CHANGING_GEOMETRY.value) {
-                    mApplication.progressDialog.changeTitle(mMainActivity, mMainActivity.mBinding.appBar.content.mapView, "Đang đổi tọa độ...")
-                    UpdateGeometryAsync(mMainActivity.mBinding.appBar.content.mapView, mMainActivity,
+                    mApplication.progressDialog.changeTitle(mMainActivity, mMainActivity.appBar.content.mapView, "Đang đổi tọa độ...")
+                    UpdateGeometryAsync(mMainActivity.appBar.content.mapView, mMainActivity,
                             mApplication.selectedFeature!!.featureTable as ServiceFeatureTable,
                             mApplication.selectedFeature!! as ArcGISFeature,
                             object: UpdateGeometryAsync.AsyncResponse{
@@ -319,7 +325,7 @@ class DCallout(private val mMainActivity: MainActivity, private val mMapView: Ma
                 }
             }
             mCallout!!.location = mApplication.center
-            mCallout.content = bindingLinearLayout.root
+            mCallout.content = layout
             mMainActivity.runOnUiThread {
                 mCallout.refresh()
                 if (!mCallout.isShowing) mCallout.show()
@@ -333,7 +339,7 @@ class DCallout(private val mMainActivity: MainActivity, private val mMapView: Ma
 
     private fun showCallout(point: Point?, view: View?, scale: Double) {
         mMainActivity.runOnUiThread {
-            val viewpointCenterAsync = mMainActivity.mBinding.appBar.content.mapView.setViewpointCenterAsync(point, scale)
+            val viewpointCenterAsync = mMainActivity.appBar.content.mapView.setViewpointCenterAsync(point, scale)
             viewpointCenterAsync.addDoneListener {
                 val result = viewpointCenterAsync.get()
                 if (result) {

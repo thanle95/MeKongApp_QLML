@@ -26,7 +26,7 @@
             android:textStyle="bold" />
     </LinearLayout>
     <TextView
-        android:id="@+id/txt_progress_dialog_title"
+        android:id="@+id/txtProgressDialogTitle"
         android:textColor="@color/colorPrimary"
         android:textSize="18dp"
         android:layout_width="wrap_content"

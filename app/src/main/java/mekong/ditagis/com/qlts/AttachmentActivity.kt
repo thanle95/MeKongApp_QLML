@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.widget.AdapterView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -17,13 +18,13 @@ import com.esri.arcgisruntime.data.ArcGISFeature
 import com.esri.arcgisruntime.data.Attachment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_attachment.*
+import kotlinx.android.synthetic.main.layout_handle_add_attachment.view.*
 import mekong.ditagis.com.qlts.adapter.AttachmentAdapter
 import mekong.ditagis.com.qlts.async.AddAttachmentTask
 import mekong.ditagis.com.qlts.async.DeleteAttachmentAsync
 import mekong.ditagis.com.qlts.async.FetchAttachmentAsync
 import mekong.ditagis.com.qlts.async.FetchDataAsync
-import mekong.ditagis.com.qlts.databinding.ActivityAttachmentBinding
-import mekong.ditagis.com.qlts.databinding.LayoutHandleAddAttachmentBinding
 import mekong.ditagis.com.qlts.entities.DAttachment
 import mekong.ditagis.com.qlts.utities.Constant
 import mekong.ditagis.com.qlts.utities.DAlertDialog
@@ -34,17 +35,15 @@ import java.util.*
 
 class AttachmentActivity : AppCompatActivity() {
     private lateinit var mAdapter: AttachmentAdapter
-    private lateinit var mLayoutDialog: LayoutHandleAddAttachmentBinding
+    private lateinit var mLayoutDialog: LinearLayout
     private lateinit var mApplication: DApplication
     private lateinit var mDialog: BottomSheetDialog
     private var mSelectedItem: DAttachment? = null
     private var mAttachments: List<Attachment>? = null
-    private lateinit var mBinding: ActivityAttachmentBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityAttachmentBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
+        setContentView(R.layout.activity_attachment)
 
         mApplication = application as DApplication
         initDialog()
@@ -54,9 +53,9 @@ class AttachmentActivity : AppCompatActivity() {
     }
 
     private fun initGridView() {
-        mBinding.gridAddAttachment.adapter = mAdapter
+        gridAddAttachment.adapter = mAdapter
 
-        mBinding.gridAddAttachment.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ -> this.onGridViewItemClick(parent, position) }
+        gridAddAttachment.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ -> this.onGridViewItemClick(parent, position) }
 
 
         reload()
@@ -116,8 +115,8 @@ class AttachmentActivity : AppCompatActivity() {
 
     private fun initDialog() {
         mDialog = BottomSheetDialog(this@AttachmentActivity)
-        mLayoutDialog = LayoutHandleAddAttachmentBinding.inflate(layoutInflater)
-        mDialog.setContentView(mLayoutDialog.root)
+        mLayoutDialog = layoutInflater.inflate(R.layout.layout_handle_add_attachment, null) as LinearLayout
+        mDialog.setContentView(mLayoutDialog)
 
 
     }
@@ -157,14 +156,14 @@ class AttachmentActivity : AppCompatActivity() {
         mSelectedItem?.let { _selectedItem ->
             mDialog.dismiss()
             when (v.id) {
-                R.id.llayout__handle_image__view -> _selectedItem.image?.let { viewPhoto() }
+                R.id.llayoutHandleImageView -> _selectedItem.image?.let { viewPhoto() }
                         ?: run {
                             Toast.makeText(this@AttachmentActivity, "Không có hình ảnh!", Toast.LENGTH_SHORT).show()
                         }
 
-                R.id.llayout__handle_image__capture ->
+                R.id.llayoutHandleImageCapture ->
                     capture()
-                R.id.llayout__handle_image__delete ->
+                R.id.llayoutHandleImageDelete ->
                     if (_selectedItem.image != null && _selectedItem.attachment != null) {
 
                         showDialogConfirmDelete()
@@ -205,7 +204,7 @@ class AttachmentActivity : AppCompatActivity() {
                             reload()
 
                         } ?: run {
-                            val snackbar = Snackbar.make(mBinding.gridAddAttachment, "Không xóa được ảnh!", 2000)
+                            val snackbar = Snackbar.make(gridAddAttachment, "Không xóa được ảnh!", 2000)
                             snackbar.show()
                         }
                     }
@@ -238,14 +237,14 @@ class AttachmentActivity : AppCompatActivity() {
                 override fun post(success: Boolean?) {
                     success?.let {
                         if (it) {
-                            Toast.makeText(mBinding.gridAddAttachment.context, "Thêm ảnh thành công", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(gridAddAttachment.context, "Thêm ảnh thành công", Toast.LENGTH_SHORT).show()
                             reload()
                         } else {
-                            val snackBar = Snackbar.make(mBinding.gridAddAttachment, "Không thêm được ảnh!", 2000)
+                            val snackBar = Snackbar.make(gridAddAttachment, "Không thêm được ảnh!", 2000)
                             snackBar.show()
                         }
                     } ?: run {
-                        val snackBar = Snackbar.make(mBinding.gridAddAttachment, "Không thêm được ảnh!", 2000)
+                        val snackBar = Snackbar.make(gridAddAttachment, "Không thêm được ảnh!", 2000)
                         //                                    snackbar.setAction("Thử lại", new View.OnClickListener() {
                         //                                        @Override
                         //                                        public void onClick(View v) {
