@@ -157,7 +157,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun initMapView() {
 
         mMap = ArcGISMap(Basemap.Type.OPEN_STREET_MAP, 10.107553, 105.8461029, 12)
-
+        appBar.linnearDisplayLayerBaseMap.removeAllViews()
+        appBar.linnearDisplayLayerTaiSan.removeAllViews()
         appBar.content.mapView.map = mMap
         mApplication.progressDialog.changeTitle(this, drawerLayout, "Đang lấy dữ liệu...")
         PreparingTask(object : PreparingTask.Response {
@@ -688,7 +689,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             R.id.nav_visible_float_button -> toogleFloatButton()
-            R.id.nav_logOut -> startSignIn()
+            R.id.nav_logOut -> {
+                Preference.instance.deletePreferences()
+                startSignIn()
+            }
             R.id.nav_reload -> initMapView()
             R.id.nav_delete_searching -> {
                 graphicsOverlay!!.graphics.clear()
