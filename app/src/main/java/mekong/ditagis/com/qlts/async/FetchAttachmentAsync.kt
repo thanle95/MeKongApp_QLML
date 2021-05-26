@@ -8,7 +8,8 @@ import androidx.appcompat.app.AlertDialog
 import com.esri.arcgisruntime.data.ArcGISFeature
 import com.esri.arcgisruntime.data.Attachment
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import mekong.ditagis.com.qlts.databinding.LayoutProgressDialogBinding
+import kotlinx.android.synthetic.main.layout_progress_dialog.view.*
+import mekong.ditagis.com.qlts.R
 
 /**
  * Created by ThanLe on 4/16/2018.
@@ -32,9 +33,9 @@ class FetchAttachmentAsync(@field:SuppressLint("StaticFieldLeak") private val mA
 
 
         mDialog = BottomSheetDialog(this.mActivity)
-        val bindingView = LayoutProgressDialogBinding.inflate(mActivity.layoutInflater)
-        bindingView.txtProgressDialogTitle.text = mTitle
-        mDialog!!.setContentView(bindingView.root)
+        val layoutView = mActivity.layoutInflater.inflate(R.layout.layout_progress_dialog, null)
+        layoutView.txtProgressDialogTitle.text = mTitle
+        mDialog!!.setContentView(layoutView)
         mDialog!!.setCancelable(false)
 
         mDialog!!.show()

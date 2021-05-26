@@ -29,7 +29,7 @@
         layout="@layout/content" />
 
     <LinearLayout
-        android:id="@+id/layout_layer"
+        android:id="@+id/layoutLayer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|top"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content">
 
             <ImageButton
-                android:id="@+id/btn_layer_close"
+                android:id="@+id/btnLayerClose"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -72,7 +72,7 @@
 
 
             <LinearLayout
-                android:id="@+id/layout_layer_open_street_map"
+                android:id="@+id/layoutLayerOpenStreetMap"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -81,7 +81,7 @@
                 tools:ignore="UseCompoundDrawables">
 
                 <ImageView
-                    android:id="@+id/img_layer_open_street_map"
+                    android:id="@+id/imgLayerOpenStreetMap"
                     android:layout_width="64dp"
                     android:layout_height="50dp"
                     android:background="@drawable/layout_shape_basemap"
@@ -89,7 +89,7 @@
                     android:src="@drawable/open_street_map" />
 
                 <TextView
-                    android:id="@+id/txt_layer_open_street_map"
+                    android:id="@+id/txtLayerOpenStreetMap"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -100,7 +100,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layout_layer_street_map"
+                android:id="@+id/layoutLayerStreetMap"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -109,14 +109,14 @@
                 tools:ignore="UseCompoundDrawables">
 
                 <ImageView
-                    android:id="@+id/img_layer_street_map"
+                    android:id="@+id/imgLayerStreetMap"
                     android:layout_width="64dp"
                     android:layout_height="50dp"
                     android:contentDescription="@string/todo"
                     android:src="@drawable/street_map" />
 
                 <TextView
-                    android:id="@+id/txt_layer_street_map"
+                    android:id="@+id/txtLayerStreetMap"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -127,7 +127,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layout_layer_topo"
+                android:id="@+id/layoutLayerTopo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -136,14 +136,14 @@
                 tools:ignore="UseCompoundDrawables">
 
                 <ImageView
-                    android:id="@+id/img_layer_topo"
+                    android:id="@+id/imgLayerTopo"
                     android:layout_width="64dp"
                     android:layout_height="50dp"
                     android:contentDescription="@string/todo"
                     android:src="@drawable/imagery_with_labels" />
 
                 <TextView
-                    android:id="@+id/txt_layer_topo"
+                    android:id="@+id/txtLayerTopo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -173,7 +173,7 @@
                     android:layout_height="wrap_content">
 
                     <CheckBox
-                        android:id="@+id/cb_Layer_HanhChinh"
+                        android:id="@+id/cbLayerHanhChinh"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -183,7 +183,7 @@
 
                 </FrameLayout>
                 <SeekBar
-                    android:id="@+id/skbr_hanhchinh_layers"
+                    android:id="@+id/skbrHanhchinhLayers"
                     style="@style/MySeekBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -209,7 +209,7 @@
                     android:layout_height="wrap_content">
 
                     <CheckBox
-                        android:id="@+id/cb_Layer_TaiSan"
+                        android:id="@+id/cbLayerTaiSan"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"

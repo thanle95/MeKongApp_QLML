@@ -41,12 +41,14 @@ import com.esri.arcgisruntime.mapping.Viewpoint
 import com.esri.arcgisruntime.mapping.view.*
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.activity_quan_ly_tai_san.*
+import kotlinx.android.synthetic.main.app_bar.view.*
+import kotlinx.android.synthetic.main.content.view.*
+import kotlinx.android.synthetic.main.layout_title_listview.view.*
 import mekong.ditagis.com.qlts.adapter.FeatureLayerAdapter
 import mekong.ditagis.com.qlts.adapter.ObjectsAdapter
 import mekong.ditagis.com.qlts.async.GetLegendAsync
 import mekong.ditagis.com.qlts.async.PreparingTask
-import mekong.ditagis.com.qlts.databinding.ActivityQuanLyTaiSanBinding
-import mekong.ditagis.com.qlts.databinding.LayoutTitleListviewBinding
 import mekong.ditagis.com.qlts.entities.DLayerInfo
 import mekong.ditagis.com.qlts.libs.Action
 import mekong.ditagis.com.qlts.libs.FeatureLayerDTG
@@ -80,7 +82,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      lateinit var mAddHandlingOrChangeGeometry: AddHandlingOrChangeGeometry
     private var mSelectedArcGISFeature: ArcGISFeature? = null
     internal var reqPermissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
-    lateinit var mBinding: ActivityQuanLyTaiSanBinding
     fun setUri(uri: Uri) {
         this.mUri = uri
     }
@@ -93,8 +94,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityQuanLyTaiSanBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
+        setContentView(R.layout.activity_quan_ly_tai_san)
         mApplication = application as DApplication
         mApplication.alertDialog = DAlertDialog()
         mAddHandlingOrChangeGeometry = AddHandlingOrChangeGeometry(this)
@@ -112,14 +112,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         StrictMode.setVmPolicy(builder.build())
 
         // for navigation
-        setSupportActionBar(mBinding.appBar.toolbar)
+        setSupportActionBar(appBar.toolbar)
         // permisson
         requestPermisson()
 
-        val toggle = ActionBarDrawerToggle(this, mBinding.drawerLayout, mBinding.appBar.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        mBinding.drawerLayout.addDrawerListener(toggle)
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, appBar.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
-        mBinding.navView.setNavigationItemSelectedListener(this)
+        navView.setNavigationItemSelectedListener(this)
 
         // khởi tạo chức năng tìm kiếm
         initListViewSearch()
@@ -141,8 +141,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun setLoginInfos() {
         val application = application as DApplication
         val displayName = application.user!!.displayName
-        mBinding.navView.setNavigationItemSelectedListener(this)
-        val headerLayout = mBinding.navView.getHeaderView(0)
+        navView.setNavigationItemSelectedListener(this)
+        val headerLayout = navView.getHeaderView(0)
         val nav_name_nv = headerLayout.findViewById<TextView>(R.id.nav_name_nv)
         nav_name_nv.text = displayName
     }
@@ -158,13 +158,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         mMap = ArcGISMap(Basemap.Type.OPEN_STREET_MAP, 10.107553, 105.8461029, 12)
 
-        mBinding.appBar.content.mapView.map = mMap
-        mApplication.progressDialog.changeTitle(this, mBinding.drawerLayout, "Đang lấy dữ liệu...")
+        appBar.content.mapView.map = mMap
+        mApplication.progressDialog.changeTitle(this, drawerLayout, "Đang lấy dữ liệu...")
         PreparingTask(object : PreparingTask.Response {
             override fun post(output: List<DLayerInfo>?) {
                 if (output != null && output.isNotEmpty()) {
                     mApplication!!.layerInfos = output
-                    mApplication.progressDialog.changeTitle(this@MainActivity, mBinding.drawerLayout, "Đang tải bản đồ...")
+                    mApplication.progressDialog.changeTitle(this@MainActivity, drawerLayout, "Đang tải bản đồ...")
                     setFeatureService()
                 } else if (output == null) {
                     Toast.makeText(this@MainActivity, "Tài khoản của bạn không có quyền truy cập ứng dụng này", Toast.LENGTH_SHORT).show()
@@ -180,16 +180,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         changeStatusOfLocationDataSource()
         locationDisplay!!.addLocationChangedListener { locationChangedEvent -> }
         graphicsOverlay = GraphicsOverlay()
-        mBinding.appBar.content.mapView.graphicsOverlays.add(graphicsOverlay)
-        mApplication.progressDialog.changeTitle(this, mBinding.drawerLayout, "Đang khởi tạo ứng dụng...")
+        appBar.content.mapView.graphicsOverlays.add(graphicsOverlay)
+        mApplication.progressDialog.changeTitle(this, drawerLayout, "Đang khởi tạo ứng dụng...")
     }
 
     private fun setFeatureService() {
         // config feature layer service
         mFeatureLayerDTGS = ArrayList()
-        callout = mBinding.appBar.content.mapView.callout
-        mMapViewHandler = MapViewHandler(mBinding.appBar.content.mapView, this@MainActivity)
-        DCallout = DCallout(this@MainActivity, mBinding.appBar.content.mapView, callout)
+        callout = appBar.content.mapView.callout
+        mMapViewHandler = MapViewHandler(appBar.content.mapView, this@MainActivity)
+        DCallout = DCallout(this@MainActivity, appBar.content.mapView, callout)
         val size = AtomicInteger(mApplication.layerInfos!!.size)
         val layerVisible = HashMap<Any, Boolean>()
         for (layerInfo in mApplication.layerInfos!!) {
@@ -204,17 +204,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (layerInfo.layerId.toUpperCase().contains(Constant.LAYER_ID.BASEMAP)) {
                 hanhChinhImageLayers = ArcGISMapImageLayer(url)
                 hanhChinhImageLayers!!.id = layerInfo.layerId
-                mBinding.appBar.content.mapView.map.operationalLayers.add(hanhChinhImageLayers)
+                appBar.content.mapView.map.operationalLayers.add(hanhChinhImageLayers)
                 val finalUrl = url
                 hanhChinhImageLayers!!.addDoneLoadingListener {
-                    for (layer in mBinding.appBar.content.mapView.map.operationalLayers) {
+                    for (layer in appBar.content.mapView.map.operationalLayers) {
                         if (layer is FeatureLayer) continue
                         val fullExtent = layer.fullExtent
                         if (fullExtent != null && fullExtent.xMin != 0.0 && fullExtent.yMin != 0.0
                                 && fullExtent.xMax != 0.0 && fullExtent.yMax != 0.0) {
                             try {
                                 locationDisplay!!.stop()
-                                mBinding.appBar.content.mapView.setViewpointGeometryAsync(fullExtent, 50.0)
+                                appBar.content.mapView.setViewpointGeometryAsync(fullExtent, 50.0)
 
                                 break
                             } catch (e: Exception) {
@@ -274,7 +274,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     @SuppressLint("ClickableViewAccessibility")
     private fun mapViewEvent() {
-        mBinding.appBar.content.mapView.onTouchListener = object : DefaultMapViewOnTouchListener(this, mBinding.appBar.content.mapView) {
+        appBar.content.mapView.onTouchListener = object : DefaultMapViewOnTouchListener(this, appBar.content.mapView) {
             override fun onLongPress(e: MotionEvent) {
 //                addGraphicsAddFeature(e)
                 mAddHandlingOrChangeGeometry.selectOptionAdd(e)
@@ -294,9 +294,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             @SuppressLint("SetTextI18n")
             override fun onScroll(e1: MotionEvent, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
                 if (mApplication.statusCode == Constant.StatusCode.IS_CHANGING_GEOMETRY.value) {
-                    val center: Point = mBinding.appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center
+                    val center: Point = appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center
                    mAddHandlingOrChangeGeometry.addGraphics(center)
-                    if (mBinding.appBar.content.mapView.callout.isShowing)mBinding.appBar.content.mapView.callout.dismiss()
+                    if (appBar.content.mapView.callout.isShowing)appBar.content.mapView.callout.dismiss()
                 }
 //                else mAddHandlingOrChangeGeometry.handlingCancelAdd()
 
@@ -307,7 +307,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         val log = Math.round(location!![0] * 100000).toFloat() / 100000
                         val lat = Math.round(location[1] * 100000).toFloat() / 100000
                         val text = "$lat, $log"
-                        mBinding.appBar.content.txtToado.text = text
+                        appBar.content.txtToado.text = text
                     }
                 }
                 return super.onScroll(e1, e2, distanceX, distanceY)
@@ -315,14 +315,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             override fun onUp(e: MotionEvent?): Boolean {
                 if (mApplication.statusCode == Constant.StatusCode.IS_CHANGING_GEOMETRY.value) {
-                    if (mBinding.appBar.content.mapView.callout.isShowing) mBinding.appBar.content.mapView.callout.dismiss()
+                    if (appBar.content.mapView.callout.isShowing) appBar.content.mapView.callout.dismiss()
                     DCallout!!.showPopupChangeGeometry()
 
                 }
                 return super.onUp(e)
             }
         }
-        mBinding.appBar.skbrHanhchinhLayers.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        appBar.skbrHanhchinhLayers.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 hanhChinhImageLayers!!.opacity = i.toFloat() / 100
             }
@@ -345,7 +345,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun handlingCancelAdd() {
-        val callout = mBinding.appBar.content.mapView.callout
+        val callout = appBar.content.mapView.callout
         if (callout != null && callout.isShowing) {
             callout.dismiss()
         }
@@ -366,7 +366,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun getLegend() {
-        mApplication.progressDialog.changeTitle(this, mBinding.drawerLayout, "Đang tải chú thích...")
+        mApplication.progressDialog.changeTitle(this, drawerLayout, "Đang tải chú thích...")
         GetLegendAsync(this@MainActivity, object : GetLegendAsync.AsyncResponse {
             override fun processFinish() {
                 endLoadingMap()
@@ -379,17 +379,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun initLayerListView() {
-        mBinding.appBar.cbLayerTaiSan.setOnCheckedChangeListener { buttonView, isChecked ->
-            for (i in 0 until mBinding.appBar.linnearDisplayLayerTaiSan.childCount) {
-                val view = mBinding.appBar.linnearDisplayLayerTaiSan.getChildAt(i)
+        appBar.cbLayerTaiSan.setOnCheckedChangeListener { buttonView, isChecked ->
+            for (i in 0 until appBar.linnearDisplayLayerTaiSan.childCount) {
+                val view = appBar.linnearDisplayLayerTaiSan.getChildAt(i)
                 if (view is CheckBox) {
                     view.isChecked = isChecked
                 }
             }
         }
-        mBinding.appBar.cbLayerHanhChinh.setOnCheckedChangeListener { buttonView, isChecked ->
-            for (i in 0 until mBinding.appBar.linnearDisplayLayerBaseMap.childCount) {
-                val view = mBinding.appBar.linnearDisplayLayerBaseMap.getChildAt(i)
+        appBar.cbLayerHanhChinh.setOnCheckedChangeListener { buttonView, isChecked ->
+            for (i in 0 until appBar.linnearDisplayLayerBaseMap.childCount) {
+                val view = appBar.linnearDisplayLayerBaseMap.getChildAt(i)
                 if (view is CheckBox) {
                     view.isChecked = isChecked
                 }
@@ -400,11 +400,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun initListViewSearch() {
         //đưa listview search ra phía sau
-        mBinding.appBar.content.lstviewSearch.invalidate()
+        appBar.content.lstviewSearch.invalidate()
         val items = ArrayList<ObjectsAdapter.Item>()
         this.mSearchAdapter = ObjectsAdapter(this@MainActivity, items)
-        mBinding.appBar.content.lstviewSearch.adapter = mSearchAdapter
-        mBinding.appBar.content.lstviewSearch.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        appBar.content.lstviewSearch.adapter = mSearchAdapter
+        appBar.content.lstviewSearch.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val item = parent.getItemAtPosition(position) as ObjectsAdapter.Item
             val objectID = Integer.parseInt(item.objectID!!)
             if (objectID != -1) {
@@ -423,7 +423,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun addCheckBoxSubLayer(layer: ArcGISMapImageSublayer) {
-        val checkBox = CheckBox(mBinding.appBar.linnearDisplayLayerBaseMap.context)
+        val checkBox = CheckBox(appBar.linnearDisplayLayerBaseMap.context)
         checkBox.text = layer.name
         checkBox.isChecked = false
         layer.isVisible = false
@@ -442,11 +442,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 layer.isVisible = false
             }
         }
-        mBinding.appBar.linnearDisplayLayerBaseMap.addView(checkBox)
+        appBar.linnearDisplayLayerBaseMap.addView(checkBox)
     }
 
     private fun addCheckBox_TaiSanLayer(featureLayer: FeatureLayer) {
-        val checkBox = CheckBox(mBinding.appBar.linnearDisplayLayerTaiSan.context)
+        val checkBox = CheckBox(appBar.linnearDisplayLayerTaiSan.context)
         checkBox.text = featureLayer.name
         checkBox.isChecked = false
         featureLayer.isVisible = false
@@ -460,11 +460,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     featureLayer.isVisible = false
             }
         }
-        mBinding.appBar.linnearDisplayLayerTaiSan.addView(checkBox)
+        appBar.linnearDisplayLayerTaiSan.addView(checkBox)
     }
 
     private fun changeStatusOfLocationDataSource() {
-        locationDisplay = mBinding.appBar.content.mapView.locationDisplay
+        locationDisplay = appBar.content.mapView.locationDisplay
         locationDisplay!!.startAsync()
         //        changeStatusOfLocationDataSource();
         locationDisplay!!.addDataSourceStatusChangedListener(LocationDisplay.DataSourceStatusChangedListener { dataSourceStatusChangedEvent ->
@@ -488,7 +488,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setViewPointCenter(position: Point?) {
         val geometry = GeometryEngine.project(position!!, SpatialReferences.getWebMercator())
-        mBinding.appBar.content.mapView.setViewpointCenterAsync(geometry.extent.center)
+        appBar.content.mapView.setViewpointCenterAsync(geometry.extent.center)
     }
 
     private fun setViewPointCenterLongLat(position: Point) {
@@ -500,12 +500,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val graphic = Graphic(point, symbol)
         graphicsOverlay!!.graphics.add(graphic)
 
-        mBinding.appBar.content.mapView.setViewpointCenterAsync(point)
+        appBar.content.mapView.setViewpointCenterAsync(point)
     }
 
     override fun onBackPressed() {
-        if (mBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mBinding.drawerLayout.closeDrawer(GravityCompat.START)
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
@@ -522,7 +522,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onQueryTextSubmit(query: String): Boolean {
                 mTxtSearch.clearFocus()
                 if (isSearchingFeature)
-                    mMapViewHandler!!.querySearch(query, mBinding.appBar.content.lstviewSearch, mSearchAdapter!!)
+                    mMapViewHandler!!.querySearch(query, appBar.content.lstviewSearch, mSearchAdapter!!)
                 else {
                     try {
                         mSearchAdapter!!.clear()
@@ -568,13 +568,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         menu.findItem(R.id.action_search).setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 hiddenFloatButton()
-                mBinding.appBar.content.layoutTimKiem.visibility = View.VISIBLE
+                appBar.content.layoutTimKiem.visibility = View.VISIBLE
                 return true
             }
 
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 showFloatButton()
-                mBinding.appBar.content.layoutTimKiem.visibility = View.INVISIBLE
+                appBar.content.layoutTimKiem.visibility = View.INVISIBLE
                 return true
             }
         })
@@ -586,11 +586,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val items = addFeatureItem.getItems()
         val featureLayerAdapter = FeatureLayerAdapter(this, items!!)
         val builder = AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_NoActionBar_Fullscreen)
-        val bindingLayout = LayoutTitleListviewBinding.inflate(layoutInflater)
-        val listView = bindingLayout.listview
+        val layout = layoutInflater.inflate(R.layout.layout_title_listview, null)
+        val listView = layout.listview
         listView.adapter = featureLayerAdapter
-        bindingLayout.txtTitleLayout.text = "Chọn lớp dữ liệu cập nhật"
-        builder.setView(bindingLayout.root)
+        layout.txtTitleLayout.text = "Chọn lớp dữ liệu cập nhật"
+        builder.setView(layout)
         val selectTimeDialog = builder.create()
         selectTimeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         selectTimeDialog.show()
@@ -607,7 +607,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val item = parent.getItemAtPosition(position) as FeatureLayerAdapter.Item
 
             val idLayer = item.idLayer
-            mBinding.appBar.content.txtTitleSearch.text = item.titleLayer
+            appBar.content.txtTitleSearch.text = item.titleLayer
             val featureLayer = getFeatureLayer(idLayer!!)
             mMapViewHandler!!.setIdentifyFeatureLayer(featureLayer!!)
             featureLayer.isVisible = true
@@ -620,12 +620,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val featureLayerAdapter = FeatureLayerAdapter(this, items!!)
         val builder = AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_NoActionBar_Fullscreen)
         //todo: xem layout này
-        val layout = LayoutTitleListviewBinding.inflate(layoutInflater)
+        val layout = layoutInflater.inflate(R.layout.layout_title_listview, null)
         val listView = layout.listview
         listView.adapter = featureLayerAdapter
-        val txt_Title_Layout = layout.txtTitleLayout
-        txt_Title_Layout.text = "Tìm kiếm theo"
-        builder.setView(layout.root)
+        layout.txtTitleLayout.text = "Tìm kiếm theo"
+        builder.setView(layout)
         val selectTimeDialog = builder.create()
         selectTimeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         selectTimeDialog.show()
@@ -634,7 +633,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             selectTimeDialog.dismiss()
             val itemAtPosition = parent.getItemAtPosition(position) as FeatureLayerAdapter.Item
             val idLayer = itemAtPosition.idLayer
-            mBinding.appBar.content.txtTitleSearch.text = itemAtPosition.titleLayer
+            appBar.content.txtTitleSearch.text = itemAtPosition.titleLayer
             val featureLayer = getFeatureLayer(idLayer!!)
             featureLayer!!.isVisible = true
             //                mapView.getMap().setMaxScale(featureLayer.getMaxScale());
@@ -701,7 +700,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
 
-        mBinding.drawerLayout.closeDrawer(GravityCompat.START)
+        drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
@@ -727,78 +726,78 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun hiddenFloatButton() {
-        mBinding.appBar.floatBtnLayer.hide()
-        mBinding.appBar.floatBtnLocation.hide()
+        appBar.floatBtnLayer.hide()
+        appBar.floatBtnLocation.hide()
     }
 
     private fun showFloatButton() {
-        mBinding.appBar.floatBtnLayer.show()
-        mBinding.appBar.floatBtnLocation.show()
+        appBar.floatBtnLayer.show()
+        appBar.floatBtnLocation.show()
     }
 
     private fun toogleFloatButton() {
-        if (mBinding.appBar.floatBtnLayer.isOrWillBeShown)
-            mBinding.appBar.floatBtnLayer.hide()
+        if (appBar.floatBtnLayer.isOrWillBeShown)
+            appBar.floatBtnLayer.hide()
         else
-            mBinding.appBar.floatBtnLayer.show()
+            appBar.floatBtnLayer.show()
 
-        if (mBinding.appBar.floatBtnLocation.isOrWillBeShown)
-            mBinding.appBar.floatBtnLocation.hide()
+        if (appBar.floatBtnLocation.isOrWillBeShown)
+            appBar.floatBtnLocation.hide()
         else
-            mBinding.appBar.floatBtnLocation.show()
+            appBar.floatBtnLocation.show()
 
     }
 
     private fun setOnClickListener() {
-        mBinding.appBar.layoutLayerOpenStreetMap.setOnClickListener(this)
-        mBinding.appBar.layoutLayerStreetMap.setOnClickListener(this)
-        mBinding.appBar.layoutLayerTopo.setOnClickListener(this)
+        appBar.layoutLayerOpenStreetMap.setOnClickListener(this)
+        appBar.layoutLayerStreetMap.setOnClickListener(this)
+        appBar.layoutLayerTopo.setOnClickListener(this)
 
-        mBinding.appBar.content.imgSelectLayer.setOnClickListener(this)
-        mBinding.appBar.content.imgClearSelectLayer.setOnClickListener(this)
-        mBinding.appBar.floatBtnLayer.setOnClickListener(this)
-        mBinding.appBar.btnLayerClose.setOnClickListener(this)
-        mBinding.appBar.floatBtnLocation.setOnClickListener(this)
+        appBar.content.imgSelectLayer.setOnClickListener(this)
+        appBar.content.imgClearSelectLayer.setOnClickListener(this)
+        appBar.floatBtnLayer.setOnClickListener(this)
+        appBar.btnLayerClose.setOnClickListener(this)
+        appBar.floatBtnLocation.setOnClickListener(this)
 
     }
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.img_selectLayer -> showDialogSelectTypeSearch()
-            R.id.img_clearSelectLayer -> {
-                mBinding.appBar.content.txtTitleSearch.text = getString(R.string.nav_find_address)
+            R.id.imgSelectLayer -> showDialogSelectTypeSearch()
+            R.id.imgClearSelectLayer -> {
+                appBar.content.txtTitleSearch.text = getString(R.string.nav_find_address)
                 isSearchingFeature = false
             }
             R.id.floatBtnLayer -> {
                 toogleFloatButton()
 
-                mBinding.appBar.layoutLayer.visibility = View.VISIBLE
-                mCurrentPoint = mBinding.appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center
+                appBar.layoutLayer.visibility = View.VISIBLE
+                mCurrentPoint = appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE).targetGeometry.extent.center
             }
-            R.id.layout_layer_open_street_map -> {
+            R.id.layoutLayerOpenStreetMap -> {
                 //                mapView.getMap().setMaxScale(1128.497175);
-                mBinding.appBar.content.mapView.map.basemap = Basemap.createOpenStreetMap()
-                handlingColorBackgroundLayerSelected(R.id.layout_layer_open_street_map)
-                mBinding.appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE)
+                appBar.content.mapView.map.basemap = Basemap.createOpenStreetMap()
+                handlingColorBackgroundLayerSelected(R.id.layoutLayerOpenStreetMap)
+                appBar.content.mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE)
 
                 setViewPointCenter(mCurrentPoint)
             }
-            R.id.layout_layer_street_map -> {
+            R.id.layoutLayerStreetMap -> {
                 //                mapView.getMap().setMaxScale(1128.497176);
-                mBinding.appBar.content.mapView.map.basemap = Basemap.createStreets()
-                handlingColorBackgroundLayerSelected(R.id.layout_layer_street_map)
+                appBar.content.mapView.map.basemap = Basemap.createStreets()
+                handlingColorBackgroundLayerSelected(R.id.layoutLayerStreetMap)
 
                 setViewPointCenter(mCurrentPoint)
             }
-            R.id.layout_layer_topo -> {
-                mBinding.appBar.content.mapView.map.maxScale = 5.0
-                mBinding.appBar.content.mapView.map.basemap = Basemap.createImageryWithLabels()
-                handlingColorBackgroundLayerSelected(R.id.layout_layer_topo)
+            R.id.layoutLayerTopo -> {
+                appBar.content.mapView.map.maxScale = 5.0
+                appBar.content.mapView.map.basemap = Basemap.createImageryWithLabels()
+                handlingColorBackgroundLayerSelected(R.id.layoutLayerTopo)
 
                 setViewPointCenter(mCurrentPoint)
             }
-            R.id.btn_layer_close -> {
-                mBinding.appBar.layoutLayer.visibility = View.INVISIBLE
+            R.id.btnLayerClose -> {
+                appBar.layoutLayer.visibility = View.INVISIBLE
                 toogleFloatButton()
             }
             R.id.floatBtnLocation -> if (!locationDisplay!!.isStarted) {
@@ -817,29 +816,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     @SuppressLint("ResourceAsColor")
     private fun handlingColorBackgroundLayerSelected(id: Int) {
         when (id) {
-            R.id.layout_layer_open_street_map -> {
-                mBinding.appBar.imgLayerOpenStreetMap.setBackgroundResource(R.drawable.layout_shape_basemap)
-                mBinding.appBar.txtLayerOpenStreetMap.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
-                mBinding.appBar.imgLayerStreetMap.setBackgroundResource(R.drawable.layout_shape_basemap_none)
-                mBinding.appBar.txtLayerStreetMap.setTextColor(ContextCompat.getColor(this, R.color.colorBlack))
-                mBinding.appBar.imgLayerTopo.setBackgroundResource(R.drawable.layout_shape_basemap_none)
-                mBinding.appBar.txtLayerTopo.setTextColor(ContextCompat.getColor(this, R.color.colorBlack))
+            R.id.layoutLayerOpenStreetMap -> {
+                appBar.imgLayerOpenStreetMap.setBackgroundResource(R.drawable.layout_shape_basemap)
+                appBar.txtLayerOpenStreetMap.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                appBar.imgLayerStreetMap.setBackgroundResource(R.drawable.layout_shape_basemap_none)
+                appBar.txtLayerStreetMap.setTextColor(ContextCompat.getColor(this, R.color.colorBlack))
+                appBar.imgLayerTopo.setBackgroundResource(R.drawable.layout_shape_basemap_none)
+                appBar.txtLayerTopo.setTextColor(ContextCompat.getColor(this, R.color.colorBlack))
             }
-            R.id.layout_layer_street_map -> {
-                mBinding.appBar.imgLayerStreetMap.setBackgroundResource(R.drawable.layout_shape_basemap)
-                mBinding.appBar.txtLayerStreetMap.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
-                mBinding.appBar.imgLayerOpenStreetMap.setBackgroundResource(R.drawable.layout_shape_basemap_none)
-                mBinding.appBar.txtLayerOpenStreetMap.setTextColor(ContextCompat.getColor(this, R.color.colorBlack))
-                mBinding.appBar.imgLayerTopo.setBackgroundResource(R.drawable.layout_shape_basemap_none)
-                mBinding.appBar.txtLayerTopo.setTextColor(ContextCompat.getColor(this, R.color.colorBlack))
+            R.id.layoutLayerStreetMap -> {
+                appBar.imgLayerStreetMap.setBackgroundResource(R.drawable.layout_shape_basemap)
+                appBar.txtLayerStreetMap.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                appBar.imgLayerOpenStreetMap.setBackgroundResource(R.drawable.layout_shape_basemap_none)
+                appBar.txtLayerOpenStreetMap.setTextColor(ContextCompat.getColor(this, R.color.colorBlack))
+                appBar.imgLayerTopo.setBackgroundResource(R.drawable.layout_shape_basemap_none)
+                appBar.txtLayerTopo.setTextColor(ContextCompat.getColor(this, R.color.colorBlack))
             }
-            R.id.layout_layer_topo -> {
-                mBinding.appBar.imgLayerTopo.setBackgroundResource(R.drawable.layout_shape_basemap)
-                mBinding.appBar.txtLayerTopo.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
-                mBinding.appBar.imgLayerOpenStreetMap.setBackgroundResource(R.drawable.layout_shape_basemap_none)
-                mBinding.appBar.txtLayerOpenStreetMap.setTextColor(ContextCompat.getColor(this, R.color.colorBlack))
-                mBinding.appBar.imgLayerStreetMap.setBackgroundResource(R.drawable.layout_shape_basemap_none)
-                mBinding.appBar.txtLayerStreetMap.setTextColor(ContextCompat.getColor(this, R.color.colorBlack))
+            R.id.layoutLayerTopo -> {
+                appBar.imgLayerTopo.setBackgroundResource(R.drawable.layout_shape_basemap)
+                appBar.txtLayerTopo.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                appBar.imgLayerOpenStreetMap.setBackgroundResource(R.drawable.layout_shape_basemap_none)
+                appBar.txtLayerOpenStreetMap.setTextColor(ContextCompat.getColor(this, R.color.colorBlack))
+                appBar.imgLayerStreetMap.setBackgroundResource(R.drawable.layout_shape_basemap_none)
+                appBar.txtLayerStreetMap.setTextColor(ContextCompat.getColor(this, R.color.colorBlack))
             }
         }
     }

@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".CameraActivity">
 
     <!-- TODO: Update blank fragment layout -->
@@ -19,12 +20,12 @@
             android:padding="@dimen/padding_small">
 
             <ImageView
-                android:id="@+id/camera_back"
+                android:id="@+id/cameraBack"
                 android:layout_width="@dimen/size_capture_image"
                 android:layout_height="@dimen/size_capture_image"
                 android:gravity="left"
                 android:onClick="onClick"
-                android:tint="@android:color/white"
+                app:tint="@android:color/white"
                 android:src="@drawable/ic_back" />
 
             <View
@@ -33,16 +34,16 @@
                 android:layout_weight="1" />
 
             <ImageView
-                android:id="@+id/camera_flash"
+                android:id="@+id/cameraFlash"
                 android:layout_width="@dimen/size_capture_image"
                 android:layout_height="@dimen/size_capture_image"
                 android:onClick="onClick"
-                android:tint="@android:color/white"
+                app:tint="@android:color/white"
                 android:src="@drawable/ic_flash_off" />
         </LinearLayout>
 
         <SurfaceView
-            android:id="@+id/surfaceView_fragment_camera"
+            android:id="@+id/surfaceViewFragmentCamera"
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="0dp" />
@@ -56,12 +57,12 @@
             android:padding="@dimen/padding_small">
 
             <ImageView
-                android:id="@+id/camera_capture"
+                android:id="@+id/cameraCapture"
                 android:layout_width="@dimen/size_capture_image"
                 android:layout_height="@dimen/size_capture_image"
                 android:layout_gravity="center"
                 android:onClick="onClick"
-                android:tint="@android:color/white"
+                app:tint="@android:color/white"
                 android:src="@drawable/ic_camera" />
         </LinearLayout>
     </LinearLayout>

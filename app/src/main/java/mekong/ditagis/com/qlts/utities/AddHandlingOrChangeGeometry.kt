@@ -19,6 +19,9 @@ import com.esri.arcgisruntime.loadable.LoadStatus
 import com.esri.arcgisruntime.mapping.Viewpoint
 import com.esri.arcgisruntime.mapping.view.Graphic
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol
+import kotlinx.android.synthetic.main.activity_quan_ly_tai_san.*
+import kotlinx.android.synthetic.main.app_bar.view.*
+import kotlinx.android.synthetic.main.content.view.*
 import mekong.ditagis.com.qlts.AddFeatureActivity
 import mekong.ditagis.com.qlts.MainActivity
 import mekong.ditagis.com.qlts.R
@@ -34,7 +37,7 @@ import kotlin.math.roundToInt
 
 class AddHandlingOrChangeGeometry(private val mMainActivity: MainActivity) {
     private val mApplication: DApplication = mMainActivity.application as DApplication
-    private val mMapView = mMainActivity.mBinding.appBar.content.mapView
+    private val mMapView = mMainActivity.appBar.content.mapView
     fun selectOptionAdd(e: MotionEvent?) {
         val center: Point = if (e != null) {
             mMapView.screenToLocation(android.graphics.Point(e.x.roundToInt(), e.y.roundToInt()))

@@ -14,7 +14,7 @@
         android:background="@color/colorPrimary">
 
         <TextView
-            android:id="@+id/txt_Title_Layout"
+            android:id="@+id/txtTitleLayout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
@@ -23,7 +23,7 @@
             android:textColor="@color/colorBackground_1"
             android:textSize="20sp" />
         <ImageView
-            android:id="@+id/img_refresh"
+            android:id="@+id/imgRefresh"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right"

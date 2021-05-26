@@ -5,14 +5,14 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/layout_edit_viewmoreinfo_Editext"
+        android:id="@+id/layoutEditViewmoreinfoEditext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone">
 
         <EditText
-            android:id="@+id/etxt_edit_viewmoreinfo"
+            android:id="@+id/etxtEditViewmoreinfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -22,14 +22,14 @@
     </LinearLayout>
     <FrameLayout
 
-        android:id="@+id/layout_edit_viewmoreinfo_TextView"
+        android:id="@+id/layoutEditViewmoreinfoTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/txt_edit_viewmoreinfo"
+            android:id="@+id/txtEditViewmoreinfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -37,7 +37,7 @@
             android:text="Field"
             android:textAppearance="?android:attr/textAppearanceMedium" />
         <ImageView
-            android:id="@+id/img_selectLayer"
+            android:id="@+id/imgSelectLayer"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="right|end"
@@ -98,14 +98,14 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layout_edit_viewmoreinfo_Spinner"
+        android:id="@+id/layoutEditViewmoreinfoSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone">
 
         <Spinner
-            android:id="@+id/spin_edit_viewmoreinfo"
+            android:id="@+id/spinEditViewmoreinfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"

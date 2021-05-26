@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import com.esri.arcgisruntime.data.Field
-import mekong.ditagis.com.qlts.databinding.ItemViewinfoBinding
-
+import kotlinx.android.synthetic.main.item_viewinfo.view.*
+import mekong.ditagis.com.qlts.R
 
 /**
  * Created by ThanLe on 04/10/2017.
@@ -35,7 +36,7 @@ class FeatureViewInfoAdapter(private val mContext: Context, private val items: M
         val holder: DHolder
         if (convertView == null) {
             val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            holder = DHolder(ItemViewinfoBinding.inflate(inflater))
+            holder = DHolder(inflater.inflate(R.layout.item_viewinfo, null) as LinearLayout)
             holder.view.tag = holder
         }
         else{
@@ -43,8 +44,8 @@ class FeatureViewInfoAdapter(private val mContext: Context, private val items: M
         }
         val item = items[position]
 
-        holder.binding.txtViewinfoAlias.text = item.alias
-        val txtValue = holder.binding.txtViewinfoValue
+        holder.view.txtViewinfoAlias.text = item.alias
+        val txtValue = holder.view.txtViewinfoValue
         txtValue.text = item.value
         if (item.value == null)
             txtValue.visibility = View.GONE
@@ -61,7 +62,7 @@ class FeatureViewInfoAdapter(private val mContext: Context, private val items: M
         var isEdit: Boolean = false
         var fieldType: Field.Type? = null
     }
-    private class DHolder( var binding: ItemViewinfoBinding) {
-        var view: View = binding.root
+    private class DHolder( var layout: LinearLayout ) {
+        var view: View = layout
     }
 }

@@ -13,14 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/txt_tracuu_id"
+            android:id="@+id/txtTracuuId"
             android:layout_width="318dp"
             android:layout_height="40dp"
             android:text="id"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold" />
         <TextView
-            android:id="@+id/txt_tracuu_ngaycapnhat"
+            android:id="@+id/txtTracuuNgaycapnhat"
             android:layout_gravity="end"
             android:text="12-03-2018"
             android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/txt_tracuu_diachi"
+        android:id="@+id/txtTracuuDiachi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/txt_tracuu_id"

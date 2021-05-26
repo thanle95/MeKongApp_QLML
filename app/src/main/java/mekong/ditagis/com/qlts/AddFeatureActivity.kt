@@ -11,12 +11,17 @@ import android.text.InputType
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import com.esri.arcgisruntime.data.*
 import com.esri.arcgisruntime.layers.FeatureLayer
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.activity_add_feature.*
+import kotlinx.android.synthetic.main.item_add_feature_date.view.*
+import kotlinx.android.synthetic.main.item_add_feature_edittext.view.*
+import kotlinx.android.synthetic.main.item_add_feature_spinner.view.*
+import kotlinx.android.synthetic.main.layout_select_time.view.*
 import mekong.ditagis.com.qlts.async.AddFeatureTask
-import mekong.ditagis.com.qlts.databinding.*
 import mekong.ditagis.com.qlts.entities.FeatureLayerValueIDField
 import mekong.ditagis.com.qlts.utities.Constant
 import mekong.ditagis.com.qlts.utities.DApplication
@@ -31,13 +36,11 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
     private var mUri: Uri? = null
     private var mFeatureLayerValueIDField: FeatureLayerValueIDField? = null
     private val mAdapterLayer: ArrayAdapter<String>? = null
-    private lateinit var mBinding: ActivityAddFeatureBinding
     private var mFeatureLayer: FeatureLayer? = null
     private var mFeature: ArcGISFeature? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityAddFeatureBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
+        setContentView(R.layout.activity_add_feature)
         mApplication = application as DApplication
         initViews()
     }
@@ -48,9 +51,9 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
         if (mFeatureLayerValueIDField != null) {
 
             mImages = ArrayList()
-            mBinding.btnCapture.setOnClickListener { view: View -> onClick(view) }
-            mBinding.btnAdd.setOnClickListener { view: View -> onClick(view) }
-            mBinding.btnPickPhoto.setOnClickListener { view: View -> onClick(view) }
+            btnCapture.setOnClickListener { view: View -> onClick(view) }
+            btnAdd.setOnClickListener { view: View -> onClick(view) }
+            btnPickPhoto.setOnClickListener { view: View -> onClick(view) }
             Objects.requireNonNull(supportActionBar)?.setDisplayHomeAsUpEnabled(true)
             Objects.requireNonNull(supportActionBar)?.setDisplayShowHomeEnabled(true)
             mFeatureLayer = mFeatureLayerValueIDField!!.featureLayer
@@ -71,63 +74,62 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun loadData() {
-        mApplication!!.progressDialog.changeTitle(this@AddFeatureActivity, mBinding.root, "Đang khởi tạo thuộc tính...")
-        mBinding.llayoutField.removeAllViews()
+        mApplication!!.progressDialog.changeTitle(this@AddFeatureActivity, root, "Đang khởi tạo thuộc tính...")
+        llayoutField.removeAllViews()
         for (field in mFeatureLayer!!.featureTable.fields) {
             val fieldName = field.name
             if (Constant.Field.NONE_UPDATE_FIELDS.find { f -> f == fieldName } != null) continue
             val field = mFeatureLayer!!.featureTable.fields.find { field -> field.name == fieldName }
             if (field == null) continue
             if (field.domain != null) {
-                val bindingLayoutView = ItemAddFeatureSpinnerBinding.inflate(layoutInflater)
-//                val bindingLayoutSpinner = this@UpdateActivity.layoutInflater.inflate(R.layout.item_add_feature_spinner, null, false) as LinearLayout
+                val layoutView =layoutInflater.inflate(R.layout.item_add_feature_spinner,null)
                 val codedValueDomain = field.domain as CodedValueDomain
                 val adapter = ArrayAdapter(this@AddFeatureActivity, android.R.layout.simple_list_item_1, ArrayList<String>())
-                bindingLayoutView.spinnerAddSpinnerValue.adapter = adapter
+                layoutView.spinnerAddSpinnerValue.adapter = adapter
                 val values = ArrayList<String>()
                 values.add(Constant.EMPTY)
                 var selectedValue: String? = null
                 for (codedValue in codedValueDomain.codedValues) {
                     values.add(codedValue.name)
                 }
-                bindingLayoutView.llayoutAddFeatureSpinner.hint = field.alias
-                bindingLayoutView.llayoutAddFeatureSpinner.tag = fieldName
+                layoutView.llayoutAddFeatureSpinner.hint = field.alias
+                layoutView.llayoutAddFeatureSpinner.tag = fieldName
 
-                bindingLayoutView.txtSpinTitle.text = field.alias
+                layoutView.txtSpinTitle.text = field.alias
                 adapter.addAll(values)
                 adapter.notifyDataSetChanged()
 
                 for (i in values.indices) {
                     if (selectedValue != null && values[i] == selectedValue) {
-                        bindingLayoutView.spinnerAddSpinnerValue.setSelection(i)
+                        layoutView.spinnerAddSpinnerValue.setSelection(i)
                         break
                     }
                 }
-                mBinding.llayoutField.addView(bindingLayoutView.root)
+                llayoutField.addView(layoutView)
             } else {
 //                val nm = NumberFormat.getCurrencyInstance()
                 when (field.fieldType) {
                     Field.Type.INTEGER, Field.Type.SHORT, Field.Type.DOUBLE, Field.Type.FLOAT, Field.Type.TEXT -> {
 
-                        val bindingLayoutView = ItemAddFeatureEdittextBinding.inflate(layoutInflater)
-                        bindingLayoutView.llayoutAddFeatureEdittext.hint = field.alias
-                        bindingLayoutView.llayoutAddFeatureEdittext.tag = fieldName
+                        val layoutView = layoutInflater.inflate(R.layout.item_add_feature_edittext, null)
+                        layoutView.llayoutAddFeatureEdittext.hint = field.alias
+                        layoutView.llayoutAddFeatureEdittext.tag = fieldName
                         when (field.fieldType) {
                             Field.Type.INTEGER, Field.Type.SHORT -> {
-                                bindingLayoutView.etxtNumber.inputType = InputType.TYPE_CLASS_NUMBER
+                                layoutView.etxtNumber.inputType = InputType.TYPE_CLASS_NUMBER
                             }
                             Field.Type.DOUBLE, Field.Type.FLOAT -> {
-                                bindingLayoutView.etxtNumber.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED
+                                layoutView.etxtNumber.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED
                             }
                         }
-                        mBinding.llayoutField.addView(bindingLayoutView.root)
+                        llayoutField.addView(layoutView)
                     }
                     Field.Type.DATE -> {
-                        val bindingLayoutView = ItemAddFeatureDateBinding.inflate(layoutInflater)
-                        bindingLayoutView.textInputLayoutAddFeatureDate.hint = field.alias
-                        bindingLayoutView.textInputLayoutAddFeatureDate.tag = fieldName
-                        bindingLayoutView.btnAddDate.setOnClickListener { selectDate(field, bindingLayoutView) }
-                        mBinding.llayoutField.addView(bindingLayoutView.root)
+                        val layoutView = layoutInflater.inflate(R.layout.item_add_feature_date, null) as LinearLayout
+                        layoutView.textInputLayoutAddFeatureDate.hint = field.alias
+                        layoutView.textInputLayoutAddFeatureDate.tag = fieldName
+                        layoutView.btnAddDate.setOnClickListener { selectDate(field, layoutView) }
+                        llayoutField.addView(layoutView)
                     }
 
                     else -> {
@@ -151,20 +153,20 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
         }
         mApplication!!.progressDialog.dismiss()
         if (!mFeature!!.canEditAttachments()) {
-            mBinding.btnCapture.visibility = View.GONE
+            btnCapture.visibility = View.GONE
         }
 
     }
 
-    private fun selectDate(field: Field, bindingLayoutView: ItemAddFeatureDateBinding) {
+    private fun selectDate(field: Field, layoutView: LinearLayout) {
 //        mRootView.fab_parent.close(false)
         val dialog = BottomSheetDialog(this@AddFeatureActivity)
         dialog.setCancelable(true)
-        val bindingLayoutSelectTime = LayoutSelectTimeBinding.inflate(layoutInflater)
+        val layout = layoutInflater.inflate(R.layout.layout_select_time, null)
         val calendar = Calendar.getInstance()
 
-        if (bindingLayoutView.editAddDateValue.text!!.trim().isNotEmpty()) {
-            val date = Constant.DATE_FORMAT.parse(bindingLayoutView.editAddDateValue.text!!.trim().toString())
+        if (layoutView.editAddDateValue.text!!.trim().isNotEmpty()) {
+            val date = Constant.DATE_FORMAT.parse(layoutView.editAddDateValue.text!!.trim().toString())
 
             calendar.time = date
 
@@ -172,50 +174,50 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
         var year = calendar.get(Calendar.YEAR)
         var month = calendar.get(Calendar.MONTH) + 1
         var day = calendar.get(Calendar.DAY_OF_MONTH)
-        bindingLayoutSelectTime.numberPickerYear.value = year
-        bindingLayoutSelectTime.numberPickerMonth.value = month
-        bindingLayoutSelectTime.numberPickerDay.value = day
-        bindingLayoutSelectTime.numberPickerMonth.setOnValueChangedListener { picker, oldVal, newVal ->
+        layout.numberPickerYear.value = year
+        layout.numberPickerMonth.value = month
+        layout.numberPickerDay.value = day
+        layout.numberPickerMonth.setOnValueChangedListener { picker, oldVal, newVal ->
             when (newVal) {
                 1, 3, 5, 7, 8, 10, 12 -> {
-                    bindingLayoutSelectTime.numberPickerDay.maxValue = 31
+                    layout.numberPickerDay.maxValue = 31
                 }
                 4, 6, 9, 11 -> {
-                    bindingLayoutSelectTime.numberPickerDay.maxValue = 30
+                    layout.numberPickerDay.maxValue = 30
                 }
                 2 -> {
-                    val year = bindingLayoutSelectTime.numberPickerYear.value
+                    val year = layout.numberPickerYear.value
                     if (year % 400 == 0 || (year % 4 == 0 && year % 100 > 0)) {
                         //la nam nhuan
-                        bindingLayoutSelectTime.numberPickerDay.maxValue = 29
+                        layout.numberPickerDay.maxValue = 29
                     } else {
-                        bindingLayoutSelectTime.numberPickerDay.maxValue = 28
+                        layout.numberPickerDay.maxValue = 28
                     }
                 }
             }
         }
-        bindingLayoutSelectTime.numberPickerYear.setOnValueChangedListener { picker, oldVal, newVal ->
-            val month = bindingLayoutSelectTime.numberPickerMonth.value
+        layout.numberPickerYear.setOnValueChangedListener { picker, oldVal, newVal ->
+            val month = layout.numberPickerMonth.value
             if (month == 2)
                 if (newVal % 400 == 0 || (newVal % 4 == 0 && newVal % 100 > 0)) {
                     //la nam nhuan
-                    bindingLayoutSelectTime.numberPickerDay.maxValue = 29
+                    layout.numberPickerDay.maxValue = 29
                 } else {
-                    bindingLayoutSelectTime.numberPickerDay.maxValue = 28
+                    layout.numberPickerDay.maxValue = 28
                 }
         }
-        bindingLayoutSelectTime.btnOK.setOnClickListener {
-            val year = bindingLayoutSelectTime.numberPickerYear.value
-            val month = bindingLayoutSelectTime.numberPickerMonth.value
-            val day = bindingLayoutSelectTime.numberPickerDay.value
+        layout.btnOK.setOnClickListener {
+            val year = layout.numberPickerYear.value
+            val month = layout.numberPickerMonth.value
+            val day = layout.numberPickerDay.value
             val calendar = Calendar.getInstance()
             calendar.set(year, month - 1, day)
             val date = calendar.time
-            bindingLayoutView.editAddDateValue.setText(Constant.DATE_FORMAT.format(date))
+            layoutView.editAddDateValue.setText(Constant.DATE_FORMAT.format(date))
             dialog.dismiss()
         }
 
-        dialog.setContentView(bindingLayoutSelectTime.root)
+        dialog.setContentView(layout)
 
         dialog.show()
     }
@@ -251,12 +253,12 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.btn_add -> if (!hadPoint()) {
+            R.id.btnAdd -> if (!hadPoint()) {
                 Toast.makeText(this@AddFeatureActivity, R.string.message_add_feature_had_not_point, Toast.LENGTH_LONG).show()
             } else if (mFeatureLayer == null) {
                 Toast.makeText(this@AddFeatureActivity, R.string.message_add_feature_had_not_feature, Toast.LENGTH_LONG).show()
             } else {
-                mApplication.progressDialog.changeTitle(this@AddFeatureActivity, mBinding.root,
+                mApplication.progressDialog.changeTitle(this@AddFeatureActivity, root,
                         "Đang lưu...")
                 AddFeatureTask(object : AddFeatureTask.Response {
                     override fun post(output: Feature?) {
@@ -264,17 +266,17 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
                             mApplication.selectedFeature = output
                             goHome()
                         } else {
-                            Toast.makeText(mBinding.root.context, "Nhập thiếu dữ liệu hoặc có lỗi xảy ra", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(root.context, "Nhập thiếu dữ liệu hoặc có lỗi xảy ra", Toast.LENGTH_SHORT).show()
                         }
                         mApplication.progressDialog.dismiss()
                     }
 
-                }).execute(this@AddFeatureActivity, mApplication!!, mBinding.llayoutField, mFeature!!)
+                }).execute(this@AddFeatureActivity, mApplication!!, llayoutField, mFeature!!)
 
 
             }
-            R.id.btn_capture -> capture()
-            R.id.btn_pick_photo -> pickPhoto()
+            R.id.btnCapture -> capture()
+            R.id.btnPickPhoto -> pickPhoto()
         }
     }
 
@@ -283,7 +285,7 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
         try {
             if (bitmap != null) {
                 val outputStream = ByteArrayOutputStream()
-                val imageView = ImageView(mBinding.llayoutImage.context)
+                val imageView = ImageView(llayoutImage.context)
                 imageView.setPadding(0, 0, 0, 10)
                 if (isFromCamera) {
                     imageView.setImageBitmap(bitmap)
@@ -293,7 +295,7 @@ class AddFeatureActivity : AppCompatActivity(), View.OnClickListener {
                 }
                 val image = getByteArrayFromBitmap(bitmap)
                 Toast.makeText(this, "Đã lưu ảnh", Toast.LENGTH_SHORT).show()
-                mBinding.llayoutImage.addView(imageView)
+                llayoutImage.addView(imageView)
                 mImages!!.add(image)
                 mApplication!!.images = mImages
             }

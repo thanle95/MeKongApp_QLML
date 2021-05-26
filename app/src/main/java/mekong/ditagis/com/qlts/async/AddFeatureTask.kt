@@ -12,7 +12,8 @@ import com.esri.arcgisruntime.data.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import mekong.ditagis.com.qlts.databinding.LayoutProgressDialogBinding
+import kotlinx.android.synthetic.main.layout_progress_dialog.view.*
+import mekong.ditagis.com.qlts.R
 import mekong.ditagis.com.qlts.utities.Constant
 import mekong.ditagis.com.qlts.utities.DApplication
 import java.util.*
@@ -94,9 +95,9 @@ class AddFeatureTask(private val delegate: Response) {
 
     private fun preExecute(activity: Activity) {
         mDialog = BottomSheetDialog(activity)
-        val bindingView = LayoutProgressDialogBinding.inflate(activity.layoutInflater)
-        bindingView.txtProgressDialogTitle.text = "Đang lưu..."
-        mDialog.setContentView(bindingView.root)
+        val layoutView = activity.layoutInflater.inflate(R.layout.layout_progress_dialog, null)
+        layoutView.txtProgressDialogTitle.text = "Đang lưu..."
+        mDialog!!.setContentView(layoutView)
         mDialog.setCancelable(false)
 
         mDialog.show()

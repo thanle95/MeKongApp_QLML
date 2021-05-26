@@ -12,6 +12,7 @@ import com.esri.arcgisruntime.layers.FeatureLayer
 import com.esri.arcgisruntime.mapping.Viewpoint
 import com.esri.arcgisruntime.mapping.view.MapView
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask
+import kotlinx.android.synthetic.main.activity_quan_ly_tai_san.*
 import mekong.ditagis.com.qlts.MainActivity
 import mekong.ditagis.com.qlts.adapter.ObjectsAdapter
 import mekong.ditagis.com.qlts.async.QuerySearchAsycn
@@ -46,7 +47,6 @@ class MapViewHandler(private val mMapView: MapView, private val mActivity: MainA
 //            return
 //        }
         mClickPoint = android.graphics.Point(e.x.toInt(), e.y.toInt())
-//        mApplication.progressDialog.changeTitle(mActivity, mActivity.mBinding.drawerLayout, "Đang xác định đối tượng...")
         val singleTapMapViewAsync = SingleTapMapViewAsync(mActivity,  mPopUp!!,mClickPoint!!, mMapView)
         singleTapMapViewAsync.execute()
     }
@@ -90,7 +90,7 @@ class MapViewHandler(private val mMapView: MapView, private val mActivity: MainA
     }
 
     fun querySearch(searchStr: String, listView: ListView, adapter: ObjectsAdapter) {
-        mApplication.progressDialog.changeTitle(mActivity, mActivity.mBinding.drawerLayout, "Đang tìm kiếm...")
+        mApplication.progressDialog.changeTitle(mActivity, mActivity.drawerLayout, "Đang tìm kiếm...")
         QuerySearchAsycn(mFeatureLayer.featureTable as ServiceFeatureTable, object : QuerySearchAsycn.AsyncResponse {
             override fun processFinish(output: List<ObjectsAdapter.Item>?) {
                 mApplication.progressDialog.dismiss()

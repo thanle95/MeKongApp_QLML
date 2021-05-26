@@ -5,7 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import mekong.ditagis.com.qlts.databinding.ItemViewinfoBinding
+import kotlinx.android.synthetic.main.item_viewinfo.view.*
+import mekong.ditagis.com.qlts.R
 
 /**
  * Created by ThanLe on 04/10/2017.
@@ -13,20 +14,20 @@ import mekong.ditagis.com.qlts.databinding.ItemViewinfoBinding
 class ThongKeAdapter(private val mContext: Context, private val items: MutableList<Item>) : ArrayAdapter<ThongKeAdapter.Item>(mContext, 0, items) {
 
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+    override fun getView(position: Int,convertView : View?, parent: ViewGroup): View {
         val holder: DHolder
         if (convertView == null) {
             val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            holder = DHolder(ItemViewinfoBinding.inflate(inflater))
-            holder.view.tag = holder
+            holder = DHolder(inflater.inflate(R.layout.item_viewinfo, null))
+            holder.layout.tag = holder
         }
         else{
             holder = convertView.tag as DHolder
         }
         val item = items[position]
-        holder.binding.txtViewinfoAlias.text = item.titleLayer
-        holder.binding.txtViewinfoValue.text = item.sumFeatures!!.toString()
-        return holder.view
+        holder.layout.txtViewinfoAlias.text = item.titleLayer
+        holder.layout.txtViewinfoValue.text = item.sumFeatures!!.toString()
+        return holder.layout
     }
 
     fun getItems(): List<Item> {
@@ -47,7 +48,7 @@ class ThongKeAdapter(private val mContext: Context, private val items: MutableLi
 
 
     class Item(var titleLayer: String?, var sumFeatures: Long?)
-    private class DHolder( var binding: ItemViewinfoBinding) {
-        var view: View = binding.root
+    private class DHolder( var layout: View) {
+        var view: View = layout
     }
 }

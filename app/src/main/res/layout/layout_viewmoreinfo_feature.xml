@@ -25,7 +25,7 @@
             android:textStyle="bold"></TextView>
     </LinearLayout>
     <ListView
-        android:id="@+id/lstView_alertdialog_info"
+        android:id="@+id/lstViewAlertdialogInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

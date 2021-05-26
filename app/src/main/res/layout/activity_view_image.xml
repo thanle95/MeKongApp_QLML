@@ -7,7 +7,7 @@
     android:padding="@dimen/activity_vertical_margin">
 
     <com.github.chrisbanes.photoview.PhotoView
-        android:id="@+id/img_view_attachment"
+        android:id="@+id/imgViewAttachment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/ic_right"
@@ -42,7 +42,7 @@
 
 
             <ImageButton
-                android:id="@+id/btn_rorate_left"
+                android:id="@+id/btnRorateLeft"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:tint="@android:color/white"
@@ -51,7 +51,7 @@
 
                 />
             <ImageButton
-                android:id="@+id/btn_rorate_right"
+                android:id="@+id/btnRorateRight"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:src="@drawable/ic_rotate_right"
@@ -59,7 +59,7 @@
                 android:background="@android:color/transparent"
                 /></LinearLayout>
         <Button
-            android:id="@+id/btn_update"
+            android:id="@+id/btnUpdate"
             android:textColor="@android:color/white"
             android:background="@android:color/transparent"
             android:layout_gravity="center_vertical|end"

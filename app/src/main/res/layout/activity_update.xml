@@ -25,7 +25,7 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
-                    android:id="@+id/llayout_field"
+                    android:id="@+id/llayoutField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -35,7 +35,7 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <Button
-            android:id="@+id/btn_update"
+            android:id="@+id/btnUpdate"
             style="@style/MyTextAppearance.Prime.Big"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

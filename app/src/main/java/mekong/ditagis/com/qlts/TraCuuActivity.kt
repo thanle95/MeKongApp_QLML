@@ -7,19 +7,18 @@ import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import com.esri.arcgisruntime.data.Field
 import com.esri.arcgisruntime.data.ServiceFeatureTable
+import kotlinx.android.synthetic.main.activity_tra_cuu.*
+import kotlinx.android.synthetic.main.layout_dialog_update_feature_listview.view.*
+import kotlinx.android.synthetic.main.layout_viewmoreinfo_feature.view.*
 import mekong.ditagis.com.qlts.adapter.FeatureViewMoreInfoAdapter
-import mekong.ditagis.com.qlts.databinding.ActivityTraCuuBinding
-import mekong.ditagis.com.qlts.databinding.LayoutDialogUpdateFeatureListviewBinding
 import java.util.*
 
 class TraCuuActivity : AppCompatActivity() {
     private var mServiceFeatureTable: ServiceFeatureTable? = null
     private var mLstFeatureType: MutableList<String>? = null
-    private lateinit var mBinding: ActivityTraCuuBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityTraCuuBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
+        setContentView(R.layout.activity_tra_cuu)
 
         mServiceFeatureTable = ServiceFeatureTable("")
 
@@ -28,7 +27,7 @@ class TraCuuActivity : AppCompatActivity() {
         for (i in 0 until mServiceFeatureTable!!.featureTypes.size) {
             mLstFeatureType!!.add(mServiceFeatureTable!!.featureTypes[i].name)
         }
-        val lstViewInfo = mBinding.layoutTracuuInclude.lstViewAlertdialogInfo
+        val lstViewInfo = layoutTracuuInclude.lstViewAlertdialogInfo
         lstViewInfo.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id -> edit(parent, view, position, id) }
     }
 
@@ -41,19 +40,19 @@ class TraCuuActivity : AppCompatActivity() {
                 builder.setTitle("Cập nhật thuộc tính")
                 builder.setMessage(item.alias)
                 builder.setCancelable(false).setNegativeButton("Hủy") { dialog, which -> dialog.dismiss() }
-                val bindingLayout = LayoutDialogUpdateFeatureListviewBinding.inflate(layoutInflater)
-                builder.setView(bindingLayout.root)
-                val layoutTextView = bindingLayout.layoutEditViewmoreinfoTextView
-                val textView = bindingLayout.txtEditViewmoreinfo
-                val layoutEditText = bindingLayout.layoutEditViewmoreinfoEditext
-                val editText = bindingLayout.etxtEditViewmoreinfo
-                val layoutSpin = bindingLayout.layoutEditViewmoreinfoSpinner
-                val spin = bindingLayout.spinEditViewmoreinfo
+                val layoutView = layoutInflater.inflate(R.layout.layout_dialog_update_feature_listview, null)
+                builder.setView(layoutView)
+                val layoutTextView = layoutView.layoutEditViewmoreinfoTextView
+                val textView = layoutView.txtEditViewmoreinfo
+                val layoutEditText = layoutView.layoutEditViewmoreinfoEditext
+                val editText = layoutView.etxtEditViewmoreinfo
+                val layoutSpin = layoutView.layoutEditViewmoreinfoSpinner
+                val spin = layoutView.spinEditViewmoreinfo
 
                 val domain = mServiceFeatureTable!!.getField(item.fieldName!!).domain
                 if (item.fieldName == mServiceFeatureTable!!.typeIdField) {
                     layoutSpin.visibility = View.VISIBLE
-                    val adapter = android.widget.ArrayAdapter(bindingLayout.root.context,
+                    val adapter = android.widget.ArrayAdapter(layoutView.context,
                             android.R.layout.simple_list_item_1, mLstFeatureType!!)
                     spin.adapter = adapter
                     if (item.value != null)
@@ -65,7 +64,7 @@ class TraCuuActivity : AppCompatActivity() {
                         val codes = ArrayList<String>()
                         for (codedValue in codedValues)
                             codes.add(codedValue.name)
-                        val adapter = android.widget.ArrayAdapter(bindingLayout.root.context, android.R.layout.simple_list_item_1, codes)
+                        val adapter = android.widget.ArrayAdapter(layoutView.context, android.R.layout.simple_list_item_1, codes)
                         spin.adapter = adapter
                         if (item.value != null)
                             spin.setSelection(codes.indexOf(item.value!!))
