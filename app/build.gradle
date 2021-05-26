@@ -4,8 +4,8 @@ android {
     compileSdkVersion 29
     buildToolsVersion '28.0.3'
     defaultConfig {
-        applicationId "mekong.ditagis.com.qlml"
-        minSdkVersion 26
+        applicationId "tiengiang.ditagis.com.qlml"
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 10002
         versionName "1.0.2"
