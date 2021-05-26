@@ -20,7 +20,7 @@
              android:layout_marginRight="@dimen/margin_medium"
              android:src="@drawable/ic_cancel" />
         <TextView
-            android:id="@+id/txt_title_layer"
+            android:id="@+id/txtTitleLayer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 

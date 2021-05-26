@@ -25,7 +25,7 @@ class FeatureLayerAdapter(private val mContext: Context, private val items: Muta
             holder = convertView.tag as DHolder
         }
         val item = items[position]
-        holder.view.txtTitleLayer.text = item.titleLayer
+        holder.view.txtTitle.text = item.titleLayer
         return holder.view
     }
 

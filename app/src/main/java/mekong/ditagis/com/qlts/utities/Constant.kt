@@ -16,7 +16,7 @@ class Constant internal constructor() {
     object AppID {
         const val TIEN_GIANG = "7F385322-BC7C-EB11-80D2-E88E1868CDFA"
         const val VINH_LONG = "F21FBD2D-BC7C-EB11-80D2-E88E1868CDFA"
-        val LIST = arrayOf(TIEN_GIANG, VINH_LONG)
+        val LIST = arrayOf(TIEN_GIANG)
     }
 
     object IntentExtra {

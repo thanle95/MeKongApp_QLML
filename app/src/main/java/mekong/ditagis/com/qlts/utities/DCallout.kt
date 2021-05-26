@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.app_bar.view.*
 import kotlinx.android.synthetic.main.app_bar.view.btnLayerClose
 import kotlinx.android.synthetic.main.content.view.*
 import kotlinx.android.synthetic.main.dialog_change_geometry.view.*
-import kotlinx.android.synthetic.main.item_search_type.view.*
 import kotlinx.android.synthetic.main.layout_popup_infos.view.*
 import mekong.ditagis.com.qlts.AttachmentActivity
 import mekong.ditagis.com.qlts.MainActivity
@@ -299,7 +298,7 @@ class DCallout(private val mMainActivity: MainActivity, private val mMapView: Ma
         try {
             val inflater = LayoutInflater.from(this.mMainActivity.applicationContext)
             val layout = inflater.inflate(R.layout.dialog_change_geometry, null)
-            layout.txtTitle.text = "Cập nhật tọa độ: ${mApplication.selectedFeature!!.featureTable.displayName}"
+            layout.txtTitleChangeGeometry.text = "Cập nhật tọa độ: ${mApplication.selectedFeature!!.featureTable.displayName}"
             layout.btnClose.setOnClickListener { mMainActivity.mAddHandlingOrChangeGeometry.handlingCancelAdd() }
             layout.btnChangeGeometry.setOnClickListener {
 
