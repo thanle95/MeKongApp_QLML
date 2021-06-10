@@ -86,6 +86,7 @@ class Constant internal constructor() {
 
     object URL_API {
         const val LOGIN = "$SERVER_API/Auth/Login"
+        const val THONG_TIN_DONG_HO = "http://171.244.32.245:99/tiwagis/thong-tin-khach-hang/"
         const val LAYER_INFO = "$SERVER_API/auth/layerinfos"
         const val CAPABILITIES = "$SERVER_API/auth/capabilities"
         const val APP_INFO = "$SERVER_API/auth/appinfo/"

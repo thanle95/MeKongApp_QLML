@@ -54,6 +54,15 @@
                 android:src="@drawable/ic_dialog_zoom_in"
                 app:tint="@color/colorPrimary"/>
             <ImageButton
+                android:id="@+id/imgBtnDetailInfos"
+                android:layout_width="@dimen/width_image_popup"
+                android:layout_height="@dimen/width_image_popup"
+                android:background="@android:color/white"
+                android:layout_marginRight="@dimen/padding_title_popup"
+                android:src="@drawable/ic_info_primary"
+                android:visibility="gone"
+                app:tint="@color/colorPrimary"/>
+            <ImageButton
                 android:id="@+id/imgBtnUpdate"
                 android:layout_width="@dimen/width_image_popup"
                 android:layout_height="@dimen/width_image_popup"

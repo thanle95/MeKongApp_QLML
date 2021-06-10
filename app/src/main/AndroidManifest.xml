@@ -29,7 +29,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".AddFeatureActivity" android:parentActivityName=".MainActivity" ></activity>
+        <activity android:name=".DetailInfoCustomer" android:parentActivityName=".MainActivity" android:label="Thông tin khách hàng"></activity>
+        <activity
+            android:name=".AddFeatureActivity"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".UpdateActivity"
             android:label="Cập nhật thông tin"

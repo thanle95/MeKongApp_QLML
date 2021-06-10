@@ -14,20 +14,24 @@
 
         <TextView
             android:id="@+id/txtViewinfoAlias"
-            android:layout_width="100dp"
+            android:layout_width="0dp"
+            android:layout_weight="3"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="aliassfdsfdsfdsfdasfdsfdsafdsfsdfdsfds"
             android:textAppearance="?android:attr/textAppearanceSmall"
-
-            android:textStyle="bold" />
+            android:textSize="17sp"
+ />
 
         <TextView
             android:id="@+id/txtViewinfoValue"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="5"
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
             android:text="valueaddsfdsfdsfdsfdsfdsfdasfsdfdsfdsfsdfsdfsdfdsfdsfsdf"
+            android:textSize="17sp"
+            android:textColor="@color/colorPrimary"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
 

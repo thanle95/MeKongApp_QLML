@@ -10,6 +10,7 @@ import mekong.ditagis.com.qlts.entities.*
 import java.util.*
 
 class DApplication : Application() {
+    var dongHoKhachHangInfos: List<DDongHoKhachHang> = listOf()
     var idFeatureLayerToAdd: HashMap<Int, FeatureLayerValueIDField> = hashMapOf()
     var address: String? = null
     var center: Point? = null

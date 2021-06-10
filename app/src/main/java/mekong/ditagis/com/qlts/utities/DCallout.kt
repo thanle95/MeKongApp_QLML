@@ -27,13 +27,14 @@ import kotlinx.android.synthetic.main.app_bar.view.btnLayerClose
 import kotlinx.android.synthetic.main.content.view.*
 import kotlinx.android.synthetic.main.dialog_change_geometry.view.*
 import kotlinx.android.synthetic.main.layout_popup_infos.view.*
-import mekong.ditagis.com.qlts.AttachmentActivity
-import mekong.ditagis.com.qlts.MainActivity
-import mekong.ditagis.com.qlts.R
-import mekong.ditagis.com.qlts.UpdateActivity
+import mekong.ditagis.com.qlts.*
 import mekong.ditagis.com.qlts.adapter.FeatureViewInfoAdapter
+import mekong.ditagis.com.qlts.async.PreparingTask
 import mekong.ditagis.com.qlts.async.QueryHanhChinhAsync
+import mekong.ditagis.com.qlts.async.ThongTinDongHoTask
 import mekong.ditagis.com.qlts.async.UpdateGeometryAsync
+import mekong.ditagis.com.qlts.entities.DDongHoKhachHang
+import mekong.ditagis.com.qlts.entities.DLayerInfo
 import java.util.*
 
 
@@ -242,6 +243,25 @@ class DCallout(private val mMainActivity: MainActivity, private val mMapView: Ma
 //                mapScale = maxScale
 
                 mMainActivity.appBar.content.mapView.setViewpointCenterAsync(center, maxScale)
+            }
+        }
+        val btnDetailInfos = mLayoutInfos.imgBtnDetailInfos
+        if(featureLayer.name.contains("Đồng hồ khách hàng")){
+            btnDetailInfos.visibility = View.VISIBLE
+            btnDetailInfos.setOnClickListener {
+                ThongTinDongHoTask(object : ThongTinDongHoTask.Response {
+                    override fun post(output: List<DDongHoKhachHang>?) {
+                        if (output != null && output.isNotEmpty()) {
+                            mApplication.dongHoKhachHangInfos = output
+                            val updateIntent = Intent(mMainActivity, DetailInfoCustomer::class.java)
+                            mMainActivity.startActivity(updateIntent)
+                        }  else {
+                            Toast.makeText(mMainActivity, "Không tìm thấy thông tin khách hàng", Toast.LENGTH_SHORT).show()
+
+                        }
+
+                    }
+                }).execute(mMainActivity, mApplication!!, selectedFeature.attributes[Constant.Field.OBJECTID] as Long)
             }
         }
         val btnUpdate = mLayoutInfos.imgBtnUpdate
