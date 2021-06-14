@@ -86,7 +86,8 @@ class Constant internal constructor() {
 
     object URL_API {
         const val LOGIN = "$SERVER_API/Auth/Login"
-        const val THONG_TIN_DONG_HO = "http://171.244.32.245:99/tiwagis/thong-tin-khach-hang/"
+        const val THONG_TIN_DONG_HO = "$SERVER_API_CUSTOMER/tiwagis/thong-tin-khach-hang/"
+        const val KHU_VUC = "$SERVER_API_CUSTOMER/tiwagis/khu-vuc-thu-thap-mang-luoi/"
         const val LAYER_INFO = "$SERVER_API/auth/layerinfos"
         const val CAPABILITIES = "$SERVER_API/auth/capabilities"
         const val APP_INFO = "$SERVER_API/auth/appinfo/"
@@ -129,7 +130,9 @@ class Constant internal constructor() {
         //        val SERVER = "http://vwa.ditagis.com"
 //        val SERVER = "http://vwaco.com.vn:9092"
         const val SERVER_API = "http://171.244.32.245:100"
-
+//        const val SERVER_API = "http://113.176.94.186:100"
+        const val SERVER_API_CUSTOMER = "http://171.244.32.245:99"
+//        const val SERVER_API_CUSTOMER = "http://113.176.94.186:99"
 
         private var mInstance: Constant? = null
 

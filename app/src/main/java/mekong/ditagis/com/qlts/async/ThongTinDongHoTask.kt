@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.layout_progress_dialog.view.*
 import mekong.ditagis.com.qlts.R
 import mekong.ditagis.com.qlts.entities.DAppInfo
 import mekong.ditagis.com.qlts.entities.DDongHoKhachHang
+import mekong.ditagis.com.qlts.entities.DKhuVuc
 import mekong.ditagis.com.qlts.entities.DLayerInfo
 import mekong.ditagis.com.qlts.utities.Constant
 import mekong.ditagis.com.qlts.utities.DApplication
@@ -35,7 +36,8 @@ class ThongTinDongHoTask(private val delegate: Response) {
     fun execute(activity: Activity, application: DApplication, objectID: Long) {
         preExecute(activity)
         executor.execute {
-            val infos =getInfo(application, objectID)
+            val khuVuc =getKhuVuc(application)
+            val infos =getInfo(khuVuc.Ma, objectID)
             handler.post {
                 postExecute()
                 delegate.post(infos)
@@ -57,11 +59,36 @@ class ThongTinDongHoTask(private val delegate: Response) {
         if (mDialog.isShowing)
             mDialog.dismiss()
     }
-
-
-    private fun getInfo(application: DApplication, objectID: Long): List<DDongHoKhachHang> {
+    private fun getKhuVuc(application: DApplication): DKhuVuc {
         try {
-            val url = URL(Constant.URL_API.THONG_TIN_DONG_HO + objectID)
+            val url = URL(Constant.URL_API.KHU_VUC + application.user!!.roleId)
+            val conn = url.openConnection() as HttpURLConnection
+            try {
+                conn.doOutput = false
+                conn.requestMethod = Constant.HTTPRequest.GET_METHOD
+                conn.connect()
+
+                val bufferedReader = BufferedReader(InputStreamReader(conn.inputStream))
+                val builder = StringBuilder()
+                var line: String?
+                while (bufferedReader.readLine().also { line = it } != null) {
+                    builder.append(line)
+                }
+                return parseKhuVuc(builder.toString())!!
+            } catch (e: Exception) {
+                Log.e("error", e.toString())
+            } finally {
+                conn.disconnect()
+            }
+        } catch (e: Exception) {
+            Log.e("Lỗi lấy LayerInfo", e.toString())
+        }
+        return DKhuVuc("","")
+    }
+
+    private fun getInfo(maKhuVuc: String, objectID: Long): List<DDongHoKhachHang> {
+        try {
+            val url = URL("${Constant.URL_API.THONG_TIN_DONG_HO}${maKhuVuc}/${objectID}")
             val conn = url.openConnection() as HttpURLConnection
             try {
                 conn.doOutput = false
@@ -86,6 +113,13 @@ class ThongTinDongHoTask(private val delegate: Response) {
         return listOf()
     }
 
+    @Throws(JSONException::class)
+    private fun parseKhuVuc(data: String?): DKhuVuc? {
+        val outputType = object : TypeToken<DKhuVuc>() {}.type
+        val gson = Gson()
+        val dAppInfo: DKhuVuc = gson.fromJson(data, outputType)
+        return dAppInfo
+    }
 
     @Throws(JSONException::class)
     private fun parseStringArray(data: String?): List<DDongHoKhachHang>? {
