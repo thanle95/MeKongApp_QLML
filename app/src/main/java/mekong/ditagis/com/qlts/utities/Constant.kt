@@ -127,12 +127,10 @@ class Constant internal constructor() {
         val OBJECTID = "OBJECTID"
         val IDSU_CO = "IDSuCo"
 
-        //        val SERVER = "http://vwa.ditagis.com"
-//        val SERVER = "http://vwaco.com.vn:9092"
-        const val SERVER_API = "http://171.244.32.245:100"
-//        const val SERVER_API = "http://113.176.94.186:100"
-        const val SERVER_API_CUSTOMER = "http://171.244.32.245:99"
-//        const val SERVER_API_CUSTOMER = "http://113.176.94.186:99"
+//        const val SERVER_API = "http://171.244.32.245:100"
+        const val SERVER_API = "http://113.176.94.186:100"
+//        const val SERVER_API_CUSTOMER = "http://171.244.32.245:99"
+        const val SERVER_API_CUSTOMER = "http://113.176.94.186:99"
 
         private var mInstance: Constant? = null
 
