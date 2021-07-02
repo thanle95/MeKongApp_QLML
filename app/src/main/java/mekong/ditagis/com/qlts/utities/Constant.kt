@@ -14,9 +14,8 @@ class Constant internal constructor() {
         IS_CHANGING_GEOMETRY(4),
     }
     object AppID {
-        const val TIEN_GIANG = "7F385322-BC7C-EB11-80D2-E88E1868CDFA"
-        const val VINH_LONG = "F21FBD2D-BC7C-EB11-80D2-E88E1868CDFA"
-        val LIST = arrayOf(TIEN_GIANG)
+        const val HCM_NHA_BE = "ADBF0FC9-16DB-EB11-814B-B7C0F16215A1"
+        val LIST = arrayOf(HCM_NHA_BE)
     }
 
     object IntentExtra {
@@ -127,7 +126,7 @@ class Constant internal constructor() {
 
         //        val SERVER = "http://vwa.ditagis.com"
 //        val SERVER = "http://vwaco.com.vn:9092"
-        const val SERVER_API = "http://171.244.32.245:100"
+        const val SERVER_API = "http://nbapi.ditagis.com"
 
 
         private var mInstance: Constant? = null

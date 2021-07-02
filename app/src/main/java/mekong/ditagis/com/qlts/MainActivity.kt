@@ -428,7 +428,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val checkBox = CheckBox(appBar.linnearDisplayLayerBaseMap.context)
         checkBox.text = layer.name
         checkBox.isChecked = false
-        layer.isVisible = false
+        if(layer.canChangeVisibility())
+            layer.isVisible = false
         CompoundButtonCompat.setButtonTintList(checkBox, ColorStateList(states, colors))
         checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
 
@@ -441,6 +442,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             } else {
                 if (checkBox.text == layer.name) {
                 }
+                if(layer.canChangeVisibility())
                 layer.isVisible = false
             }
         }
