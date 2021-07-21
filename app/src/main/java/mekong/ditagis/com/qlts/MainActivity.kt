@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun initMapView() {
 
-        mMap = ArcGISMap(Basemap.Type.OPEN_STREET_MAP, 10.107553, 105.8461029, 12)
+        mMap = ArcGISMap(Basemap.Type.IMAGERY_WITH_LABELS, 10.7375815, 106.6933228, 13)
 
         appBar.content.mapView.map = mMap
         appBar.linnearDisplayLayerBaseMap.removeAllViews()
@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (output != null && output.isNotEmpty()) {
                     mApplication!!.layerInfos = output
                     mApplication.progressDialog.changeTitle(this@MainActivity, drawerLayout, "Đang tải bản đồ...")
-                    setFeatureService()
+                    addLayers()
                 } else if (output == null) {
                     Toast.makeText(this@MainActivity, "Tài khoản của bạn không có quyền truy cập ứng dụng này", Toast.LENGTH_SHORT).show()
                     startSignIn()
@@ -186,7 +186,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mApplication.progressDialog.changeTitle(this, drawerLayout, "Đang khởi tạo ứng dụng...")
     }
 
-    private fun setFeatureService() {
+    private fun addLayers() {
         // config feature layer service
         mFeatureLayerDTGS = ArrayList()
         callout = appBar.content.mapView.callout
@@ -210,14 +210,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val finalUrl = url
                 hanhChinhImageLayers!!.addDoneLoadingListener {
                     for (layer in appBar.content.mapView.map.operationalLayers) {
-                        if (layer is FeatureLayer) continue
+//                        if (layer is FeatureLayer) continue
                         val fullExtent = layer.fullExtent
                         if (fullExtent != null && fullExtent.xMin != 0.0 && fullExtent.yMin != 0.0
                                 && fullExtent.xMax != 0.0 && fullExtent.yMax != 0.0) {
                             try {
                                 locationDisplay!!.stop()
-                                appBar.content.mapView.setViewpointGeometryAsync(fullExtent, 50.0)
-
+//                                appBar.content.mapView.setViewpointGeometryAsync(fullExtent, 50.0)
+//                                appBar.content.mapView.setViewpointCenterAsync(fullExtent.center, 3000.0)
                                 break
                             } catch (e: Exception) {
                                 DAlertDialog().show(this@MainActivity, "Thông báo", layer.name + ": " + e.toString())
